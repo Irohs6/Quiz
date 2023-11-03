@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello QuizController!{% endblock %}
+
+{% block body %}
+<input hidden id="quiz" type="text" data-attribut="{{ quizJson }} ">
+   <h1>{{ quiz.title }}</h1>
+
+  
+        {{ form_start(formQuiz) }}
+            <div id="quiz-container">
+                <h2 id="questions"></h2>
+                
+
+                <div  id="answer"></div>
+
+                <input  id="valider" type="button" value="Valider"/>
+                
+
+             </div>    
+                <div id="recap-container" style="display: none;"></div>
+                <input type="button" id="show-recap" value="Afficher recap">
+                <input id="submit" type="submit">
+
+        {{ form_end(formQuiz) }}
+  
+        {% block javascripts %}
+           
+           
+        
+        <script src="{{ asset('js/script.js') }}"></script>
+        
+    {% endblock %}
+{% endblock %}

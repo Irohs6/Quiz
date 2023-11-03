@@ -4,25 +4,44 @@ security:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
-        users_in_memory: { memory: null }
+        # used to reload user from session & other features (e.g. switch_user)
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: email
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
             lazy: true
-            provider: users_in_memory
+            provider: app_user_provider
+            custom_authenticator: App\Security\AppAuthenticator
+            logout:
+                path: app_logout
+                # where to redirect after logout
+                target: app_quiz
+
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 604800 #semaine en seconde
+                path: /
+                always_remember_me: true
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
 
             # https://symfony.com/doc/current/security/impersonating_user.html
             # switch_user: true
-
+    role_hierarchy:
+        ROLE_USER:        [] # Les utilisateurs ordinaires
+        ROLE_MODERATOR:   [ROLE_USER] # Les modérateurs ont également les autorisations des utilisateurs
+        ROLE_ADMIN:       [ROLE_MODERATOR] # Les administrateurs ont également les autorisations des modérateurs
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
+    # pour securisé des url spécifique exiger que toutes les URL Commencez par commence en haut de la liste et s'arrète a la première occurence
+        - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
 
 when@test:

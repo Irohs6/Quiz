@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter une Session{% endblock %}
+
+{% block body %}
+<div class="container">
+
+    {% if edit %}
+        <h1>Modifier les question du quiz: {{ quiz.title }}</h1>    
+    {% else %}
+        <h1>Ajouter les question aux: {{ quiz.title }}</h1>
+    {% endif %}
+        
+    
+    
+    {{ form_start(formNewQuestion) }}
+        
+        {{ form_row(formNewQuestion.sentence) }}
+        
+        {# on va construire dynamiquement la liste des question a creer a partir de question #}
+        <h2>Ajout des question du Question</h2>
+        <div class="formNewQuestion-group row ">
+
+            <div class="col-formNewQuestion-label col-sm-2">&nbsp;</div>
+
+            <div id="answers-fields-list" class="col-sm-10 remove-collection-widget"
+                data-prototype="{{ form_widget(formNewQuestion.answers.vars.prototype)|e }}"
+                data-question="{{questionId}}"
+                data-widget-tags="{{ '<p></p>'|e }}"
+                data-widget-counter="{{ formNewQuestion.answers|length }}">
+                
+                {% for questionField in formNewQuestion.answers %}
+
+                    <p>
+                        {{ form_errors(questionField) }}
+
+                        {{ form_widget(questionField, {'attr': {'class': 'borders'}}) }}
+
+                    </p>
+                   
+                    {% endfor %} 
+
+            </div>
+
+        </div>
+
+        <div class="formNewQuestion-group row flex-action">
+            <button type="button" 
+                class="add-another-collection-widget button"
+                data-list-selector="#answers-fields-list">
+                Ajouter une Réponse
+            </button>
+        </div>
+
+        
+        <a href="{{path('show_quiz', {'id': quiz.id})}}">Terminé</a>
+    
+     
+    
+        {# empêche l'apparition d'une légende "questions", si la collection est vide (en cas de création d'une nouvelle session) #}
+        {% do formNewQuestion.answers.setRendered %}
+    {{ form_end(formNewQuestion) }}
+</div>
+{% endblock %}
+

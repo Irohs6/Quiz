@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Log in!{% endblock %}
+
+{% block body %}
+    {% for user in users %}
+        {% if 'ROLE_ADMIN' not in user.roles %}
+            <li>{{ user.username }}</li>
+        {% endif %}
+    {% endfor %}
+{% endblock %}
