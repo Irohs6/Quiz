@@ -109,6 +109,39 @@ a{
     background-repeat: no-repeat;
     background-size: cover;
 }
+#quiz-container-play{
+    position: absolute;
+    top: 170px;
+    left: 25%;
+    padding: 15px;
+    border-radius: 10px;
+    background-color: #0B2443;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+    color: white;
+    height: 750px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    justify-content: center;
+}
+
+.difficulter{
+
+}
+
+.category{
+
+}
+
+.nb_question{
+
+}
+#recap-container{
+    display: none;
+}
 
 #answer{
     padding: 10px;

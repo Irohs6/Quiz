@@ -4,11 +4,17 @@
 
 {% block body %}
 <input hidden id="quiz" type="text" data-attribut="{{ quizJson }} ">
-   <h1>{{ quiz.title }}</h1>
-
+<h1>{{ quiz.title }}</h1>
+    <article id="quiz-container-play">
+        <h2 class="title"> {{ quiz.title }}</h2>
+        <p class="difficulter">Difficulté : {{ quiz.level }} </p>
+        <p class="category">Catégorie: {{ quiz.category.label }} </p>
+        <p class="nb_question">Nombre de question :{{ quiz.questions|length }}</p>
+        <a id="play" href="#">Jouer</a>
+    </article>
   
         {{ form_start(formQuiz) }}
-            <div id="quiz-container" style="background-image: url('{{ asset("uploads/img/category/" ~ category.picture) }}');">
+            <div id="quiz-container" style ="background-image: url({{asset("uploads/img/category/"~category.picture)}});">
                 <h2 id="questions"></h2>
                 
 
@@ -18,18 +24,13 @@
                 
 
             </div>    
-                <div id="recap-container" style="display: none;"></div>
+                <div id="recap-container"></div>
                 <input type="button" id="show-recap" value="Afficher recap">
                 <input id="submit" type="submit">
 
         {{ form_end(formQuiz) }}
-  
-        {% block javascripts %}
-           
-           
-        
-        <script src="{{ asset('js/script.js') }}"></script>
-        
+    {% block javascripts %}
+        <script src="{{ asset('js/script.js') }}"></script>   
     {% endblock %}
+    
 {% endblock %}
-{# <img src="{{ asset('uploads/img/category/'~ category.picture) }}" alt="{{ category.label }}"> #}

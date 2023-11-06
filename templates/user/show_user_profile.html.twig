@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}profile{% endblock %}
+
+{% block body %}
+<section>
+        <h1> Bienvenue {{ app.user.username }}</h1>
+        
+        <p>nb quiz creer {{ app.user.quizzes|length }}</p>
+        <p>nb topic creer {{ app.user.topics|length}}</p>
+        <p>nb reponse {{ app.user.posts|length }} </p>
+        <p>nb game jouer: {{ app.user.games|length}}</p>
+    </section>
+{% endblock %}

@@ -14,12 +14,16 @@ let quizContainer = document.getElementById('quiz-container')
 document.getElementById('show-recap').style.display = 'none'
 
 document.getElementById('submit').style.display = 'none'
+let play = document.getElementById('play')
+console.log(play);
 // nextQuestion.style.display = 'none'
 let recapDataArray = {}; // Déclaration de la variable pour stocker le récapitulatif
 let currentQuestionIndex = 0 // initialise a 0 utiliser pour parcourir les index du tableau de question
 let count = 0 
 
-
+play.addEventListener('click', function() {
+    document.getElementById('quiz-container-play').style.display = 'none'
+})
 
 // Initialisez les réponses actuelles
 function displayQuestion() {
@@ -155,7 +159,7 @@ function displayRecap() {
             recapDataField.name = 'recapData'; // lui ajoute le name recapData
             recapContainer.appendChild(recapDataField);// place le input en enfant de la div recapContainer
             recapDataField.value = recapDataJSON; // Ajoutez le Json a la value du input pour pouvoir le récupérer dans le controller
-            num++// rajoute 1 a chaque tour
+            num++// rajoute 1 a chaque tour de la boucle
         }
     } 
  

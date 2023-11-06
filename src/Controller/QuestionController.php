@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Answer;
 use App\Entity\Question;
 use App\Form\QuestionType;
+use App\Form\QuestionAnswerType;
 use App\Repository\QuizRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -56,6 +58,51 @@ class QuestionController extends AbstractController
             'quiz' => $quiz,
             'edit' => $question->getId(),
             'formNewQuestion' => $formNewquestion,
+            'questionId' => $question->getId(),
+        ]);
+    }
+
+    #[Route('/question/answer/new/{idQuiz}', name: 'new_question_answer')]
+    #[Route('/question/answer/edit/{id}', name: 'edit_question_answer')]
+    public function addEditQuestionAnswer(Question $question = null,Answer $answer = null, Request $request, EntityManagerInterface $entityManager, QuizRepository $quizRepository): Response
+    {
+        if(!$question && !$answer){
+
+            $question = new Question; // créer une nouvelle intance de question
+            $answer = new Answer;
+            $quizId = $request->attributes->get('idQuiz');//on récupère l'id de quiz dans l'url
+            $quiz = $quizRepository->findOneBy(['id' => $quizId]);// on récupére le quiz grace a son id
+            $category = $quiz->getCategory();
+            $answer->setQuestion($question);
+        }else{
+            $quiz = $question->getQuiz();// si quiz existe on récupère le Quiz appartenant a la question
+            $category = $quiz->getCategory(); //// si quiz existe on récupère la catégorie appartenant a la question
+        }
+        $question->setQuiz($quiz); //ajoute la question dans son  quiz
+        $question->setCategory($category);// ajoute la catégorie a la question
+        $formNewQuestionAnswer = $this->createForm(QuestionAnswerType::class, $quiz);//crer le formulaire
+        $formNewAnswer = $this->createForm(QuestionType::class, $question);//crer le formulaire
+
+        $formNewQuestionAnswer->handleRequest($request);
+        
+        //si le formulaire de question est remplie et valide
+        if ($formNewQuestionAnswer->isSubmitted() && $formNewQuestionAnswer->isValid()) {
+            //récupère les donné du formulaire  
+            $formNewQuestionAnswer->getData();
+            // prepare PDO(prepare la requete Insert ou Update)
+            $entityManager->persist($question);
+            // execute PDO(la requete Insert ou Update)
+            $entityManager->flush();
+            //redirige vers la liste des question
+            return $this->redirectToRoute('app_quiz',['idQuiz' => $quiz->getId()]); // redirige vers la création des question 
+        }
+
+        return $this->render('quiz/newQuestionAnswer.html.twig', [
+            'quiz' => $quiz,
+            'edit' => $question->getId(),
+            'quizId' => $quiz->getId(),
+            'formNewQuestionAnswer' => $formNewQuestionAnswer,
+            'formNewAnswer' => $formNewAnswer,
             'questionId' => $question->getId(),
         ]);
     }

@@ -4,11 +4,7 @@ namespace App\Form;
 
 use App\Entity\Quiz;
 use App\Entity\Level;
-use App\Form\AnswerType;
-use App\Form\QuestionType;
-use App\Entity\SubCategory;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
+
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;

@@ -88,4 +88,9 @@ class Level
 
         return $this;
     }
+
+    function __toString()
+    {
+        return $this->getLabel();
+    }
 }

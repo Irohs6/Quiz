@@ -5,7 +5,7 @@
 {% block body %}
     {% for user in users %}
         {% if 'ROLE_ADMIN' not in user.roles %}
-            <li>{{ user.username }}</li>
+            <li>{{ user.username }}</li><a href="{{path('app_userManagementRole', {'id': user.id})}}"> Role Modérateur</a>
         {% endif %}
     {% endfor %}
 {% endblock %}

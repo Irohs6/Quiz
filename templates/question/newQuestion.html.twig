@@ -11,7 +11,7 @@
         <h1>Ajouter les question aux: {{ quiz.title }}</h1>
     {% endif %}
         
-    
+    <p>Vous devez ajouter un minum de 10 question avec au minmum 2 réponse pour qu'un quiz soit valide</p>
     
     {{ form_start(formNewQuestion) }}
         
@@ -52,8 +52,10 @@
             </button>
         </div>
 
+        {% if quiz.questions|length < 10 %}  
+            <a href="{{path('app_quiz')}}">Terminé</a>
+        {% endif %}
         
-        <a href="{{path('show_quiz', {'id': quiz.id})}}">Terminé</a>
     
      
     

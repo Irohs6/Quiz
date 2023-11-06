@@ -46,26 +46,40 @@
                         <section class="level{{nb}}">
 
                             <p>{{ level.label }}</p>
-
-                            <a href="{{path('new_quiz', {'idCategory': category.id})}}">Ajouter Quiz</a><br>
-
+                            {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}  
+                                <a href="{{path('new_quiz', {'idCategory': category.id})}}">Ajouter Quiz</a><br>
+                            {% endif %}
                             {% for quiz in level.quizzes %}{#  boucle pour afficher les quizs #}
 
                                 {% if category.label == quiz.category.label %}  {#  condition pour trier les quiz par catégorie #}
+                                    {% if quiz.isVerified %}{# condition qu vérifie si le quiz est vérifier si oui il affiche le quiz#}
+                                        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}  
+                                            <li>{{ quiz.title }}</li>
+                                            {% if quiz.questions|length > 0 %}{#  condition si le quiz a plus de 1 question affiche le bouton  #}
 
-                                    <a href="{{path('show_quiz', {'id': quiz.id})}}">
-                                        <li>{{ quiz.title }}</li>
-                                    </a>
+                                                <a href="{{path('app_play', {'id': quiz.id})}}">Jouer</a>
 
-                                    {% if quiz.questions|length > 0 %}   
-
-                                        <a href="{{path('app_play', {'id': quiz.id})}}">Jouer</a>
-
+                                            {% endif %} 
+                                        {% endif %}
+                                    {% else %}{#  affiche que pour modérateur et admin #}
+                                        {% if is_granted('ROLE_MODERATOR') %}
+                                            <a href="{{path('show_quiz', {'id': quiz.id})}}">Détail</a>
+                                            <a href="{{path('new_question_answer', {'idQuiz': quiz.id})}}">Ajouter des question</a>
+                                            
+                                                <li>{{ quiz.title }}</li>
+                                        
+                                            {% if quiz.questions|length > 0 %}   
+    
+                                                <a href="{{path('app_play', {'id': quiz.id})}}">Jouer</a>
+    
+                                            {% endif %}
+                                        {% endif %}
+                                     {% endif %}{# Fin condition {% if quiz.isVerified %} #}
+                                    {% if is_granted('ROLE_MODERATOR') %} 
+                                        <a href="{{path('edit_quiz', {'id': quiz.id})}}">Modifier</a>
+                                        <a href="{{path('delete_quiz', {'id': quiz.id})}}">Supprimer</a>
+                                        <a href="{{path('new_question', {'idQuiz': quiz.id})}}">Ajouter Question</a>
                                     {% endif %}
-
-                                    <a href="{{path('edit_quiz', {'id': quiz.id})}}">Modifier</a>
-                                    <a href="{{path('delete_quiz', {'id': quiz.id})}}">Supprimer</a>
-                                    <a href="{{path('new_question', {'idQuiz': quiz.id})}}">Ajouter Question</a>
 
                                     
                                 {% endif %}  {# fin condition {% if category.label == quiz.category.label %}   #}

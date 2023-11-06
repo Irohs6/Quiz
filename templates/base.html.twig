@@ -21,10 +21,14 @@
                     {% if is_granted('ROLE_ADMIN') %} 
                         <a href="{{path('app_admin_panel')}}">Panel admin</a>
                     {% endif %}
+                    {% if is_granted('ROLE_MODERATOR') %} 
+                        <a href="{{path('app_moderator_panel')}}">Modération</a>
+                    {% endif %}
                     <a href="{{path('app_quiz')}}">Accueil</a>
                         {# si l'utilisateur est connecté #}
                     {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}  
                         {#affiche le bouton déconnection  #}
+                        <a href="{{path('user_profile',{'id': app.user.id})}}">profile</a>
                         <a href="{{path('app_logout')}}">Déconnexion</a>
                     {% else %}
                         {# sinon connection et inscription #}
@@ -53,7 +57,8 @@
                 crossorigin="anonymous">
             </script>
             <script src="{{ asset('js/quiz.js') }}"></script>
-            {# <script src="{{ asset('js/answer.js') }}"></script> #}
+            <script src="{{ asset('js/answer.js') }}"></script>
+            
         {% endblock %}
     </body>
 </html>

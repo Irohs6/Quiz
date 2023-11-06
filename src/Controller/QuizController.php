@@ -7,7 +7,6 @@ use App\Entity\Game;
 use App\Entity\Quiz;
 use App\Form\QuizType;
 use App\Form\PlayQuizzType;
-
 use App\Repository\ThemeRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\LevelRepository;
@@ -17,6 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class QuizController extends AbstractController
 {
@@ -66,7 +66,7 @@ class QuizController extends AbstractController
         $category = $quiz->getCategory();
         $game = new Game; // nouvelle instance de Game
         $quiz->addGame($game);// ajout du quiz dans Game
-
+        dd($request->attributes);
         $formQuiz = $this->createForm(PlayQuizzType::class, $question, ['attr' => ['class' => 'formQuiz']]); //creer le formulaire
         
         $formQuiz->handleRequest($request);
@@ -123,7 +123,8 @@ class QuizController extends AbstractController
             $quiz = new Quiz; // créer une nouvelle intance de Quiz
             $idCategory = $request->attributes->get('idCategory'); // récupère l'id Category dans l'url
             $category = $categoryRepository->findOneBy(['id' => $idCategory]); // on recupère l'entity category grace a son id
-           
+            $user = $this->getUser();
+            $quiz->setUserId($user);
         }else{
             $category = $quiz->getCategory(); // si quiz existe on recupère la catégory contenu dans quiz
         }
@@ -159,7 +160,7 @@ class QuizController extends AbstractController
         ]);
     }
 
-    #[Route('/quiz/{id}/delete', name: 'delete_quiz')]
+    #[Route('admin/quiz/{id}/delete', name: 'delete_quiz')]
     public function deleteQuiz(Quiz $quiz = null, EntityManagerInterface $entityManager): Response
     {
         $entityManager->remove($quiz);//suprime un quiz
@@ -168,15 +169,7 @@ class QuizController extends AbstractController
         return $this->redirectToRoute('app_quiz');
     }
 
-    #[Route('/quiz/{id}/show', name: 'show_quiz')]
-    public function showQuiz(Quiz $quiz, QuestionRepository $questionRepository): Response
-    {
-        $questionNotInQuiz = $questionRepository->questionsNotInQuiz($quiz->getId());//pour afficher la liste des question qui ne sont pas dans ce quiz
-        return $this->render('quiz/show_quiz.html.twig', [
-            'questionNotInQuiz' => $questionNotInQuiz,
-            'quiz' => $quiz,
-        ]);
-    }
+   
 
     
 }
