@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter une Categorie{% endblock %}
+
+{% block body %}
+<div class="container">
+
+    {# {% if edit %}
+        <h1>Modifier la category du theme: {{ category.theme.label }}</h1>    
+    {% else %} #}
+        <h1>Ajouter la category au theme: {{ theme.label }}</h1>
+    {# {% endif %} #}
+        
+    {{ form_start(formNewCategory) }}
+        
+        {{ form_row(formNewCategory.label) }}
+        {{ form_row(formNewCategory.picture) }}
+        
+    {{ form_end(formNewCategory) }}
+</div>
+{% endblock %}
+

@@ -104,6 +104,10 @@ a{
     align-items: center;
     width: 50%;
     color: white;
+    height: 600px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 #answer{
@@ -168,9 +172,9 @@ p{
     width: 100%;
 }
 
-#quiz-detail{
+/* #quiz-detail{
 
-}
+} */
 
 .quiz-detail{
 

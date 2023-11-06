@@ -8,7 +8,7 @@
 
   
         {{ form_start(formQuiz) }}
-            <div id="quiz-container">
+            <div id="quiz-container" style="background-image: url('{{ asset("uploads/img/category/" ~ category.picture) }}');">
                 <h2 id="questions"></h2>
                 
 
@@ -17,7 +17,7 @@
                 <input  id="valider" type="button" value="Valider"/>
                 
 
-             </div>    
+            </div>    
                 <div id="recap-container" style="display: none;"></div>
                 <input type="button" id="show-recap" value="Afficher recap">
                 <input id="submit" type="submit">
@@ -32,3 +32,4 @@
         
     {% endblock %}
 {% endblock %}
+{# <img src="{{ asset('uploads/img/category/'~ category.picture) }}" alt="{{ category.label }}"> #}

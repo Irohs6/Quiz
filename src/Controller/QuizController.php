@@ -63,7 +63,7 @@ class QuizController extends AbstractController
         }
         
         $quizJson = json_encode($quizData); //transforme le tableau en Json ((JavaScript Object Notation))
-
+        $category = $quiz->getCategory();
         $game = new Game; // nouvelle instance de Game
         $quiz->addGame($game);// ajout du quiz dans Game
 
@@ -108,6 +108,7 @@ class QuizController extends AbstractController
         }
 
         return $this->render('quiz/playQuiz.html.twig', [
+            'category' => $category,
             'quiz' => $quiz,
             'quizJson' => $quizJson,
             'formQuiz' => $formQuiz,
