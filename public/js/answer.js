@@ -7,7 +7,7 @@ $(document).ready(function() { // Une fois que le document (base.html.twig) HTML
         // Récupération du nombre actuel d'élément "question" dans la collection (à défaut, utilisation de la longueur de la collection)
         var counterAnswer = listAnswer.data('widget-answers-counter') || list.children().length
         // Récupération de l'identifiant de la session concernée, en cours de création/modification
-        var question = list.data('questionId')
+        var question = list.data('quizId')
         // Extraction du prototype complet du champ (que l'on va adapter ci-dessous)
         var newWidgetAnswer = list.attr('data-answers')
         console.log(newWidgetAnswer);

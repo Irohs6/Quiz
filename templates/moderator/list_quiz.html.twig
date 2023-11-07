@@ -3,9 +3,34 @@
 {% block title %}Hello AdminController!{% endblock %}
 
 {% block body %}
+<ul>
 {% for quiz in quizes %}
-    <li>{{ quiz.title }} <br>Nb question:{{ quiz.questions|length}} est vérifié</li>
+    <li>
+        <p>{{ quiz.title }}</p>
+        <a href="{{path('edit_quiz', {'id': quiz.id})}}">Modifier</a>  
+    </li>
+    <li>
+        Nb question:{{ quiz.questions|length}}
+    </li>
+    <li>
+        Statut: 
+        {% if quiz.isVerified %}
+            <span class="success">Vérifier</span>
+        {% else %}
+            <span class="error">A vérifier</span>
+        {% endif %}
+    </li>
+    <li>
+        <a href="{{path('show_quiz', {'id': quiz.id})}}">Détail</a>
+    </li>
+    <li>
+        {% if quiz.questions|length > 0 %}   
+                <a href="{{path('app_play', {'id': quiz.id})}}">Test Quiz</a>
+        {% endif %}
+        <a href="{{path('new_question', {'idQuiz': quiz.id})}}">Ajouter Question</a>
+    </li>
+    <br>
 {% endfor %}
-    
+</ul>    
    
 {% endblock %}

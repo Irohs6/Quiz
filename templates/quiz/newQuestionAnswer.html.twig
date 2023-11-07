@@ -39,8 +39,8 @@
                 {{ form_start(formNewAnswer) }}
                     <div class="col-formNewAnswer-label col-sm-2">&nbsp;</div>
                     <div id="answer-fields-list"  class="col-sm-10 remove-collection-answer-widget"
-                        data-answers="{{ form_widget(questionField.answers.vars.prototype)|e }}"
-                        data-question="{{ questionId }}"
+                        {# data-answers="{{ form_widget(questionField.answers.vars.prototype)|e }}" #}
+                        data-question="{{ quizId }}"
                         data-widget-answers="{{ '<p></p>'|e }}"
                         data-widget-answers-counter="{{ questionField.answers|length }}">
                         {% for answerField in formNewAnswer.answers %}

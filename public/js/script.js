@@ -4,6 +4,7 @@ console.log(quizData);
 let quizQuestion = document.getElementById('questions')
 // Réinitialise la variable selectedAnswers à un objet vide
 selectedAnswers = {}
+tableScore = {}
 let quizAnswer = document.getElementById('answer')
 
 let valider = document.getElementById('valider')
@@ -104,9 +105,9 @@ valider.addEventListener('click', function() {
     }
     
     // Stocke les réponses sélectionnées dans le tableau selectedAnswers
-    selectedAnswers[currentQuestion.id] = selectedAnswers[currentQuestion.id] || [];
-    selectedAnswers[currentQuestion.id].push(...checkedAnswers);
-   
+    selectedAnswers['question'] = selectedAnswers['question'] || [];
+    selectedAnswers['question'].push(...checkedAnswers);
+  
     // incrément l'index du tableau pour passé a la question suivante
 
     currentQuestionIndex++;
@@ -119,6 +120,8 @@ valider.addEventListener('click', function() {
 
 //function pour afficher le recap d'un quiz une fois fini
 function displayRecap() {
+    const answerScoreTotal = document.createElement('span');
+    let scoreTotal = 0
     let num = 1
     document.getElementById('quiz-container').style.display = 'none';//cache le contenu du quiz-container contenant les question et les réponse
     document.getElementById('submit').style.display = 'block';//fait apparaitre le bouton de soumission
@@ -140,20 +143,41 @@ function displayRecap() {
 
             questionData.forEach(answerData => {
             const answerListItem = document.createElement('li');
+            const answerScore = document.createElement('li');
+            
+            
             /**************************************************************************************** */
             //si la question sélection est vrais on lui ajoute la class success(couleur vert) sinon error(couleur rouge)
             if (answerData.answerIsright) {
                answerListItem.className = 'success' //ajoute la class success si la réponse est vrais
+               const score = 10 ;
+               scoreTotal = scoreTotal + score
+               answerScore.innerHTML = `<strong>Score:</strong> ${ score }`;
             }else{
                 answerListItem.className = 'error'// error si la réponse sélectioné est fause
+                const score = 0 ;
+                answerScore.innerHTML = `<strong>Score:</strong> ${ score }`;
             }
                 answerListItem.innerHTML = `<strong>Réponse:</strong> ${answerData.answerIntitulle}`;
-                answersElement.appendChild(answerListItem);//place le li en fant du ul
+                answersElement.appendChild(answerListItem);//place le li enfant du ul
+                answerListItem.appendChild(answerScore);//place le li enfant du ul
+                
             });
-
+            recapContainer.insertAdjacentElement('afterend',answerScoreTotal);
+            answerScoreTotal.innerHTML = `<strong>Score Total:</strong> ${ scoreTotal }`;
+            tableScore = []
+            tableScore.push({
+                    'score': scoreTotal //id de la question
+                }
+            );
+            selectedAnswersScore = {
+                ...selectedAnswers,...tableScore   
+            }
+            
+            console.log(selectedAnswersScore);
             questionElement.appendChild(answersElement); // place le ul en enfant de la div
             recapContainer.appendChild(questionElement); //et palce la div en enfant de la div recap container
-            const recapDataJSON = JSON.stringify(selectedAnswers);// JSON.stringify converti une variable Javascript/ un objet ou un tableau en un string JSON prend en premier paramamètre la value, peux accepter un second paramètre une fonction de remplacement et un 3ème paramètre pour l'indentation
+            const recapDataJSON = JSON.stringify(selectedAnswersScore);// JSON.stringify converti une variable Javascript/ un objet ou un tableau en un string JSON prend en premier paramamètre la value, peux accepter un second paramètre une fonction de remplacement et un 3ème paramètre pour l'indentation
             const recapDataField = document.createElement('input');//créer un élément input
             recapDataField.type = 'hidden';// met le input en type hidden(non visible)
             recapDataField.name = 'recapData'; // lui ajoute le name recapData
@@ -165,7 +189,7 @@ function displayRecap() {
  
 }
 
-document.getElementById('show-recap').addEventListener('click', function() {
+document.getElementById('show-recap').addEventListener('click', function(){
     displayRecap();  // Affichez le récapitulatif
     document.getElementById('show-recap').style.display = 'none'
 

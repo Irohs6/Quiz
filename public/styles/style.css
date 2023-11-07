@@ -128,17 +128,6 @@ a{
     justify-content: center;
 }
 
-.difficulter{
-
-}
-
-.category{
-
-}
-
-.nb_question{
-
-}
 #recap-container{
     display: none;
 }
@@ -160,6 +149,7 @@ a{
 .error{
     color: red;
 }
+
 .level{
    
     display: flex;
@@ -168,35 +158,36 @@ a{
     flex-direction: row;
     list-style: none;
 }
+
 .level1{
     border-radius: 15px;
     width: 400px;
     height: 500px;
-    background-color: #33932E;
-   
+    background-color: #33932E; 
 }
+
 .level2{
     border-radius: 15px;   
     width: 400px;
     height: 500px;
     background-color: #DF9409;
 }
+
 .level3{
     border-radius: 15px;
     width: 400px;
     height: 500px;
     background-color: #92140C;
 }
+
 .category{
     display: flex;
     flex-direction: row;
     justify-content: space-around;
     flex-wrap: wrap;
 }
-p{
-    text-align: center;
-    width: 100%;
-}
+
+
 /******************************Détail Quiz*************************************************/
 #quiz-detail-container{
     display: flex;

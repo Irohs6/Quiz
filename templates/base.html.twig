@@ -28,7 +28,7 @@
                         {# si l'utilisateur est connecté #}
                     {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}  
                         {#affiche le bouton déconnection  #}
-                        <a href="{{path('user_profile',{'id': app.user.id})}}">profile</a>
+                        <a href="{{path('user_profile',{'id': app.user.id})}}">Profile</a>
                         <a href="{{path('app_logout')}}">Déconnexion</a>
                     {% else %}
                         {# sinon connection et inscription #}

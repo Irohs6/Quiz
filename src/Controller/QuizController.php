@@ -66,38 +66,33 @@ class QuizController extends AbstractController
         $category = $quiz->getCategory();
         $game = new Game; // nouvelle instance de Game
         $quiz->addGame($game);// ajout du quiz dans Game
-        dd($request->attributes);
         $formQuiz = $this->createForm(PlayQuizzType::class, $question, ['attr' => ['class' => 'formQuiz']]); //creer le formulaire
-        
+        $user = $this->getUser(); // on récupère l'user en session
+        $game->setUserId($user); // on rajoute l'user en session a la Game
         $formQuiz->handleRequest($request);
-     
+        $level = $quiz->getLevel(); // on récupère le niveaux de difficulté 
+        $scoreCoeff = $level->getScoreCoef(); //on récupère le coefficient
        
         //si le formQuizulaire est remplie et valide
         if ($formQuiz->isSubmitted() && $formQuiz->isValid()) {
             $recapData = $request->request->get('recapData');//récupère le tableau de récapitulatif du quiz en json
             
             $recapDataArray = json_decode($recapData, true);// convertit en une structure de données PHP dans notre cas un tableau associatif
-           
-            $data = $formQuiz->getData();
             
-            foreach ($recapDataArray as $questionId => $value ) {  // pour chaque id question on récupère les valeur
-                //dd($recapdataArray)=
-                //     array:1 [▼
-                    //     12 => array:1 [▼
-                    //       0 => array:5 [▼
-                    //         "questionId" => 12
-                    //         "questionIntitulle" => "qqch"
-                    //         "answerId" => "31"
-                    //         "answerIntitulle" => "untruc"
-                    //         "answerIsright" => true
-                    //       ]
-                    //     ]
-                    //]
-                $answer = $entityManager->getRepository(Answer::class)->findOneBy(['id' => $value[0]['answerId']]);// je récupère l'id de la réponse pour récupérer mon entity answer
-                $game->addAnswer($answer);   //j'ajoute l'entity answer a la game  
-
+            // dd($recapDataArray['question']);
+           
+            foreach ($recapDataArray[0] as $score => $value ) {  // dans le racapdata on récupère la value du score 
+                $score = $value * $scoreCoeff /10;//effectue le calcul du score
+                    $game->setScore($score);
             }  
-                            
+            
+            foreach ($recapDataArray['question'] as $question => $answer) { 
+                //on récupère les réponse pour chaque question
+                $answer = $entityManager->getRepository(Answer::class)->findOneBy(['id' => $answer['answerId']]);// je récupère l'id de la réponse pour récupérer mon entity answer
+                $game->addAnswer($answer);   //j'ajoute l'entity answer a la game  
+                
+            }  
+                   
             // prepare PDO(prepare la requete Insert ou Update)
             $entityManager->persist($game);
             // execute PDO(la requete Insert ou Update)
@@ -169,7 +164,4 @@ class QuizController extends AbstractController
         return $this->redirectToRoute('app_quiz');
     }
 
-   
-
-    
 }
