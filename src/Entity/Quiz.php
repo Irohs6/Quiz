@@ -29,7 +29,7 @@ class Quiz
     #[ORM\JoinColumn(nullable: false)]
     private ?Level $level = null;
 
-    #[ORM\OneToMany(mappedBy: 'quiz', targetEntity: Question::class)]
+    #[ORM\OneToMany(mappedBy: 'quiz', targetEntity: Question::class,cascade: ['persist'] )]
     private Collection $questions;
 
     #[ORM\OneToMany(mappedBy: 'quiz', targetEntity: Game::class)]

@@ -78,20 +78,20 @@ class QuizController extends AbstractController
             $recapData = $request->request->get('recapData');//récupère le tableau de récapitulatif du quiz en json
             
             $recapDataArray = json_decode($recapData, true);// convertit en une structure de données PHP dans notre cas un tableau associatif
-            
-            // dd($recapDataArray['question']);
+          
+           foreach ($recapDataArray as $data) {
+            if (isset($data['score'])) {
+                $score = $data['score'];
+                $scoreSum = $score * $scoreCoeff / 10;
+            } else {
+                foreach ($data as $response) {
+                    $answer = $entityManager->getRepository(Answer::class)->findOneBy(['id' => $response['answerId']]);
+                    $game->addAnswer($answer);
+                }
+            }
+        }
+        $game->setScore($scoreSum);
            
-            foreach ($recapDataArray[0] as $score => $value ) {  // dans le racapdata on récupère la value du score 
-                $score = $value * $scoreCoeff /10;//effectue le calcul du score
-                    $game->setScore($score);
-            }  
-            
-            foreach ($recapDataArray['question'] as $question => $answer) { 
-                //on récupère les réponse pour chaque question
-                $answer = $entityManager->getRepository(Answer::class)->findOneBy(['id' => $answer['answerId']]);// je récupère l'id de la réponse pour récupérer mon entity answer
-                $game->addAnswer($answer);   //j'ajoute l'entity answer a la game  
-                
-            }  
                    
             // prepare PDO(prepare la requete Insert ou Update)
             $entityManager->persist($game);

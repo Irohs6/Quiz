@@ -48,6 +48,7 @@
                             <p>{{ level.label }}</p>
                             {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}  
                                 <a href="{{path('new_quiz', {'idCategory': category.id})}}">Ajouter Quiz</a><br>
+                                <a href="{{path('app_test', {'id': category.id})}}">Test Ajouter Quiz</a><br>
                             {% endif %}
                             {% for quiz in level.quizzes %}{#  boucle pour afficher les quizs #}
 
@@ -64,7 +65,6 @@
                                     {% else %}{#  affiche que pour modérateur et admin #}
                                         {% if is_granted('ROLE_MODERATOR') %}
                                             <a href="{{path('show_quiz', {'id': quiz.id})}}">Détail</a>
-                                            <a href="{{path('new_question_answer', {'idQuiz': quiz.id})}}">Ajouter des question</a>
                                             
                                                 <li>{{ quiz.title }}</li>
                                         

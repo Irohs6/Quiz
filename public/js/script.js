@@ -105,8 +105,8 @@ valider.addEventListener('click', function() {
     }
     
     // Stocke les réponses sélectionnées dans le tableau selectedAnswers
-    selectedAnswers['question'] = selectedAnswers['question'] || [];
-    selectedAnswers['question'].push(...checkedAnswers);
+    selectedAnswers[currentQuestion.id] = selectedAnswers[currentQuestion.id] || [];
+    selectedAnswers[currentQuestion.id].push(...checkedAnswers);
   
     // incrément l'index du tableau pour passé a la question suivante
 
@@ -123,6 +123,8 @@ function displayRecap() {
     const answerScoreTotal = document.createElement('span');
     let scoreTotal = 0
     let num = 1
+   
+
     document.getElementById('quiz-container').style.display = 'none';//cache le contenu du quiz-container contenant les question et les réponse
     document.getElementById('submit').style.display = 'block';//fait apparaitre le bouton de soumission
 
@@ -131,11 +133,15 @@ function displayRecap() {
     document.getElementById('recap-container').style.display = 'block'; //met visible l'élément qui a l'id recap-container
 
     for (const questionId in selectedAnswers) {
+        const questionData = selectedAnswers[questionId];
+       
+        
         if (selectedAnswers.hasOwnProperty(questionId)) {//hasOwnProperty renvoit true ou false dans l'exemple il vérifie si selectedAnswers posséde la propriété questionId si oui il renvoie True
            
-            const questionData = selectedAnswers[questionId];
+            
 
             const questionElement = document.createElement('div');
+
             questionElement.innerHTML = `<strong>Question ${ num }:</strong>  ${questionData[0].questionIntitulle}`;
 
             const answersElement = document.createElement('ul');
@@ -185,6 +191,7 @@ function displayRecap() {
             recapDataField.value = recapDataJSON; // Ajoutez le Json a la value du input pour pouvoir le récupérer dans le controller
             num++// rajoute 1 a chaque tour de la boucle
         }
+        
     } 
  
 }
