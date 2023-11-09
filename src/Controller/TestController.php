@@ -24,12 +24,14 @@ class TestController extends AbstractController
     }
 
     #[Route('/test/{id}', name: 'app_test')]
-    public function create(Request $request, Category $category): Response
+    public function create(Request $request, Quiz $quiz): Response
     {
-        $quiz = new Quiz();
+        
         $form = $this->createForm(TestQuizType::class, $quiz);
+        $category = $quiz->getCategory();
         $question = new Question();
-        $formNewQuestion = $this->createForm(TestQuestionType::class, $question);
+        $question->setCategory($category);
+        // $formNewQuestion = $this->createForm(TestQuestionType::class, $question);
         if ($request->isMethod('POST')) {
             $form->handleRequest($request);
 
@@ -40,28 +42,9 @@ class TestController extends AbstractController
 
         return $this->render('test/create.html.twig', [
             'form' => $form->createView(),
-            'formNewQuestion' => $formNewQuestion->createView(),
+            // 'formNewQuestion' => $formNewQuestion->createView(),
             'quizId' =>$quiz->getId(),
-            'questionId' => $question->getId()
-        ]);
-    }
-
-   
-    public function createAnswer(Request $request): Response
-    {
-        $question = new Question();
-        $formNewQuestion = $this->createForm(TestQuestionType::class, $question);
-
-        if ($request->isMethod('POST')) {
-            $formNewQuestion->handleRequest($request);
-
-            if ($formNewQuestion->isSubmitted() && $formNewQuestion->isValid()) {
-                // Vous pouvez enregistrer le quiz en base de données ici
-            }
-        }
-
-        return $this->render('test/question_template.html.twig', [
-            'formNewQuestion' => $formNewQuestion->createView(),
+            
         ]);
     }
 }

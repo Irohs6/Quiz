@@ -19,22 +19,9 @@ class TestQuizType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('title', TextType::class,[
-                'label' => 'Titre du Quiz',
-                'attr' =>[ 
-                    'class' => 'form-control'
-                ]
-            ])
-         
-            ->add('level', EntityType::class,[
-                'class' => Level::class,
-                'choice_label' => 'label',
-                'multiple' => false,
-                'expanded' => true, 
-                
-            ])
+          
             ->add('questions', CollectionType::class,[
-                'entry_type' => QuestionType::class,
+                'entry_type' => TestQuestionType::class,
                 'prototype' => true,
                 //autoriser l'ajout de nouveau élément qui seront persiter grace au cascade persit sur l'élément Question
                 //ca va va activer un data prototype qui sera un attribut html qu'on pourra manipuler en js
@@ -42,7 +29,8 @@ class TestQuizType extends AbstractType
                 'allow_delete' => true, //autorise la suppression
                 'by_reference' => false,// il est obligatoire car Quiz n'a pas de setQuestion mais c'est Question qui contient setQuiz
                 //Question est propriétaire de la relations. Pour éviter un mapping => false on est obligé de rajouter un by_reference => false
-                'label' => 'Questions',
+                
+                
             ])
 
 

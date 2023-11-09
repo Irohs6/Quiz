@@ -46,6 +46,10 @@ class QuestionRepository extends ServiceEntityRepository
 //        ;
 //    }
 
+    public function __toString()
+    {
+        return $this->getSentence();
+    }
     public function questionsNotInQuiz(int $quizId)
     {
         $em = $this->getEntityManager();

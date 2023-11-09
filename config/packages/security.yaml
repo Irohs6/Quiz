@@ -43,7 +43,7 @@ security:
     # pour securisé des url spécifique exiger que toutes les URL Commencez par commence en haut de la liste et s'arrète a la première occurence
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/moderator, roles: ROLE_MODERATOR }
-        # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/user, roles: ROLE_USER }
 
 when@test:
     security:

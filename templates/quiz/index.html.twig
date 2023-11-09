@@ -48,14 +48,15 @@
                             <p>{{ level.label }}</p>
                             {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}  
                                 <a href="{{path('new_quiz', {'idCategory': category.id})}}">Ajouter Quiz</a><br>
-                                <a href="{{path('app_test', {'id': category.id})}}">Test Ajouter Quiz</a><br>
-                            {% endif %}
-                            {% for quiz in level.quizzes %}{#  boucle pour afficher les quizs #}
-
+                                {% endif %}
+                                {% for quiz in level.quizzes %}{#  boucle pour afficher les quizs #}
+                                
+                               
                                 {% if category.label == quiz.category.label %}  {#  condition pour trier les quiz par catégorie #}
                                     {% if quiz.isVerified %}{# condition qu vérifie si le quiz est vérifier si oui il affiche le quiz#}
                                         {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}  
                                             <li>{{ quiz.title }}</li>
+                                           
                                             {% if quiz.questions|length > 0 %}{#  condition si le quiz a plus de 1 question affiche le bouton  #}
 
                                                 <a href="{{path('app_play', {'id': quiz.id})}}">Jouer</a>
@@ -67,7 +68,7 @@
                                             <a href="{{path('show_quiz', {'id': quiz.id})}}">Détail</a>
                                             
                                                 <li>{{ quiz.title }}</li>
-                                        
+                                                <a href="{{path('app_test', {'id': quiz.id})}}">Test Ajouter question</a><br>
                                             {% if quiz.questions|length > 0 %}   
     
                                                 <a href="{{path('app_play', {'id': quiz.id})}}">Jouer</a>

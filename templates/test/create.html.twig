@@ -5,54 +5,75 @@
 {% block title %}Créer un Quiz{% endblock %}
 
 {% block body %}
+{% set answers = "" %}
     <h1>Créer un Quiz</h1>
     {{ form_start(form) }}
-   
-    
     <h2>Ajout des questions du quiz</h2>
-        {{form_row(form.title)}}
-        {{form_row(form.level)}}
-
-    <div class="form-group row">
-
-        <div class="col-form-label col-sm-2">&nbsp;</div>
-
-        <div id="question-fields-list" class="col-sm-10 remove-collection-widget"
-            data-prototype="{{ form_widget(form.questions.vars.prototype)|e }}"
-            data-quiz="{{ quizId }}"
+<div class="container">
+   
+       
+    {# *******************ajout ou modification des question au quiz ********************************************************************#}
+    
+    <div id="question-fields-list" class="col-sm-10 remove-collection-widget"
+    data-prototype="{{ form_widget(form.questions.vars.prototype)|e }}"
+    data-quiz="{{quizId}}"
+    data-widget-tags="{{ '<p></p>'|e }}"
+    data-widget-counter="{{ form.questions|length }}"> 
+    {% for questionField in form.questions %}
+        <div class="form-group row">
+            
+            <div class="col-form-label col-sm-2">&nbsp;</div>
+            
+            <div id="answer-fields-list" class="col-sm-10 remove-collection-widget"
+            data-prototype="{{ form_widget(questionField.answers.vars.prototype)|e }}"
+            data-quiz="{{quizId}}"
             data-widget-tags="{{ '<p></p>'|e }}"
-            data-widget-counter="{{ form.questions|length }}"> 
-{# *******************ajout ou modification des question au quiz ********************************************************************#}
-            {% for questionField in form.questions %}
+            {# data-widget-counter="{{ questionField.answers|length }}">  #}
+            {% for answerField in questionField.answers %}
+            {% set answers = answerField %}
             <p>
-                {{ form_errors(questionField) }}
-                {{ form_widget(questionField, {'attr': {'class': 'borders'}}) }} 
-
+                
+                {# {{ dump(answerField) }} #}
+            </p>      
             {% endfor %}
-        </div>
-    </div>
 
-    <div class="formNewQuestionAnswer-group row flex-action">
-        <button type="button" class="add-another-collection-widget button" data-list-selector="#question-fields-list">
-            Ajouter une question
-        </button>
-    </div>
-
-    {# Empêche l'apparition d'une légende "questions", si la collection est vide (en cas de création d'une nouvelle session) #}
-    {% do form.questions.setRendered %}
-
+            {% set formQuestion = questionField %}
+            {{ form_row(formQuestion) }}
+            {{ dump(answers.vars.id) }}
+                    
+            </div>
+        </div>        
+                {# {{ form_errors(questionField) }}
+                    {# {% set name = questionField.vars.name %} #}
+               
+                   {# <script id="question-template" type="text/template">
+                        {% include 'test/question_template.html.twig' %}
+                    </script> #}
+                </div>
+    {% endfor %}
+    <div class="form-group row flex-action">
+        <button type="button" 
+                        class="add-another-collection-widget button"
+                        data-list-selector="#answer-fields-list">Ajouter une nouvelle réponse
+    </button>
+    <button type="button" 
+    class="add-another-collection-widget button"
+    data-list-selector="#question-fields-list">Ajouter une nouvelle question
+</button>
+            
+    {# empêche l'apparition d'une légende "programmes", si la collection est vide (en cas de création d'une nouvelle session) #}
+        {% do form.questions.setRendered %}
+</div> 
     {{ form_end(form) }}
-    <script id="question-template" type="text/template">
-        {% include 'test/question_template.html.twig' %}
-    </script>
 
     {% block javascripts %}
+
         <script
-        src="https://code.jquery.com/jquery-3.4.1.min.js"
-        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-        crossorigin="anonymous">
+            src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous">
         </script>
         <script src="{{ asset('js/quiz.js') }}"></script>
-        {# <script src="{{ asset('js/answer.js') }}"></script> #}
+
     {% endblock %}
 {% endblock %}

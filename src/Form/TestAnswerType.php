@@ -3,8 +3,10 @@
 namespace App\Form;
 
 use App\Entity\Answer;
+use App\Entity\Question;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -16,6 +18,12 @@ class TestAnswerType extends AbstractType
     {
         
         $builder
+
+        // ->add('question', EntityType::class,[
+        //     'class' =>  Question::class,
+        //     'label' => 'Question'
+        // ])
+
         ->add('sentence', TextType::class,[
             'label' => 'Réponse',
         ])
