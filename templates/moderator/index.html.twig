@@ -1,11 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AdminController!{% endblock %}
+{% block title %}Panel Moderator!{% endblock %}
 
 {% block body %}
     <p> Bienvenue {{ app.user.username }}</p>
     <li>
         <a href="{{path('app_list_quiz')}}">Liste Quiz</a>
+    </li>
+    <li>
+        <a href="{{path('list_theme')}}">Liste des Themes</a>
     </li>
    
 {% endblock %}

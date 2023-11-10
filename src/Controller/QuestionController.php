@@ -2,12 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Answer;
 use App\Entity\Question;
 use App\Form\QuestionType;
-use App\Form\QuestionAnswerType;
 use App\Repository\QuizRepository;
-use App\Form\QuizQuestionAnswerType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

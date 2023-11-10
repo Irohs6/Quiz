@@ -10,13 +10,12 @@ use App\Form\PlayQuizzType;
 use App\Repository\ThemeRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\LevelRepository;
-use App\Repository\QuestionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Session\Session;
+
 
 class QuizController extends AbstractController
 {
@@ -123,10 +122,7 @@ class QuizController extends AbstractController
         }else{
             $category = $quiz->getCategory(); // si quiz existe on recupère la catégory contenu dans quiz
         }
-        // $question = new Question;
-        // $reponse = New Answer;
-        // $reponse->setQuestion($question);
-        // $question->addAnswer($reponse);
+
         $quiz->setCategory($category); //ajoute quiz a sa sous catégorie 
         $quiz->setIsVerified(false); // met a false par default
         $formNewQuiz= $this->createForm(QuizType::class, $quiz);//crer le formulaire

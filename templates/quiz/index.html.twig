@@ -47,50 +47,54 @@
 
                             <p>{{ level.label }}</p>
                             {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}  
-                                <a href="{{path('new_quiz', {'idCategory': category.id})}}">Ajouter Quiz</a><br>
-                                {% endif %}
-                                {% for quiz in level.quizzes %}{#  boucle pour afficher les quizs #}
+                                <a class="add" href="{{path('new_quiz', {'idCategory': category.id})}}">Ajouter Quiz</a><br>
+                            {% endif %}
+
+                            {% for quiz in level.quizzes %}{#  boucle pour afficher les quizs #}
                                 
-                               
-                                {% if category.label == quiz.category.label %}  {#  condition pour trier les quiz par catégorie #}
-                                    {% if quiz.isVerified %}{# condition qu vérifie si le quiz est vérifier si oui il affiche le quiz#}
-                                        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}  
-                                            <li>{{ quiz.title }}</li>
-                                           
-                                            {% if quiz.questions|length > 0 %}{#  condition si le quiz a plus de 1 question affiche le bouton  #}
+                                <ul class="quizList">  
+                                    {% if category.label == quiz.category.label %}  {#  condition pour trier les quiz par catégorie #}
+                                        {% if quiz.isVerified %}{# condition qu vérifie si le quiz est vérifier si oui il affiche le quiz#}
+                                            {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}  
+                                                <li>{{ quiz.title }}</li>
+                                                {% if is_granted('ROLE_MODERATOR') %}
+                                                    <a class="detail" href="{{path('show_quiz', {'id': quiz.id})}}">Détail</a>
+                                                {% endif %}
+                                                {% if quiz.questions|length > 0 %}{#  condition si le quiz a plus de 1 question affiche le bouton  #}
 
-                                                <a href="{{path('app_play', {'id': quiz.id})}}">Jouer</a>
+                                                    <a  class="play" href="{{path('app_play', {'id': quiz.id})}}">Jouer</a>
 
-                                            {% endif %} 
-                                        {% endif %}
-                                    {% else %}{#  affiche que pour modérateur et admin #}
-                                        {% if is_granted('ROLE_MODERATOR') %}
-                                            <a href="{{path('show_quiz', {'id': quiz.id})}}">Détail</a>
+                                                {% endif %} 
+                                            {% endif %}
+                                        {% else %}{#  affiche que pour modérateur et admin #}
+                                            {% if is_granted('ROLE_MODERATOR') %}
                                             
                                                 <li>{{ quiz.title }}</li>
-                                                <a href="{{path('app_test', {'id': quiz.id})}}">Test Ajouter question</a><br>
-                                            {% if quiz.questions|length > 0 %}   
-    
-                                                <a href="{{path('app_play', {'id': quiz.id})}}">Jouer</a>
-    
+                                                <a class="detail" href="{{path('show_quiz', {'id': quiz.id})}}">Détail</a>
+                                                    {# <a href="{{path('app_test', {'id': quiz.id})}}">Test Ajouter réponse</a><br> #}
+                                                    <a class="add" href="{{path('app_test', {'id': quiz.id})}}">Test Ajouter question</a><br>
+                                                {% if quiz.questions|length > 0 %}   
+        
+                                                    <a class="play" href="{{path('app_play', {'id': quiz.id})}}">Jouer</a>
+        
+                                                {% endif %}
                                             {% endif %}
+                                        {% endif %}{# Fin condition {% if quiz.isVerified %} #}
+                                        {% if is_granted('ROLE_MODERATOR') %} 
+                                            <a class="modify" href="{{path('edit_quiz', {'id': quiz.id})}}">Modifier</a>
+                                            <a class="delete" href="{{path('delete_quiz', {'id': quiz.id})}}">Supprimer</a>
+                                            <a class="add" href="{{path('new_question', {'idQuiz': quiz.id})}}">Ajouter Question</a>
                                         {% endif %}
-                                     {% endif %}{# Fin condition {% if quiz.isVerified %} #}
-                                    {% if is_granted('ROLE_MODERATOR') %} 
-                                        <a href="{{path('edit_quiz', {'id': quiz.id})}}">Modifier</a>
-                                        <a href="{{path('delete_quiz', {'id': quiz.id})}}">Supprimer</a>
-                                        <a href="{{path('new_question', {'idQuiz': quiz.id})}}">Ajouter Question</a>
-                                    {% endif %}
 
-                                    
-                                {% endif %}  {# fin condition {% if category.label == quiz.category.label %}   #}
-
+                                        
+                                    {% endif %}  {# fin condition {% if category.label == quiz.category.label %}   #}
+                                </ul>
                             {% endfor %} {# {% for quiz in level.quizzes %} %}   #}
 
                             {% set nb = nb + 1 %} {# on ajoute 1 a la variable pour que chaque class est un nom différent pour chaque level (level1) (level2) #}
                         </section> {# class="level"+nb#}
 
-                    {% endif %}
+                    {% endif %}  {# {% if level.label == labelLevel %} #}
                 {% endfor %}  {# fin boucle {% for level in allLevel %} #}
                 {% set nb = 1%} {# on rénitialise la valeur a 1 a la fin de la boucle des level pour que quand la boucle de la nouvelle catégorie commence pour que chaque class du meme level ont le meme nom #}
             </section> {# class="level"#}

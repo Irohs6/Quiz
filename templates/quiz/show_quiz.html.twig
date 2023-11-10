@@ -22,13 +22,13 @@
                                 
                         </ul>
                         {% endfor %}
-                    <a href="{{ path('app_unset_quiz',{'id' : question.id ,'idQuiz': quiz.id})}}">Enlever</a>
+                    <a class="retirer" href="{{ path('app_unset_quiz',{'id' : question.id ,'idQuiz': quiz.id})}}">Enlever</a>
                    
 
-                    <a href="{{path('edit_question', {'id': question.id})}}">Modifier</a>
+                    <a class="modify" href="{{path('edit_question', {'id': question.id})}}">Modifier</a>
 
                 {% endfor %}
-                    <a href="{{path('new_question', {'idQuiz': quiz.id})}}">Ajouter Question</a>
+                    <a class="add" href="{{path('new_question', {'idQuiz': quiz.id})}}">Ajouter Question</a>
             </ul>
             
         </article>

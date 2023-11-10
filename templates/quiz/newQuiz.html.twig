@@ -15,67 +15,6 @@
     {{ form_row(formNewQuiz.title) }}
     {{ form_row(formNewQuiz.level) }}
     
-    {# <h2>Ajout des questions du quiz</h2>
-    {{ dump(formNewQuiz) }} #}
-
-    {# <div class="formNewQuiz-group row">
-
-        <div class="col-formNewQuiz-label col-sm-2">&nbsp;</div>
-
-        <div id="question-fields-list" class="col-sm-10 remove-collection-widget"
-            data-prototype="{{ form_widget(formNewQuiz.questions.vars.prototype)|e }}"
-            data-quiz="{{ quizId }}"
-            data-widget-tags="{{ '<p></p>'|e }}"
-            data-widget-counter="{{ formNewQuiz.questions|length }}">  #}
-
-{# *******************ajout ou modification des question au quiz ********************************************************************#}
-             {# {% for questionField in formNewQuiz.questions %}
-            <p>
-                {{ dump(questionField) }}
-                {{ form_errors(questionField) }}
-                {{ form_widget(questionField, {'attr': {'class': 'borders'}}) }}  #}
-           
-{# *******************ajout ou modification des réponse au question ********************************************************************#}
-                {# <h2>Ajout des réponses de la question</h2>
-               
-                    <div class="col-formNewQuiz-label col-sm-2">&nbsp;</div>
-                    <div id="answer-fields-list"  class="col-sm-10 remove-collection-answer-widget"
-                        data-answers="{{ form_widget(questionField.answers.vars.prototype)|e }}"
-                        data-question="{{ questionId }}"
-                        data-widget-answers="{{ '<p></p>'|e }}"
-                        data-widget-answers-counter="{{ questionField.answers|length }}">
-                        {% for answerField in questionField.answers %}
-                        
-                            {{ form_errors(answers) }}    
-                            {{ form_widget(answerField, {'attr': {'class': 'border'}})  }}    
-                            
-                            {# Empêche l'apparition d'une légende "questions", si la collection est vide (en cas de création d'une nouvelle session) #}
-                             {# {% do questionField.answers.setRendered %}
-                        {# {% endfor %} #}
-                    {# </div>
-                </div> 
-            </p>  #}
-            {# <div class="formNewQuiz-group row flex-action">
-                <button type="button" class="add-another-collection-answer-widget button" data-list-answers-selector="#answer-fields-list">
-                    Ajouter une réponse
-                </button>
-            </div>  #}
-        {# {% endfor %}
-        
-        </div>
-    </div>
-    
-    <div class="formNewQuiz-group row flex-action">
-        <button type="button" class="add-another-collection-widget button" data-list-selector="#question-fields-list">
-            Ajouter une question
-        </button>
-    </div> #}
-
-    {# Empêche l'apparition d'une légende "questions", si la collection est vide (en cas de création d'une nouvelle session) #}
-    {# {% do formNewQuiz.questions.setRendered %} #}
-   
-       
-   
-    {{ form_end(formNewQuiz) }}
+{{ form_end(formNewQuiz) }}
 </div>
 {% endblock %}

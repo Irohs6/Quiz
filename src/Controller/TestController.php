@@ -24,27 +24,55 @@ class TestController extends AbstractController
     }
 
     #[Route('/test/{id}', name: 'app_test')]
-    public function create(Request $request, Quiz $quiz): Response
+    public function createAnswer(Request $request, Quiz $quiz): Response
     {
+        $question = new Question;
         
-        $form = $this->createForm(TestQuizType::class, $quiz);
+        $form = $this->createForm(TestQuestionType::class, $question);
+        $formQuiz = $this->createForm(TestQuizType::class, $quiz);
+        // $formQuiz = $this->createForm(TestQuizType::class, $question);
         $category = $quiz->getCategory();
         $question = new Question();
+        $answer = new Answer;
         $question->setCategory($category);
-        // $formNewQuestion = $this->createForm(TestQuestionType::class, $question);
-        if ($request->isMethod('POST')) {
+        $answer->setQuestion($question);
+        
+       
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
                 // Vous pouvez enregistrer le quiz en base de données ici
             }
-        }
+        
 
         return $this->render('test/create.html.twig', [
             'form' => $form->createView(),
-            // 'formNewQuestion' => $formNewQuestion->createView(),
             'quizId' =>$quiz->getId(),
-            
+            'formQuiz' => $formQuiz->createView(),
+        ]);
+    }
+
+    #[Route('/test/quiz/{id}', name: 'app_question')]
+    public function createQuiz(Request $request, Quiz $quiz): Response
+    {
+        $formQuiz = $this->createForm(TestQuizType::class, $quiz);
+
+        
+        $category = $quiz->getCategory();
+        $question = new Question();
+        $question->setCategory($category);
+        
+       
+            $formQuiz->handleRequest($request);
+        // dd($formQuiz->get('questions'));
+            if ($formQuiz->isSubmitted() && $formQuiz->isValid()) {
+                // Vous pouvez enregistrer le quiz en base de données ici
+            }
+        
+        return $this->render('test/create.html.twig', [
+            'quiz' => $quiz,
+            'formQuiz' => $formQuiz->createView(),
+            'quizId' =>$quiz->getId(), 
         ]);
     }
 }

@@ -4,11 +4,42 @@
     box-sizing: 0;
 }
 /********************général***********************************/
-.add{
+.add, .modify, .delete, .retirer{
     cursor: pointer;
-    border: 2px solid black;
+    border: 2px solid #0B2443;
     border-radius: 5px;
+    color: black;
+    padding: 3px;
+    width: 200px;
+    text-align: center;
 }
+
+/* .modify{
+    cursor: pointer;
+    border: 2px solid #0B2443;
+    border-radius: 5px;
+    color: black;
+    padding: 3px;
+    width: 200px;
+}
+
+.delete{
+    cursor: pointer;
+    border: 2px solid #0B2443;
+    border-radius: 5px;
+    color: black;
+    padding: 3px;
+    width: 200px;
+}
+
+.retirer{
+    cursor: pointer;
+    border: 2px solid #0B2443;
+    border-radius: 5px;
+    color: black;
+    padding: 3px;
+    width: 200px;
+} */
 /*******************NAV*****************************************/
 #nav{
     display: flex;
@@ -158,19 +189,30 @@ a{
     flex-direction: row;
     list-style: none;
 }
-
-.level1{
+.quizList{
+    flex-direction: column;
+    display: flex;
+}
+.level1 {
     border-radius: 15px;
     width: 400px;
     height: 500px;
     background-color: #33932E; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: auto;
 }
 
 .level2{
-    border-radius: 15px;   
+    display: flex;
+    overflow-x: scroll;
+    border-radius: 15px;
     width: 400px;
     height: 500px;
     background-color: #DF9409;
+    flex-direction: column;
+    align-items: center;
 }
 
 .level3{
@@ -178,6 +220,10 @@ a{
     width: 400px;
     height: 500px;
     background-color: #92140C;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: scroll;
 }
 
 .category{
@@ -196,12 +242,13 @@ a{
     width: 100%;
 }
 
-/* #quiz-detail{
 
-} */
 
 .quiz-detail{
-
+    display: flex;
+    margin: 2px;
+    flex-direction: column;
+    width: 50%;
 }
 .quiz-detail-reponse{
 

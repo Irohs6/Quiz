@@ -23,7 +23,7 @@ class Game
     private ?string $score = null;
 
     #[ORM\ManyToOne(inversedBy: 'games')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Quiz $quiz = null;
 
     #[ORM\ManyToMany(targetEntity: Answer::class, mappedBy: 'games')]

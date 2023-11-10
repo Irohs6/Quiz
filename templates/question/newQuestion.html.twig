@@ -52,8 +52,8 @@
             </button>
         </div>
 
-        {% if quiz.questions|length < 10 %}  
-            <a href="{{path('app_quiz')}}">Terminé</a>
+        {% if quiz.questions|length >= 10 %}  
+            <a href="{{path('show_quiz', {'id': quiz.id})}}">Terminé</a>
         {% endif %}
         
     
