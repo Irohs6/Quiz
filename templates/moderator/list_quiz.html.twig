@@ -8,8 +8,8 @@
         
         {% set categoryExist = category %}
         <h2>Pour la categories {{category}} il y a  {{ category.quizzes|length }} quiz</h2>
-        <button id="button{{nb}}">Afficher</button>
-    <ul hidden class="category{{nb}}">
+        <button id="button{{nb}}" class="showButton">Afficher</button>
+    <ul class="category{{nb}}">
         {% for quiz in quizes %}
             {# {% set categoryquiz = quiz.category %} #}
 
@@ -48,8 +48,8 @@
     {% set nb = nb +1 %}
 {% endfor %}
 
-{% block javascripts %}
+
 <script src="{{ asset('js/show_quiz.js') }}"></script>   
-{% endblock %}
+
    
 {% endblock %}

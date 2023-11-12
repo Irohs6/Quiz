@@ -5,7 +5,13 @@
 {% block body %}
     {% for user in users %}
         {% if 'ROLE_ADMIN' not in user.roles %}
-            <li>{{ user.username }}</li><a href="{{path('app_userManagementRole', {'id': user.id})}}"> Role Modérateur</a>
+            <li>{{ user.username }}</li><a href="{{path('app_userManagementRole', {'id': user.id})}}"> Changer Role</a>
+            {% if not user.isBanned %}
+                <li><a href="{{path('app_userIsBanned', {'id': user.id})}}"> Bannir</a></li>
+            {% else %}
+                <li><a href="{{path('app_userUnBanned', {'id': user.id})}}"> Bannir</a></li>
+            {% endif %}
+
         {% endif %}
     {% endfor %}
 {% endblock %}

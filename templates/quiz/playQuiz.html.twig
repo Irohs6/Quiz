@@ -14,7 +14,8 @@
     </article>
   
         {{ form_start(formQuiz) }}
-            <div id="quiz-container" style ="background-image: url({{asset("uploads/img/category/"~category.picture)}});">
+        <div id="quiz-container"  style="background-image: url('{{ asset('uploads/img/category/' ~ category.picture) }}');">
+            <section class="quiz-container">
                 <h2 id="questions"></h2>
                 
 
@@ -27,10 +28,10 @@
                 <div id="recap-container"></div>
                 <input type="button" id="show-recap" value="Afficher recap">
                 <input id="submit" type="submit">
-
+            </section>
         {{ form_end(formQuiz) }}
-    {% block javascripts %}
+   
         <script src="{{ asset('js/script.js') }}"></script>   
-    {% endblock %}
+    
     
 {% endblock %}

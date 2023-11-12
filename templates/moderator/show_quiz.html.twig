@@ -5,11 +5,19 @@
 {% block body %}   
 
    <h1>{{ quiz.title }}</h1>
-
-    <div id="quiz-detail-container">
+   
+   
         <article id="quiz-detail"> 
-            <ul class="quiz-detail">
+
+           
+            <section class="quiz-detail">
                 <h2>{{ quiz.category.label }}</h2>
+                {% if quiz.isVerified %}
+                    Statut: Quiz validé
+                {% else %}
+                    <a href="{{path('verified_quiz', {'id': quiz.id})}}">Vérifier</a>
+                {% endif %}
+                <div id="quiz-detail-container">
                 {% for question in quiz.questions %}
 
                     <li>{{ question.sentence }}</li>
@@ -29,7 +37,7 @@
 
                 {% endfor %}
                     <a class="add" href="{{path('new_question', {'idQuiz': quiz.id})}}">Ajouter Question</a>
-            </ul>
+            </section>
             
         </article>
         <h3>Liste des questions non utilisées</h3>     

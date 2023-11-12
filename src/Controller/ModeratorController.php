@@ -38,9 +38,19 @@ class ModeratorController extends AbstractController
     public function showQuiz(Quiz $quiz, QuestionRepository $questionRepository): Response
     {
         $questionNotInQuiz = $questionRepository->questionsNotInQuiz($quiz->getId());//pour afficher la liste des question qui ne sont pas dans ce quiz
-        return $this->render('quiz/show_quiz.html.twig', [
+        return $this->render('moderator/show_quiz.html.twig', [
             'questionNotInQuiz' => $questionNotInQuiz,
             'quiz' => $quiz,
         ]);
+    }
+
+    #[Route('/moderator/verified/quiz/{id}', name: 'verified_quiz')]
+    public function verifiedQuiz(Quiz $quiz, EntityManagerInterface $entityManager): Response
+    {
+       $quiz->setIsVerified(true);
+       $entityManager->flush();
+
+       return $this->redirectToRoute('show_quiz',['id' => $quiz->getId()]);
+       
     }
 }

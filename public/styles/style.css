@@ -68,6 +68,30 @@ h1{
     height: 150px;
 }
 
+/*****************************footer************************************/
+footer{
+    width: 100%;
+    background-color: #0B2443;
+}
+.footer{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-around;
+}
+
+.contatc{
+    display: flex;
+    flex-direction: column;
+}
+
+.partenanire{
+
+}
+
+.reseau-sociaux{
+
+}
 /*****************************accueil**********************************/
 h1{
     font-weight: bold;
@@ -78,8 +102,8 @@ h3{
 #hero{
     margin-top: 10px;
     width: 1320px;
-    height: 300px;
-    background-image: url(../img/home_description.png);
+    height: 500px;
+    background-image: url(../img/quiz_quest.jpg);
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -91,7 +115,7 @@ h3{
 }
 .hero-text{
     position: absolute;
-    top: 0%;
+    top: 5%;
     left: 10%;
     display: flex;
     align-items: center;
@@ -99,7 +123,10 @@ h3{
     width: 80%;
     flex-direction: column;
     padding-left: 12px;
-    color: white;
+    color: rgb(5, 5, 5);
+    font-weight: bold;
+    font-size: 30px;
+    background-color: rgba(255, 255, 255, 0.4);
 }
 
 a{
@@ -126,20 +153,24 @@ a{
     width: 90%;
     align-items: center;
 }
-#quiz-container{
+#quiz-container {
     padding: 15px;
     border-radius: 10px;
-    background-color: #0B2443;
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 50%;
-    color: white;
+    color: rgb(11, 11, 11);
     height: 600px;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
+    justify-content: space-evenly;
+
+    /* Ajouter un fond légèrement blanc avec une opacité de 20% */
+    background-color: rgba(255, 255, 255, 0.2);
 }
+
 #quiz-container-play{
     position: absolute;
     top: 170px;
@@ -157,6 +188,18 @@ a{
     background-repeat: no-repeat;
     background-size: cover;
     justify-content: center;
+}
+
+.quiz-container{
+    border-radius: 15px;
+    padding: 15px;
+    height: 80%;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.4);
 }
 
 #recap-container{
@@ -182,7 +225,6 @@ a{
 }
 
 .level{
-   
     display: flex;
     width: 100%;
     justify-content: space-around;
@@ -201,7 +243,7 @@ a{
     display: flex;
     flex-direction: column;
     align-items: center;
-    overflow: auto;
+    overflow: scroll;
 }
 
 .level2{
@@ -242,13 +284,22 @@ a{
     width: 100%;
 }
 
-
+#quiz-detail{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid black;
+    width: 80%;
+}
 
 .quiz-detail{
     display: flex;
     margin: 2px;
     flex-direction: column;
     width: 50%;
+    align-items: center;
 }
 .quiz-detail-reponse{
 

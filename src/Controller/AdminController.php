@@ -36,5 +36,23 @@ class AdminController extends AbstractController
         return $this->redirectToRoute('app_userManagement');
     }
 
+    #[Route(path: 'admin/panel/isBanned/{id}', name: 'app_userIsBanned')]
+    public function isBanned(User $user, EntityManagerInterface $entityManager): Response
+    {
+        $user->setIsBanned(true);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_userManagement');
+    }
+
+    #[Route(path: 'admin/panel/unBanned/{id}', name: 'app_userUnBanned')]
+    public function unBanned(User $user, EntityManagerInterface $entityManager): Response
+    {
+        $user->setIsBanned(false);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_userManagement');
+    }
+
 
 }

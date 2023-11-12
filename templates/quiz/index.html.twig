@@ -71,8 +71,8 @@
                                             
                                                 <li>{{ quiz.title }}</li>
                                                 <a class="detail" href="{{path('show_quiz', {'id': quiz.id})}}">Détail</a>
-                                                    {# <a href="{{path('app_test', {'id': quiz.id})}}">Test Ajouter réponse</a><br> #}
-                                                    <a class="add" href="{{path('app_test', {'id': quiz.id})}}">Test Ajouter question</a><br>
+                                                 
+                                              
                                                 {% if quiz.questions|length > 0 %}   
         
                                                     <a class="play" href="{{path('app_play', {'id': quiz.id})}}">Jouer</a>

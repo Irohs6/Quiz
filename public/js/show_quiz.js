@@ -1,13 +1,26 @@
+document.addEventListener("DOMContentLoaded", function () {
+    let buttons = document.querySelectorAll('.showButton');
+    let lists = document.querySelectorAll('[class^="category"]');
 
-let lengthCategory = document.querySelectorAll('ul').length
+    lists.forEach(function (list) {
+        list.style.display = 'none';
+    });
 
+    buttons.forEach(function (button, index) {
+        let list_quiz = document.querySelector('.category' + (index + 1));
+        console.log(list_quiz);
+        button.addEventListener('click', function () {
+            console.log(button);
+            // Cacher toutes les listes sauf celle cliquée
+            lists.forEach(function (list) {
+                if (list !== list_quiz) {
+                    list.style.display = 'none';
+                }
+            });
 
-for (let i = 1; i < lengthCategory; i++) {
-    
-   
-
-    list_quiz.addEventListener("click", function()
-    {
-        list_quiz.className('block')
-    })
-}
+            // Basculer l'affichage de la liste cliquée
+            list_quiz.style.display = (list_quiz.style.display === 'none') ? 'block' : 'none';
+            console.log(list_quiz);
+        });
+    });
+});
