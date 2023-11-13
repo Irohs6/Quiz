@@ -144,6 +144,18 @@ a{
     flex-direction: row;
     justify-content: space-evenly;
 }
+.slide{
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+    height: 70px;
+    width: 70px;
+    display: flex;
+}
+.swiper {
+    width: 150px;
+    height: 100px;
+}
 /*****************************Quiz************************************/
 .formQuiz{
     margin-right: auto;

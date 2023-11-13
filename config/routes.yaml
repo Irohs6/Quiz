@@ -4,6 +4,6 @@ controllers:
         namespace: App\Controller
     type: attribute
 symfonycasts_verify_email:
-    path: /registration/confirmation_email.html.twig
-    controller: SymfonyCasts\Bundle\VerifyEmail\Controller\VerifyEmailControllerInterface::verifyEmail
+    path: /verify/email
+    
    

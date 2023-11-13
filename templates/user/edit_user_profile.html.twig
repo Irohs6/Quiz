@@ -12,6 +12,32 @@
         {{ form_row(formEditUser.email) }}
         {{ form_row(formEditUser.username) }}
         
+       
+        <div class="swiper">
+            <!-- Additional required wrapper -->
+            <div class="swiper-wrapper">
+              <!-- Slides -->
+              <div class="swiper-slide">
+                <input type="image" name="profilImage" class="slide" src="{{ asset('avatar/chat_profil.png') }}" alt="un chat">
+              </div>
+              <div class="swiper-slide">
+                <input type="image" name="profilImage" class="slide" src="{{ asset('avatar/lion_profil.png') }}" alt="un lion">
+              </div>
+              <div class="swiper-slide">
+                <input type="image" name="profilImage" class="slide" src="{{ asset('avatar/chat_astronaute_profil.png') }}" alt="un chat astronaute">
+              </div>
+             
+            </div>
+            <!-- If we need pagination -->
+            <div class="swiper-pagination"></div>
+          
+            <!-- If we need navigation buttons -->
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+          
+            <!-- If we need scrollbar -->
+            <div class="swiper-scrollbar"></div>
+          </div>
     {{ form_end(formEditUser) }}
 </div>
 {% endblock %}

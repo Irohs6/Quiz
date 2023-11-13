@@ -29,6 +29,8 @@ class UserController extends AbstractController
        
         //si le formulaire de Quiz est remplie et valide
         if ($formEditUser->isSubmitted() && $formEditUser->isValid()) {
+            $recapData = $request->request;
+            
             //récupère les donné du formulaire  
             $formEditUser->getData();
             // prepare PDO(prepare la requete Insert ou Update)

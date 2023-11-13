@@ -32,7 +32,7 @@ class Quiz
     #[ORM\OneToMany(mappedBy: 'quiz', targetEntity: Question::class,cascade: ['persist'] )]
     private Collection $questions;
 
-    #[ORM\OneToMany(mappedBy: 'quiz', targetEntity: Game::class,cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'quiz', targetEntity: Game::class,cascade: ['persist', 'remove'])]
     private Collection $games;
 
     #[ORM\ManyToOne(inversedBy: 'quizzes')]
