@@ -18,7 +18,7 @@ class FileUploader
     {
         $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
        
-        $fileName = $originalFilename.'-'.uniqid().'.'.$file->guessExtension();
+        $fileName = uniqid().'.'.$file->guessExtension();
 
         try {
             $file->move($this->getTargetDirectory(), $fileName);

@@ -243,12 +243,14 @@ a{
     display: flex;
     flex-direction: column;
     align-items: center;
-    overflow: scroll;
+    overflow-x: hidden;
+    overflow-y: scroll;
 }
 
 .level2{
     display: flex;
-    overflow-x: scroll;
+    overflow-x: hidden;
+    overflow-y: scroll;
     border-radius: 15px;
     width: 400px;
     height: 500px;
@@ -265,7 +267,8 @@ a{
     display: flex;
     flex-direction: column;
     align-items: center;
-    overflow-x: scroll;
+    overflow-x: hidden;
+    overflow-y: scroll;
 }
 
 .category{

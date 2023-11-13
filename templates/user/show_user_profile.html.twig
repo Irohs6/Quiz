@@ -5,7 +5,7 @@
 {% block body %}
 <section>
     <h1> Bienvenue {{ app.user.username }}</h1>
-        
+        <a href="{{path('edit_profile', {'id': app.user.id})}}">Modifier profil</a>
     <p>nb quiz creer {{ app.user.quizzes|length }}</p>
     <p>nb topic creer {{ app.user.topics|length}}</p>
     <p>nb reponse {{ app.user.posts|length }} </p>

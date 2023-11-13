@@ -37,16 +37,13 @@ class CategoryController extends AbstractController
             $category = new Category;
             $idTheme = $request->attributes->get('idTheme');
             $theme = $themeRepository->findOneBy(['id' => $idTheme]);
+            $picture = null;
         }else{
             $theme = $category->getTheme();
             // Récupérez le nom du fichier depuis l'entité
-            if ($category->getPicture()) {
-                $category->setPicture(
-                    new File($this->getParameter('pictures_directory').'/'.$category->getPicture()));
-            }else{
-                $category->setPicture(null);
-            }
+           $picture = $category->getPicture();
         }
+        // dd($category);
         $category->setTheme($theme);
         $formNewCategory= $this->createForm(CategoryType::class, $category);//crer le formulaire
         $formNewCategory->handleRequest($request);
@@ -55,12 +52,14 @@ class CategoryController extends AbstractController
         if ($formNewCategory->isSubmitted() && $formNewCategory->isValid()) {
             /** @var UploadedFile $pictureFile */
         $pictureFile = $formNewCategory->get('picture')->getData();
-        
+       
         if ($pictureFile) {
             $pictureFileName = $fileUploader->upload($pictureFile);
             $category->setPicture($pictureFileName);
+        }else{
+            $category->setPicture($picture);
         }
-
+        
             //récupère les donné du formulaire  
             $formNewCategory->getData();
             // prepare PDO(prepare la requete Insert ou Update)
