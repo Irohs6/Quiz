@@ -32,9 +32,11 @@ class RegistrationController extends AbstractController
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
-        //VerifAdmin000@
+        //VerifAdmin000@ 
         //AdminVerifMdp000@
         if ($form->isSubmitted() && $form->isValid()) {
+            $imageName =  $request->request->all('formEditUser')['selectedProfileImage']; 
+            $user->setProfileImage($imageName);
             $data = $form->getData();
             $user->setIsBanned(false);
             $user->setRoles(['ROLE_USER']);//met le role user par default

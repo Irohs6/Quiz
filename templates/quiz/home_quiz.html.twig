@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello QuizController!{% endblock %}
+
+{% block body %}
+{% set labelLevel = "" %} {# déclaration d'une varibale pour les différentes section des level  #}
+{% set nb = 1 %} {# déclaration d'une variable nb pour le nom des class des level #}
+
+<div class="container">
+    <div id="hero">
+        <article class="hero-text">
+            <h1>Quiz Quest</h1>
+                <p>
+                    Bienvenue sur Quiz Quest, vous trouverez ici des différent type quiz qui vous 
+                    permettant de vous détendre, avec nos quiz de la catégorie Drôle,
+                    apprendre avec nos quiz de culture générale,
+                    ou simplement être le meilleur pour voir votre pseudo tous en haut du classement
+                    
+                </p>
+        </article>
+    </div>
+
+    <section id="list-theme">
+        
+        {% for theme in allTheme %}{# boucle pour afficher tous les theme disponible #}
+            <h2>{{ theme.label }}</h2>
+            {% for category in theme.categories %}
+                {{ category }}
+                <!-- Slider main container -->
+                <div class="swiper-quiz">
+                    <!-- Additional required wrapper -->
+                    <div class="swiper-wrapper">
+                        <!-- Slides -->
+                        {% for quiz in category.quizzes %}
+                            <div class="swiper-slide-quiz">
+                                <section class="level">{{ quiz.title }}</section>
+                            </div>
+                        </div>
+                        <!-- If we need pagination -->
+                        <div class="swiper-pagination"></div>
+                            
+                        <!-- If we need navigation buttons -->
+                        <div class="swiper-button-prev"></div>
+                        <div class="swiper-button-next"></div>
+                            
+                        <!-- If we need scrollbar -->
+                        <div class="swiper-scrollbar"></div>
+                        {% endfor %}  
+                    </div> 
+            {% endfor %}        
+        {% endfor %}
+        
+    </section>
+    
+{% endblock %}

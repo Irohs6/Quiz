@@ -32,6 +32,19 @@ class QuizController extends AbstractController
             'allLevel'=>$allLevel
         ]);
     }
+    #[Route('home/quiz', name: 'app_home_quiz')]
+    public function home(ThemeRepository $themeRepository, CategoryRepository $categoryRepository, LevelRepository $levelRepository): Response
+    {
+        $allTheme = $themeRepository->findAll();//recupère toute les donné de la table theme
+        $allCategories = $categoryRepository->findAll();//recupère toute les donné de la table category
+        $allLevel = $levelRepository->findAll();//recupère toute les donné de la table level
+
+        return $this->render('quiz/home_quiz.html.twig', [
+            'allTheme' => $allTheme,
+            'allCategories' => $allCategories,
+            'allLevel'=>$allLevel
+        ]);
+    }
 
     #[Route('/quiz/play/{id}', name: 'app_play')]
     public function playQuiz(Quiz $quiz, Request $request, EntityManagerInterface $entityManager): Response

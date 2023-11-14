@@ -14,32 +14,7 @@
     text-align: center;
 }
 
-/* .modify{
-    cursor: pointer;
-    border: 2px solid #0B2443;
-    border-radius: 5px;
-    color: black;
-    padding: 3px;
-    width: 200px;
-}
 
-.delete{
-    cursor: pointer;
-    border: 2px solid #0B2443;
-    border-radius: 5px;
-    color: black;
-    padding: 3px;
-    width: 200px;
-}
-
-.retirer{
-    cursor: pointer;
-    border: 2px solid #0B2443;
-    border-radius: 5px;
-    color: black;
-    padding: 3px;
-    width: 200px;
-} */
 /*******************NAV*****************************************/
 #nav{
     display: flex;
@@ -156,6 +131,18 @@ a{
     width: 150px;
     height: 100px;
 }
+.slide-quiz{
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+    height: 70px;
+    width: 70px;
+    display: flex;
+}
+.swiper-quiz {
+    width: 400px;
+    height: 500px;
+}
 /*****************************Quiz************************************/
 .formQuiz{
     margin-right: auto;
@@ -164,6 +151,7 @@ a{
     flex-direction: column;
     width: 90%;
     align-items: center;
+    margin-bottom: 30px;
 }
 #quiz-container {
     padding: 15px;
@@ -195,7 +183,7 @@ a{
     align-items: center;
     width: 50%;
     color: white;
-    height: 750px;
+    height: 680px;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -316,6 +304,80 @@ a{
     width: 50%;
     align-items: center;
 }
-.quiz-detail-reponse{
-
+/***********************************Profil***********************************/
+#img_profil{
+    height: 100px;
+    width: 100px;
+}
+.img_profil{
+    height: 100px;
+    width: 100px;
+}
+#container-profil{
+    position: relative;
+    display: flex;
+    width: 80%;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    border: 2px solid black;
+    margin: 10px;
+    border-radius: 10px;
+    height: 600px;
+    padding-left: 10px;
+}
+#section_profil{
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+}
+#quiz_profil{
+    width: 45%; 
+}
+#forum_profil{
+    width: 45%;
+}
+.table-score{
+    width: 60%;
+    height: 60%;
+    position: absolute;
+    top: 10%;
+    left: 25%;
+    background-color: rgba(255, 255, 255);
+    border: 2px solid black;
+    padding: 15px;
+    border-radius: 10px;
+}
+thead th,thead td{
+    color: #DF9409;
+}
+#table_score, th, td{
+    border: 1px solid black;
+    border-collapse: collapse;
+    width: 100%;
+    padding-left: 5px;
+}
+th, td {
+    color: white;
+    width: 3%;
+    background-color: #0b2443b8;
+    text-align: center;
+}
+#list-quiz{
+    font-weight: bold;
+    list-style: none;
+    width: 60%;
+    height: 60%;
+    position: absolute;
+    top: 10%;
+    left: 25%;
+    background-color: rgba(255, 255, 255);
+    border: 2px solid black;
+    padding: 15px;
+    border-radius: 10px;
+}
+.profil-info{
+    font-weight: bold;
 }

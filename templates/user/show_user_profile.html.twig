@@ -1,19 +1,99 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}profile{% endblock %}
-
+{# page de profil d'un uttilisateur seul lui meme peux y accèder #}
 {% block body %}
-<section>
-    <h1> Bienvenue {{ app.user.username }}</h1>
+{# pour le calcul du score  #}
+{% set scoretotal = 0 %} 
+{# pour le numéro du quiz #}
+{% set nb = 1 %} 
+<div id="container-profil">
+    {# variable déclarer pour le calcul du score total #}
+    <section id="section_profil">
+        {# Condition pour vérifier si une image de profil existe #}
+        {% if app.user.profileImage %}
+            <figure id="img_profil">
+                <img class="img_profil" src="{{ asset('avatar/' ~ app.user.profileImage) }}" alt="Image de profil de {{ app.user.username }}">
+            </figure>   
+            <figcaption>
+                <p><span class="profil-info">Pseudo :</span>{{ app.user.username }}</p>
+            </figcaption>
+        {% else %}
+            <p><span class="profil-info">Pseudo :</span>{{ app.user.username }}</p>
+        {% endif %}
+           
+        
+        {# lien vers le formulaire de modification de profil(username, email, image) #}
         <a href="{{path('edit_profile', {'id': app.user.id})}}">Modifier profil</a>
-    {% if app.user.profileImage %}
-        <img src="{{ asset('avatar/' ~ app.user.profileImage) }}" alt="Image de profil de {{ app.user.username }}">
-    {% else %}
-        <p>Aucune image de profil disponible.</p>
-    {% endif %}
-    <p>nb quiz creer {{ app.user.quizzes|length }}</p>
-    <p>nb topic creer {{ app.user.topics|length}}</p>
-    <p>nb reponse {{ app.user.posts|length }} </p>
-    <p>nb game jouer: {{ app.user.games|length}}</p>
-</section>
+        {# nombre de quiz creer pour cet utilisateur + bouton voir liste de tous ses quiz #}
+    </section>
+    <section id="quiz_profil">
+        {% if app.user.quizzes|length == 0  %}
+            Vous n'avez pas créer de quiz pour le moment
+        {% else %}
+
+            <p><span class="profil-info">Nombre de quiz creer :</span>{{ app.user.quizzes|length }} <a id="show-list-quiz" href="#">Voir</a></p>
+            <ul id="list-quiz">
+
+                {# boucle pour afficher les quiz de cet utilisateur #}
+                {% for quiz in app.user.quizzes %} 
+
+                    <li>
+                        <a class="play" href="{{path('app_play', {'id': quiz.id})}}"><p>{{ quiz.title }}</p></a>
+                    </li>
+
+                {% endfor %}
+            </ul>
+
+        {% endif %}
+    
+        {# le nombre total de partit jouer + le détail des 3 meilleurs partie #}
+        <p><span class="profil-info">Nombre game jouer :</span> {{ app.user.games|length }}</p>
+        <p><span class="profil-info">Mes 3 meilleurs scores :</span></p>
+
+        {% for bestGame in games %}
+
+            <p><span class="profil-info">Quiz {{ nb }}:</span> {{ bestGame.quiz.title }} score: {{ bestGame.score }}</p>
+
+            {% set nb = nb + 1 %} 
+        {% endfor %}
+        
+        {% if not app.user.games|length == 0 %}          
+            <a id="show-score" href="#">Voir tableau des scores</a>
+            <div id="show_table" class="table-score">
+                {{ include('user/template_show_tablescore.html.twig') }}
+            </div>
+        {% endif %}
+
+        {% for game in app.user.games %}
+
+            {% set scoretotal = scoretotal + game.score %}
+
+        {% endfor %}
+
+        <p><span class="profil-info">Score Total :</span> {{ scoretotal }}</p>
+    </section>
+
+
+    <section id="forum_profil">
+        <h3>Forum</h3>
+        {% if app.user.topics|length == 0 %}
+            <p><span class="profil-info">Topic :</span> Vous n'avez créer aucun topic pour l'instant</p>
+        {% else %}
+            <p><span class="profil-info">Nombre topic creer :</span> {{ app.user.topics|length}}</p>
+            <ul>
+                {# boucle pour afficher tous les topics créer par cet uttilisateur #}
+                {% for topic in app.user.topics %}
+                    {{ topic.title }}
+                {% endfor %}
+            </ul>   
+        {% endif %}
+
+        {% if app.user.posts|length == 0 %}
+            <p><span class="profil-info">Post :</span>  Vous n'avez participer a aucun topic pour le moment</p>   
+        {% else %}      
+            <p><span class="profil-info">Nombre de Post :</span> {{ app.user.posts|length }} </p>
+        {% endif %}
+    </section>
+</div>
 {% endblock %}

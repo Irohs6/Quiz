@@ -1,0 +1,21 @@
+
+
+
+<table id="table_score">
+    <thead>
+        <tr>
+            <td>Quiz</td>
+            <td>Difficulter</td>
+            <td>Score obtenue</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for game in games %}
+            <tr>
+                <td>{{ game.quiz.title }}</td>
+                <td>{{ game.quiz.level }}</td>
+                <td> {{ game.score }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

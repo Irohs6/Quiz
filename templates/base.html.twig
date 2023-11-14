@@ -30,7 +30,8 @@
                         {# si l'utilisateur est connecté #}
                     {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}  
                         {#affiche le bouton déconnection  #}
-                        <a href="{{path('user_profile',{'id': app.user.id})}}">Profile</a>
+                         <a href="{{path('user_profile',{'id': app.user.id})}}"><figure><img class="img_profil" src="{{ asset('avatar/' ~ app.user.profileImage) }}" alt="Image de profil de {{ app.user.username }}"><figcaption> {{ app.user.username }}</figcaption></figure></a>
+                       
                         <a href="{{path('app_logout')}}">Déconnexion</a>
                     {% else %}
                         {# sinon connection et inscription #}
@@ -41,8 +42,10 @@
             </div>
         </header>
         <main>
-
-            {% block body %}{% endblock %}
+            <div class="container">
+                {% block body %}
+                {% endblock %} 
+            </div>
         </main>
         <footer>
             <div class="footer">
@@ -105,6 +108,7 @@
            crossorigin="anonymous">
            </script>
            <script src="{{ asset('js/quiz.js') }}"></script>
+           <script src="{{ asset('js/profil.js') }}"></script>
         {% endblock %}
     </body>
 </html>
