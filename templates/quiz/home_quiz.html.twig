@@ -21,35 +21,31 @@
     </div>
 
     <section id="list-theme">
-        
-        {% for theme in allTheme %}{# boucle pour afficher tous les theme disponible #}
+        {% for theme in allTheme %}
             <h2>{{ theme.label }}</h2>
             {% for category in theme.categories %}
-                {{ category }}
                 <!-- Slider main container -->
-                <div class="swiper-quiz">
-                    <!-- Additional required wrapper -->
+                <div class="swiper-container">
                     <div class="swiper-wrapper">
-                        <!-- Slides -->
                         {% for quiz in category.quizzes %}
-                            <div class="swiper-slide-quiz">
-                                <section class="level">{{ quiz.title }}</section>
+                            <div class="swiper-slide">
+                                <section class="slide-quiz">{{ quiz.title }}</section>
                             </div>
-                        </div>
-                        <!-- If we need pagination -->
-                        <div class="swiper-pagination"></div>
-                            
-                        <!-- If we need navigation buttons -->
-                        <div class="swiper-button-prev"></div>
-                        <div class="swiper-button-next"></div>
-                            
-                        <!-- If we need scrollbar -->
-                        <div class="swiper-scrollbar"></div>
-                        {% endfor %}  
-                    </div> 
-            {% endfor %}        
+                        {% endfor %}
+                    </div>
+                    
+                    <!-- Navigation buttons inside the swiper-container -->
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-button-next"></div>
+                    <!-- Pagination -->
+                    <div class="swiper-pagination"></div>
+                    <!-- Scrollbar -->
+                    <div class="swiper-scrollbar"></div>
+                </div>
+            {% endfor %}
         {% endfor %}
-        
     </section>
+</div>
+
     
 {% endblock %}
