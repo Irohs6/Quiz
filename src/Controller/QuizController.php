@@ -9,6 +9,7 @@ use App\Form\QuizType;
 use App\Form\PlayQuizzType;
 use App\Repository\ThemeRepository;
 use App\Repository\CategoryRepository;
+use App\Repository\GameRepository;
 use App\Repository\LevelRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -22,31 +23,34 @@ class QuizController extends AbstractController
 {
     //pour afficher les theme les catégorie et leurs quiz
     #[Route('/quiz', name: 'app_quiz')]
-    public function home(ThemeRepository $themeRepository, CategoryRepository $categoryRepository, LevelRepository $levelRepository): Response
+    public function home(ThemeRepository $themeRepository, CategoryRepository $categoryRepository, LevelRepository $levelRepository,GameRepository $gameRepository): Response
     {
         $allTheme = $themeRepository->findAll();//recupère toute les donné de la table theme
         $allCategories = $categoryRepository->findAll();//recupère toute les donné de la table category
         $allLevel = $levelRepository->findAll();//recupère toute les donné de la table level
-
+        $games = $gameRepository->findAll();
         return $this->render('quiz/home.html.twig', [
             'allTheme' => $allTheme,
             'allCategories' => $allCategories,
-            'allLevel'=>$allLevel
+            'allLevel'=>$allLevel,
+            'games' => $games
+
         ]);
     }
 
     //futur home de quiz en cour de création
     #[Route('home/quiz', name: 'app_home_quiz')]
-    public function home_quiz(ThemeRepository $themeRepository, CategoryRepository $categoryRepository, LevelRepository $levelRepository): Response
+    public function home_quiz(ThemeRepository $themeRepository, CategoryRepository $categoryRepository, LevelRepository $levelRepository, GameRepository $gameRepository): Response
     {
         $allTheme = $themeRepository->findAll();//recupère toute les donné de la table theme
         $allCategories = $categoryRepository->findAll();//recupère toute les donné de la table category
         $allLevel = $levelRepository->findAll();//recupère toute les donné de la table level
-
+        $games = $gameRepository->findAll();
         return $this->render('quiz/home_quiz.html.twig', [
             'allTheme' => $allTheme,
             'allCategories' => $allCategories,
-            'allLevel'=>$allLevel
+            'allLevel'=> $allLevel,
+            'games' => $games
         ]);
     }
 
@@ -109,22 +113,15 @@ class QuizController extends AbstractController
                 }
             }
         }
-       
+        $now = new DateTime();
+        $game->setDateGame($now);
         $game->setScore($scoreSum);//ajoute le score a la game
+        // dd($game);
             // prepare PDO(prepare la requete Insert ou Update)
             $entityManager->persist($game);
             // execute PDO(la requete Insert ou Update)
             $entityManager->flush();
             //redirige ver le home qui est la liste des formation
-            $now = new DateTime();
-            
-            $endDate =  strtotime($now.'+ 7 days');
-            $session = new Session();
-            $session->set('game',[
-                'endate' => $endDate,
-                'user' => $user->getId(),
-                'quiz' => $quiz->getId(),
-            ]);
            
             return $this->redirectToRoute('app_quiz');
         

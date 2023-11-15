@@ -80,10 +80,10 @@
 
                                                 {% endif %}
 
-                                                {% if quiz.questions|length > 8 %}
+                                                {% if quiz.questions|length > 0 %}
                                                 {#  condition si le quiz a plus de 8 question affiche le bouton  #}
                                                     {# route vers la page pour jouer un quiz  #}
-                                                    <a  class="play" href="{{path('app_play', {'id': quiz.id})}}">Afficher</a>
+                                                    {# <a  class="play" href="{{path('app_play', {'id': quiz.id})}}">Afficher</a> #}
 
                                                 {% endif %} 
 
@@ -98,19 +98,27 @@
                                                 <a class="detail" href="{{path('show_quiz', {'id': quiz.id})}}">Détail</a>
                                                  
                                               
-                                                {% if quiz.questions|length > 0 %}   
-                                                {# {{ dump(app.session.get('date')) }} #}
-                                                {{ dump(app.session.get('game')) }}
-                                                
-                                                {# {% if app.user.id == app.session.get('game')['user'] and quiz.id == app.session.get('game')['quiz']  %}
-                                                    {% if app.session.get('game')['date']  %}
-                                                        
-                                                    
+                                                {% if quiz.questions|length > 0 %} 
                                                     <a class="play" href="{{path('app_play', {'id': quiz.id})}}">Jouer</a>
-                                                    {% endif %} #}
-                                                    {# {% endif %} #}
-                                                    <a class="play" href="{{path('app_play', {'id': quiz.id})}}">Jouer</a>
-        
+
+                                                        {% for game in games %}
+                                                            {% set idQuiz = game.id  %}
+
+                                                            {% if game.id == idQuiz %}
+
+                                                                {% set enddate =  game.dateGame|date_modify("+7 day")|date("m/d/Y")  %}
+
+
+                                                                {% if  app.user.id == game.userId.id and game.quiz.id == quiz.id and enddate 
+                                                                     == "now"|date("m/d/Y")  %}
+
+                                                                {% else %}
+
+                                                                    
+                                                                {% endif %}
+
+                                                            {% endif %}    
+                                                        {% endfor %} 
                                                 {% endif %}
 
                                             {% endif %}

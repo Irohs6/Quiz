@@ -32,6 +32,9 @@ class Game
     #[ORM\ManyToOne(inversedBy: 'Games')]
     private ?User $userId = null;
 
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $dateGame = null;
+
     public function __construct()
     {
         $this->answers = new ArrayCollection();
@@ -113,6 +116,18 @@ class Game
     public function setUserId(?User $userId): static
     {
         $this->userId = $userId;
+
+        return $this;
+    }
+
+    public function getDateGame(): ?\DateTimeInterface
+    {
+        return $this->dateGame;
+    }
+
+    public function setDateGame(?\DateTimeInterface $dateGame): static
+    {
+        $this->dateGame = $dateGame;
 
         return $this;
     }
