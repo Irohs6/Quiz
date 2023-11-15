@@ -10,30 +10,34 @@ use App\Form\PlayQuizzType;
 use App\Repository\ThemeRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\LevelRepository;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class QuizController extends AbstractController
 {
+    //pour afficher les theme les catégorie et leurs quiz
     #[Route('/quiz', name: 'app_quiz')]
-    public function index(ThemeRepository $themeRepository, CategoryRepository $categoryRepository, LevelRepository $levelRepository): Response
+    public function home(ThemeRepository $themeRepository, CategoryRepository $categoryRepository, LevelRepository $levelRepository): Response
     {
         $allTheme = $themeRepository->findAll();//recupère toute les donné de la table theme
         $allCategories = $categoryRepository->findAll();//recupère toute les donné de la table category
         $allLevel = $levelRepository->findAll();//recupère toute les donné de la table level
 
-        return $this->render('quiz/index.html.twig', [
+        return $this->render('quiz/home.html.twig', [
             'allTheme' => $allTheme,
             'allCategories' => $allCategories,
             'allLevel'=>$allLevel
         ]);
     }
+
+    //futur home de quiz en cour de création
     #[Route('home/quiz', name: 'app_home_quiz')]
-    public function home(ThemeRepository $themeRepository, CategoryRepository $categoryRepository, LevelRepository $levelRepository): Response
+    public function home_quiz(ThemeRepository $themeRepository, CategoryRepository $categoryRepository, LevelRepository $levelRepository): Response
     {
         $allTheme = $themeRepository->findAll();//recupère toute les donné de la table theme
         $allCategories = $categoryRepository->findAll();//recupère toute les donné de la table category
@@ -46,11 +50,13 @@ class QuizController extends AbstractController
         ]);
     }
 
+
+    //pages pour jouer un quiz
     #[Route('/quiz/play/{id}', name: 'app_play')]
-    public function playQuiz(Quiz $quiz, Request $request, EntityManagerInterface $entityManager): Response
+    public function playQuiz(Quiz $quiz, Request $request, EntityManagerInterface $entityManager, Session $session): Response
     {
         $quizData = [
-            'titre' => $quiz->getTitle(),
+            'titre' => $quiz->getTitle(),//ajoute le titre du quiz
             'questions' => [], // Initialise le tableau des questions 
         ];
         
@@ -84,7 +90,8 @@ class QuizController extends AbstractController
         $formQuiz->handleRequest($request);
         $level = $quiz->getLevel(); // on récupère le niveaux de difficulté 
         $scoreCoeff = $level->getScoreCoef(); //on récupère le coefficient
-       
+        
+
         //si le formQuizulaire est remplie et valide
         if ($formQuiz->isSubmitted() && $formQuiz->isValid()) {
             $recapData = $request->request->get('recapData');//récupère le tableau de récapitulatif du quiz en json
@@ -97,19 +104,28 @@ class QuizController extends AbstractController
                 $scoreSum = $score * $scoreCoeff / 10;
             } else {
                 foreach ($data as $response) {
-                    $answer = $entityManager->getRepository(Answer::class)->findOneBy(['id' => $response['answerId']]);
-                    $game->addAnswer($answer);
+                    $answer = $entityManager->getRepository(Answer::class)->findOneBy(['id' => $response['answerId']]);//récupère la question grace a son id contenu dans le tableau
+                    $game->addAnswer($answer);//ajoute les question a la game
                 }
             }
         }
-        $game->setScore($scoreSum);
-           
-                   
+       
+        $game->setScore($scoreSum);//ajoute le score a la game
             // prepare PDO(prepare la requete Insert ou Update)
             $entityManager->persist($game);
             // execute PDO(la requete Insert ou Update)
             $entityManager->flush();
             //redirige ver le home qui est la liste des formation
+            $now = new DateTime();
+            
+            $endDate =  strtotime($now.'+ 7 days');
+            $session = new Session();
+            $session->set('game',[
+                'endate' => $endDate,
+                'user' => $user->getId(),
+                'quiz' => $quiz->getId(),
+            ]);
+           
             return $this->redirectToRoute('app_quiz');
         
         }
@@ -122,16 +138,18 @@ class QuizController extends AbstractController
         ]);
     }
 
+    //Pour créer ou modifier une catégorie
     #[Route('/quiz/{idCategory}/new/', name: 'new_quiz')]
     #[Route('/quiz/{id}/edit/', name: 'edit_quiz')]
     public function newQuiz(Quiz $quiz = null, Request $request, EntityManagerInterface $entityManager,CategoryRepository $categoryRepository): Response
     {
+        //si quiz n'éxiste pas
         if (!$quiz) {
             $quiz = new Quiz; // créer une nouvelle intance de Quiz
             $idCategory = $request->attributes->get('idCategory'); // récupère l'id Category dans l'url
             $category = $categoryRepository->findOneBy(['id' => $idCategory]); // on recupère l'entity category grace a son id
-            $user = $this->getUser();
-            $quiz->setUserId($user);
+            $user = $this->getUser();//on récupère le user connecté
+            $quiz->setUserId($user);//on ajoute le user au quiz
         }else{
             $category = $quiz->getCategory(); // si quiz existe on recupère la catégory contenu dans quiz
         }
@@ -163,6 +181,7 @@ class QuizController extends AbstractController
             // 'questionId' => $question->getId(),
         ]);
     }
+
 
     #[Route('admin/quiz/{id}/delete', name: 'delete_quiz')]
     public function deleteQuiz(Quiz $quiz = null, EntityManagerInterface $entityManager): Response

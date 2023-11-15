@@ -29,20 +29,20 @@ class RegistrationController extends AbstractController
     #[Route('/register', name: 'app_register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
-        $user = new User();
-        $form = $this->createForm(RegistrationFormType::class, $user);
+        $user = new User();// créer une nouvelle instance de User
+        $form = $this->createForm(RegistrationFormType::class, $user);//créer le fomrmulaire
         $form->handleRequest($request);
         //VerifAdmin000@ 
         //AdminVerifMdp000@
         if ($form->isSubmitted() && $form->isValid()) {
-            $imageName =  $request->request->all('formEditUser')['selectedProfileImage']; 
-            $user->setProfileImage($imageName);
+            $imageName =  $request->request->all('formEditUser')['selectedProfileImage']; //recupère l'image de profil selectioné
+            $user->setProfileImage($imageName);//ajoute l'image au user
             $data = $form->getData();
-            $user->setIsBanned(false);
+            $user->setIsBanned(false);//met le statut banni a false par défault
             $user->setRoles(['ROLE_USER']);//met le role user par default
             $email= $data->getEmail();
             if ($email === 'adminMail@quiz-quest.com') {
-                $user->setRoles(['ROLE_ADMIN']);//met le role user par default
+                $user->setRoles(['ROLE_ADMIN']);//met le role admin si l'adresse mail 'adminMail@quiz-quest.com' est par default
             }else{
                 $user->setRoles(['ROLE_USER']);//met le role user par default
             }

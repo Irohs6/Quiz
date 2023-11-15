@@ -5,9 +5,8 @@
 {% block body %}
     <p> Bienvenue {{ app.user.username }}</p>
     <li>
+        {# lien vers la liste des utilisateur #}
         <a href="{{path('app_userManagement')}}">Liste User</a>
     </li>
-    <li>
-        <a href="{{path('app_category')}}">Liste des Categories</a>
-    </li>
+   
 {% endblock %}

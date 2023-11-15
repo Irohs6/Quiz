@@ -5,47 +5,70 @@
 {% block body %}   
 
    <h1>{{ quiz.title }}</h1>
-   
-   
+
         <article id="quiz-detail"> 
 
-           
             <section class="quiz-detail">
+
                 <h2>{{ quiz.category.label }}</h2>
+                {# si quiz est vérifier  #}
                 {% if quiz.isVerified %}
+                {# affiche le message  #}
                     Statut: Quiz validé
+                {#ajouter un bouton #}  
                 {% else %}
+                {# sinon affiche le bouton pour le valider  #}
                     <a href="{{path('verified_quiz', {'id': quiz.id})}}">Vérifier</a>
+
                 {% endif %}
+
                 <div id="quiz-detail-container">
+                    {# boucle pour afficher les question du quiz  #}
                 {% for question in quiz.questions %}
 
                     <li>{{ question.sentence }}</li>
+
+                        {# boucle pour afficher les réponses de la question  #}
+
                         {% for reponse in question.answers %}
                         
                         <ul class="quiz-detail-reponse">
+                            {# condition si l'id de question est = a l'id de reponse.question  #}
                             {% if question.id == reponse.question.id %}
+
                                 <li>{{ reponse.sentence }}</li>
+
                             {% endif %}
                                 
                         </ul>
                         {% endfor %}
+                        {# bouton qui permet de retirer la question et ses réponses du quiz  #}
                     <a class="retirer" href="{{ path('app_unset_quiz',{'id' : question.id ,'idQuiz': quiz.id})}}">Enlever</a>
-                   
 
+                        {# Route vers le formulaire de modification d'une question et de ses réponses  #}
                     <a class="modify" href="{{path('edit_question', {'id': question.id})}}">Modifier</a>
 
-                {% endfor %}
+                {% endfor %} {# fin {% for question in quiz.questions %} #}
+
+                        {# route vers le formulaire pour ajouter une question et ses réponses  #}
                     <a class="add" href="{{path('new_question', {'idQuiz': quiz.id})}}">Ajouter Question</a>
+
             </section>
             
         </article>
-        <h3>Liste des questions non utilisées</h3>     
+
+        <h3>Liste des questions non utilisées</h3> 
+
         <ul>
+            {# boucle pour afficher la liste des question qui ne sont pas dans un quiz  #}
             {% for question in questionNotInQuiz %}
+                {# condition pour afficher que les question de la catégorie du quiz  #}
                 {% if question.category == quiz.category %}
+                {# bouton pour ajouter la question et ses réponses au quiz  #}
                     <li>{{ question }}<a class="add" href="{{ path('app_add_quiz',{'id' : question.id ,'idQuiz': quiz.id})}}"> Ajouter</a></li>
+
                 {% endif %}
+                
             {% endfor %}
            
         </ul>

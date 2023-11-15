@@ -3,19 +3,32 @@
 {% block title %}Hello QuizController!{% endblock %}
 
 {% block body %}
+{# fichier json en hidden récupérer par le fichier scrip.js et traité pour afficher les question et les réponse du quiz de façon dynamique  #}
 <input hidden id="quiz" type="text" data-attribut="{{ quizJson }} ">
+
 <h1>{{ quiz.title }}</h1>
-    <article id="quiz-container-play">
+
+    <article id="quiz-container-play"> 
+        {# container qui affiche le nombre de question la difficulter la catégorie d'un quiz et le bouton pour jouer#}
+
         <h2 class="title"> {{ quiz.title }}</h2>
+
         <p class="difficulter">Difficulté : {{ quiz.level }} </p>
+
         <p class="category">Catégorie: {{ quiz.category.label }} </p>
+
         <p class="nb_question">Nombre de question :{{ quiz.questions|length }}</p>
+
         <a id="play" href="#">Jouer</a>
+
     </article>
   
         {{ form_start(formQuiz) }}
+        {# affiche l'image liée a la catégorie du quiz  #}
         <div id="quiz-container"  style="background-image: url('{{ asset('uploads/img/category/' ~ category.picture) }}');">
+
             <section class="quiz-container">
+
                 <h2 id="questions"></h2>
                 
 
@@ -25,8 +38,11 @@
                 
 
             </div>    
+                {# div ou sera afficher le recapitulatif du quiz une fois terminer  #}
                 <div id="recap-container"></div>
+                {# bouton qui permettra d'afficher le tableaux récapitulatif a la fin du quiz  #}
                 <input type="button" id="show-recap" value="Afficher recap">
+                {# pour soumettre le résultat #}
                 <input id="submit" type="submit">
             </section>
         {{ form_end(formQuiz) }}

@@ -18,45 +18,54 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 class CategoryController extends AbstractController
 {
-    #[Route('/category', name: 'app_category')]
-    public function index(CategoryRepository $categoryRepository, ThemeRepository $themeRepository): Response
+    //affiche la liste complete des catégorie**************************************************************
+    #[Route('moderator/category/list', name: 'app_category')]
+    public function liste_category(CategoryRepository $categoryRepository, ThemeRepository $themeRepository): Response
     {
         $themes = $themeRepository->findAll();
         $categories = $categoryRepository->findAll();
-        return $this->render('category/index.html.twig', [
+        return $this->render('category/list.html.twig', [
             'themes' => $themes,
             'categories' => $categories,
         ]);
     }
 
-    #[Route('/category/new/{idTheme}', name: 'new_category')]
-    #[Route('/category/edit/{id}', name: 'edit_category')]
+    //Pour créer un nouvelle catégorie dans un thème définie *************************************************************************************************
+    #[Route('admin/category/new/{idTheme}', name: 'new_category')]
+    #[Route('admin/category/edit/{id}', name: 'edit_category')]
     public function newEditCategory(Category $category = null,Request $request, ThemeRepository $themeRepository, EntityManagerInterface $entityManager,FileUploader $fileUploader): Response
     {
+        //si la catégorie n'existe pas 
         if (!$category) {
-            $category = new Category;
-            $idTheme = $request->attributes->get('idTheme');
-            $theme = $themeRepository->findOneBy(['id' => $idTheme]);
-            $picture = null;
+            $category = new Category;// on créer une nouvelle instance de catégorie
+            $idTheme = $request->attributes->get('idTheme');// on récupère l'id theme contenu dans l'url
+            $theme = $themeRepository->findOneBy(['id' => $idTheme]); // on récupère l'entity theme garce a cet id
+            $picture = null; // on set la variable a null si la catégorie n'existe pas
         }else{
-            $theme = $category->getTheme();
+            //si la catégorie existe
+            $theme = $category->getTheme(); //on récupère le theme contenu dans la catégorie
             // Récupérez le nom du fichier depuis l'entité
-           $picture = $category->getPicture();
+            $picture = $category->getPicture();//on récupère l'image de la catégorie
         }
-        // dd($category);
-        $category->setTheme($theme);
-        $formNewCategory= $this->createForm(CategoryType::class, $category);//crer le formulaire
+        
+        $category->setTheme($theme);//on ajoute le thème a la catégorie
+        $formNewCategory= $this->createForm(CategoryType::class, $category);//créer le formulaire
+
         $formNewCategory->handleRequest($request);
        
         //si le formulaire de Quiz est remplie et valide
         if ($formNewCategory->isSubmitted() && $formNewCategory->isValid()) {
             /** @var UploadedFile $pictureFile */
+        // on récupère l'image
         $pictureFile = $formNewCategory->get('picture')->getData();
-       
+       //si l'image existe
         if ($pictureFile) {
+            //on utilise la fonction upload du service File upload qi va modifier le name avec un id unique
             $pictureFileName = $fileUploader->upload($pictureFile);
+            // on set l'image modifier dans la catégorie
             $category->setPicture($pictureFileName);
         }else{
+            //si l'image n'a pas changer on remet la meme
             $category->setPicture($picture);
         }
         

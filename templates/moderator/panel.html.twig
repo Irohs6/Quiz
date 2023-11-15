@@ -5,10 +5,16 @@
 {% block body %}
     <p> Bienvenue {{ app.user.username }}</p>
     <li>
+        {# route vers la liste des quiz  #}
         <a href="{{path('app_list_quiz')}}">Liste Quiz</a>
     </li>
     <li>
+        {# route vers la liste des theme  #}
         <a href="{{path('list_theme')}}">Liste des Themes</a>
     </li>
-   
+
+    <li>
+        {# lien vers la liste des catégorie  #}
+        <a href="{{path('app_category')}}">Liste des Categories</a>
+    </li>
 {% endblock %}

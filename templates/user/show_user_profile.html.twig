@@ -10,39 +10,57 @@
 <div id="container-profil">
     {# variable déclarer pour le calcul du score total #}
     <section id="section_profil">
+
         {# Condition pour vérifier si une image de profil existe #}
         {% if app.user.profileImage %}
+
             <figure id="img_profil">
                 <img class="img_profil" src="{{ asset('avatar/' ~ app.user.profileImage) }}" alt="Image de profil de {{ app.user.username }}">
             </figure>   
             <figcaption>
                 <p><span class="profil-info">Pseudo :</span>{{ app.user.username }}</p>
             </figcaption>
+
         {% else %}
+
+        {# si elle n'existe pas affiche uniquement le pseudo  #}
             <p><span class="profil-info">Pseudo :</span>{{ app.user.username }}</p>
+
         {% endif %}
+
            
-        
         {# lien vers le formulaire de modification de profil(username, email, image) #}
         <a href="{{path('edit_profile', {'id': app.user.id})}}">Modifier profil</a>
         {# nombre de quiz creer pour cet utilisateur + bouton voir liste de tous ses quiz #}
-    </section>
-    <section id="quiz_profil">
-        {% if app.user.quizzes|length == 0  %}
-            Vous n'avez pas créer de quiz pour le moment
-        {% else %}
+    </section> {# fin section <section id="section_profil"> #}
 
+    <section id="quiz_profil">
+        {# condition si l'utilisateur a créer un quiz ou non  #}
+        {% if not app.user.quizzes|length == 0  %}
+        
             <p><span class="profil-info">Nombre de quiz creer :</span>{{ app.user.quizzes|length }} <a id="show-list-quiz" href="#">Voir</a></p>
             <ul id="list-quiz">
-
+    
                 {# boucle pour afficher les quiz de cet utilisateur #}
                 {% for quiz in app.user.quizzes %} 
-
+                    {% if quiz.questions|length > 0 %}
+                        <li>
+                            <a class="play" href="{{path('app_play', {'id': quiz.id})}}"><p>{{ quiz.title }} nombre de qustion: {{quiz.questions|length}}</p></a>
+                        </li>
+                    {% else %}
                     <li>
-                        <a class="play" href="{{path('app_play', {'id': quiz.id})}}"><p>{{ quiz.title }}</p></a>
+                        <p>{{ quiz.title }}<a class="play" href="{{path('new_question', {'idQuiz': quiz.id})}}"> Ajouter question</a></p>
                     </li>
-
+                    {% endif %}
                 {% endfor %}
+            </ul>
+
+        {% else %}
+
+        {# message si aucun quiz créer  #}
+            <ul id="list-quiz">   
+                Vous n'avez pas créer de quiz pour le moment
+                <p><span hidden class="profil-info">Nombre de quiz creer :</span>{{ app.user.quizzes|length }} <a id="show-list-quiz" href="#">Voir</a></p>
             </ul>
 
         {% endif %}
@@ -56,8 +74,10 @@
             <p><span class="profil-info">Quiz {{ nb }}:</span> {{ bestGame.quiz.title }} score: {{ bestGame.score }}</p>
 
             {% set nb = nb + 1 %} 
+
         {% endfor %}
         
+        {# condition si le user a déja fait une patit ou non #}
         {% if not app.user.games|length == 0 %}          
             <a id="show-score" href="#">Voir tableau des scores</a>
             <div id="show_table" class="table-score">
@@ -66,34 +86,52 @@
         {% endif %}
 
         {% for game in app.user.games %}
-
+            {# calcul pour le score total  #}
             {% set scoretotal = scoretotal + game.score %}
 
         {% endfor %}
-
+            {# affichage du score total  #}
         <p><span class="profil-info">Score Total :</span> {{ scoretotal }}</p>
-    </section>
+
+    </section>{# fin section <section id="quiz_profil"> #}
 
 
     <section id="forum_profil">
+
         <h3>Forum</h3>
+        {# condition si le user a déja créer un topic   #}
         {% if app.user.topics|length == 0 %}
+            {# affiche un message si aucun topic créer  #}
             <p><span class="profil-info">Topic :</span> Vous n'avez créer aucun topic pour l'instant</p>
+
         {% else %}
+            {# affiche le nombre de topic créer  #}
             <p><span class="profil-info">Nombre topic creer :</span> {{ app.user.topics|length}}</p>
+
             <ul>
                 {# boucle pour afficher tous les topics créer par cet uttilisateur #}
                 {% for topic in app.user.topics %}
+
                     {{ topic.title }}
+
                 {% endfor %}
+
             </ul>   
+
         {% endif %}
 
+        {# condition si le user a créer ddes post  #}
         {% if app.user.posts|length == 0 %}
-            <p><span class="profil-info">Post :</span>  Vous n'avez participer a aucun topic pour le moment</p>   
-        {% else %}      
-            <p><span class="profil-info">Nombre de Post :</span> {{ app.user.posts|length }} </p>
+            {# message si aucun post créer  #}
+            <p><span class="profil-info">Post :</span>  Vous n'avez participer a aucun topic pour le moment</p> 
+
+        {% else %}     
+
+            <p><span class="profil-info">Nombre de Post :</span> {{ app.user.posts|length }}</p>
+
         {% endif %}
-    </section>
+
+        </section>   {# fin section <section id="forum_profil"></section> #}
+
 </div>
 {% endblock %}

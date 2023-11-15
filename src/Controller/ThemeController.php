@@ -13,12 +13,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ThemeController extends AbstractController
 {
+
+    //pour la création et la modification d'un thème
     #[Route('moderator/create/theme', name: 'new_theme')]
     #[Route('moderator/theme/edit/{id}', name: 'edit_theme')]
     public function createEditTheme(Theme $theme = null, EntityManagerInterface $entityManager, Request $request): Response
     {
+        //si theme n'existe pas 
         if (!$theme) {
-            $theme = new Theme;
+            $theme = new Theme;//on créer une nouvelle instance de theme
         }
 
         $formNewTheme = $this->createForm(ThemeType::class, $theme);//crer le formulaire
@@ -33,7 +36,7 @@ class ThemeController extends AbstractController
             $entityManager->persist($theme);
             // execute PDO(la requete Insert ou Update)
             $entityManager->flush();
-            //redirige ajout de question et réponse
+            //redirige vers la list des theme
             return $this->redirectToRoute('list_theme');
         }
 
@@ -44,8 +47,8 @@ class ThemeController extends AbstractController
         ]);
     }
 
-
-    #[Route('moderator/list/theme/create', name: 'list_theme')]
+    //pour afficher la liste des themes
+    #[Route('moderator/list/theme', name: 'list_theme')]
     public function listTheme(ThemeRepository $themeRepository): Response
     {
         $themes = $themeRepository->findAll();

@@ -5,17 +5,24 @@
 {% block body %}
     <h1>Liste des catégories</h1>
     <ul>
+        {# boucle pour afficher les theme  #}
         {% for theme in themes %}
+
         <h2>{{ theme.label }}</h2>
-        <a href="{{path('new_category',{'idTheme': theme.id})}}">Ajouter une nouvelle catégories</a> 
+        {# route vers le formulaire pour ajouter une nouvelle catégorie dans le theme  #}
+        <a href="{{path('new_category',{'idTheme': theme.id})}}">Ajouter une nouvelle catégorie</a> 
+
+            {# boucle pour afficher les catégorie pour chaque theme  #}
+
             {% for category in theme.categories %}
-                
-            
-               
+
                 <li>
+                    {# Route vers le formulaire de modification d'une catégorie  #}
                     {{ category.label }}  <a href="{{path('edit_category',{'id': category.id})}}">Modifier</a>
                 </li>
+
             {% endfor %} 
+
         {% endfor %}
     </ul>
 {% endblock %}

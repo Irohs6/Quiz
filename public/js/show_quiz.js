@@ -1,3 +1,4 @@
+
 document.addEventListener("DOMContentLoaded", function () {
     let buttons = document.querySelectorAll('.showButton');
     let lists = document.querySelectorAll('[class^="category"]');

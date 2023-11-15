@@ -13,18 +13,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class QuestionController extends AbstractController
 {
-    #[Route('/question', name: 'app_question')]
-    public function index(): Response
-    {
-        return $this->render('question/index.html.twig', [
-            'controller_name' => 'QuestionController',
-        ]);
-    }
-
+  
+    //pour créer un nouveau question ou editer une question 
     #[Route('/question/new/{idQuiz}', name: 'new_question')]
     #[Route('/question/edit/{id}', name: 'edit_question')]
     public function addEditQuestion(Question $question = null, Request $request, EntityManagerInterface $entityManager, QuizRepository $quizRepository): Response
     {
+        // si question n'existe pas 
         if(!$question){
             $question = new Question; // créer une nouvelle intance de question
             $quizId = $request->attributes->get('idQuiz');//on récupère l'id de quiz dans l'url
@@ -60,7 +55,7 @@ class QuestionController extends AbstractController
         ]);
     }
 
-   
+    // pour retirer une question d'un quiz
     #[Route('unset/question/{id}/{idQuiz}/unset_quiz', name: 'app_unset_quiz')]
     public function unsetQuiz(Question $question,Request $request, EntityManagerInterface $entityManager, QuizRepository $quizRepository): Response
     {   
@@ -74,9 +69,10 @@ class QuestionController extends AbstractController
         $entityManager->flush();
 
         return $this->redirectToRoute('show_quiz', ['id'=> $quiz->getId()]); //// redirige vers le détail d'un quiz
-      
-          
+ 
     }  
+
+    //pour ajouter une question et ses réponses a un quiz
     #[Route('add/question/{id}/{idQuiz}/add_quiz', name: 'app_add_quiz')]
     public function addQuiz(Question $question,Request $request, EntityManagerInterface $entityManager, QuizRepository $quizRepository): Response
     {   

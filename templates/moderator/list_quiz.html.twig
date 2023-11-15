@@ -1,52 +1,71 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Hello AdminController!{% endblock %}
-{% set nb = 1 %}
+{% set nb = 1 %}{#  variable déclarer a 1  pour créer différent id sur les button pour les récupérer en js #}
 {% block body %}
 
+{# boucle pour afficher toute les catégorie  #}
 {% for category in categories %}
         
-        {% set categoryExist = category %}
+        {% set categoryExist = category %} {# variable pour eviter les doublons#}
+        {# affiche le nombre de quiz existant dans cet catégorie  #}
         <h2>Pour la categories {{category}} il y a  {{ category.quizzes|length }} quiz</h2>
-        <button id="button{{nb}}" class="showButton">Afficher</button>
-    <ul class="category{{nb}}">
-        {% for quiz in quizes %}
-            {# {% set categoryquiz = quiz.category %} #}
 
+        <button id="button{{nb}}" class="showButton">Afficher</button>
+
+    <ul class="category{{nb}}">
+        {# boucle pour afficher les quiz  #}
+        {% for quiz in quizes %} 
+
+            {# condition qui vérifie que la catégorie n'est pas déja afficher pour qu'elle ne soit afficher qu'un seul fois pour tous les quiz de cet catégorie  #}
             {% if categoryExist == category  %}
+
+                {# condition pour afficher les quiz qui appartenant a cet catégorie #}
                 {% if category.id == quiz.category.id  %}
 
                     <li>
                         <h4>{{ quiz.title }}</h4>
                         <a class="modify" href="{{path('edit_quiz', {'id': quiz.id})}}">Modifier</a>  
                     </li>
+
                     <li>
                         Nb question:{{ quiz.questions|length}}
                     </li>
+
                     <li>
                         Statut: 
+                        {# condition pour afficher les différent statut d'un quiz  #}
                         {% if quiz.isVerified %}
                             <span class="success">Vérifier</span>
                         {% else %}
                             <span class="error">A vérifier</span>
                         {% endif %}
                     </li>
+
                     <li>
+                        {# route pour afficher le détail d'un quiz  #}
                         <a class="detail" href="{{path('show_quiz', {'id': quiz.id})}}">Détail</a>
                     </li>
+
                     <li>
+                        {# condition si le quiz a au moin une question on affiche un bouton pour tester le quiz #}
                         {% if quiz.questions|length > 0 %}   
+
                                 <a href="{{path('app_play', {'id': quiz.id})}}">Test Quiz</a>
+
                         {% endif %}
+                        {# route pour ajouter une nouvelle question et ses réponses  #}
                         <a class="add" href="{{path('new_question', {'idQuiz': quiz.id})}}">Ajouter Question</a>
                     </li>
-                    <br> 
-                {% endif %}   
-            {% endif %}
-        {% endfor %}
+                    
+
+                {% endif %}  {# fin {% if category.id == quiz.category.id  %}#} 
+            {% endif %} {# fin {% if categoryExist == category  %} #}
+
+        {% endfor %}{# fin {% for quiz in quizes %}  #}
     </ul>
-    {% set nb = nb +1 %}
-{% endfor %}
+    {% set nb = nb +1 %} {#  on ajoute 1 a chaque tour de boucle #}
+{% endfor %} {# fin {% for category in categories %}#}
 
 
 <script src="{{ asset('js/show_quiz.js') }}"></script>   

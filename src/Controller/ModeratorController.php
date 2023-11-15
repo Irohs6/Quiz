@@ -15,17 +15,19 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ModeratorController extends AbstractController
 {
+    //route vers le pannel modérator
     #[Route('/moderator/pannel', name: 'app_moderator_panel')]
-    public function index(): Response
+    public function panel(): Response
     {
-        return $this->render('moderator/index.html.twig');
+        return $this->render('moderator/panel.html.twig');
     }
 
+    // route vers la liste des quizs ou un modérateur pourravoir le statut d'un quiz, voir le détail d'un quiz, modifier le titre un quiz et ajouter des question a un quiz
     #[Route(path: 'moderator/list/quiz', name: 'app_list_quiz')]
-    public function userList(QuizRepository $quizRepository,CategoryRepository $categoryRepository): Response
+    public function quizList(QuizRepository $quizRepository,CategoryRepository $categoryRepository): Response
     {
-        $quizes = $quizRepository->findAll();
-        $categories = $categoryRepository->findAll();
+        $quizes = $quizRepository->findAll();//récupère toute les données quiz enregistré
+        $categories = $categoryRepository->findAll();//récupère toute les données de catégorie enregistré
        
         return $this->render('moderator/list_quiz.html.twig', [
             'quizes' => $quizes,
@@ -33,7 +35,7 @@ class ModeratorController extends AbstractController
         ]);
     }
 
-
+    //permet de voir le détail d'un quiz ou un modérateur pourra enlever ou ajouter des questions modifier une question et ses réponses
     #[Route('/moderator/quiz/{id}/show', name: 'show_quiz')]
     public function showQuiz(Quiz $quiz, QuestionRepository $questionRepository): Response
     {
@@ -44,6 +46,8 @@ class ModeratorController extends AbstractController
         ]);
     }
 
+
+    //
     #[Route('/moderator/verified/quiz/{id}', name: 'verified_quiz')]
     public function verifiedQuiz(Quiz $quiz, EntityManagerInterface $entityManager): Response
     {
