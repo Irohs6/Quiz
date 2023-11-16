@@ -28,12 +28,16 @@ class QuizController extends AbstractController
         $allTheme = $themeRepository->findAll();//recupère toute les donné de la table theme
         $allCategories = $categoryRepository->findAll();//recupère toute les donné de la table category
         $allLevel = $levelRepository->findAll();//recupère toute les donné de la table level
-        $games = $gameRepository->findAll();
+        if (!$this->getUser()) {
+            $gamePlay = "";
+        }else{
+            $gamePlay = $gameRepository->findOneBy(['userId'=>$this->getUser()->getId()]);
+        }
         return $this->render('quiz/home.html.twig', [
             'allTheme' => $allTheme,
             'allCategories' => $allCategories,
             'allLevel'=>$allLevel,
-            'games' => $games
+            'game' => $gamePlay
 
         ]);
     }
@@ -45,19 +49,23 @@ class QuizController extends AbstractController
         $allTheme = $themeRepository->findAll();//recupère toute les donné de la table theme
         $allCategories = $categoryRepository->findAll();//recupère toute les donné de la table category
         $allLevel = $levelRepository->findAll();//recupère toute les donné de la table level
-        $games = $gameRepository->findAll();
+        if ($this->getUser()->getId()) {
+            $gamePlay = $gameRepository->findOneBy(['userId'=>$this->getUser()->getId()]);
+        }else{
+            $gamePlay = "";
+        }
         return $this->render('quiz/home_quiz.html.twig', [
             'allTheme' => $allTheme,
             'allCategories' => $allCategories,
             'allLevel'=> $allLevel,
-            'games' => $games
+            'game' => $gamePlay
         ]);
     }
 
 
     //pages pour jouer un quiz
     #[Route('/quiz/play/{id}', name: 'app_play')]
-    public function playQuiz(Quiz $quiz, Request $request, EntityManagerInterface $entityManager, Session $session): Response
+    public function playQuiz(Quiz $quiz, Request $request, EntityManagerInterface $entityManager,GameRepository $gameRepository): Response
     {
         $quizData = [
             'titre' => $quiz->getTitle(),//ajoute le titre du quiz
@@ -85,48 +93,72 @@ class QuizController extends AbstractController
         }
         
         $quizJson = json_encode($quizData); //transforme le tableau en Json ((JavaScript Object Notation))
-        $category = $quiz->getCategory();
+        $category = $quiz->getCategory(); // on récupère la catégorie pour en récupérer l'image
         $game = new Game; // nouvelle instance de Game
-        $quiz->addGame($game);// ajout du quiz dans Game
+        
         $formQuiz = $this->createForm(PlayQuizzType::class, $question, ['attr' => ['class' => 'formQuiz']]); //creer le formulaire
-        $user = $this->getUser(); // on récupère l'user en session
-        $game->setUserId($user); // on rajoute l'user en session a la Game
+        
         $formQuiz->handleRequest($request);
         $level = $quiz->getLevel(); // on récupère le niveaux de difficulté 
         $scoreCoeff = $level->getScoreCoef(); //on récupère le coefficient
-        
 
-        //si le formQuizulaire est remplie et valide
-        if ($formQuiz->isSubmitted() && $formQuiz->isValid()) {
-            $recapData = $request->request->get('recapData');//récupère le tableau de récapitulatif du quiz en json
-            
-            $recapDataArray = json_decode($recapData, true);// convertit en une structure de données PHP dans notre cas un tableau associatif
-          
-           foreach ($recapDataArray as $data) {
-            if (isset($data['score'])) {
-                $score = $data['score'];
-                $scoreSum = $score * $scoreCoeff / 10;
-            } else {
-                foreach ($data as $response) {
-                    $answer = $entityManager->getRepository(Answer::class)->findOneBy(['id' => $response['answerId']]);//récupère la question grace a son id contenu dans le tableau
-                    $game->addAnswer($answer);//ajoute les question a la game
-                }
-            }
+        $gamePlay = $gameRepository->findOneBy(['userId'=>$this->getUser()->getId(), 'quiz' => $quiz->getId()]);
+        if ($gamePlay) {
+             $date = $gamePlay->getDateGame();
+             $dateModify = date_modify($date ,"+7 day");
         }
+       
         $now = new DateTime();
-        $game->setDateGame($now);
-        $game->setScore($scoreSum);//ajoute le score a la game
-        // dd($game);
-            // prepare PDO(prepare la requete Insert ou Update)
-            $entityManager->persist($game);
-            // execute PDO(la requete Insert ou Update)
-            $entityManager->flush();
-            //redirige ver le home qui est la liste des formation
-           
-            return $this->redirectToRoute('app_quiz');
-        
-        }
 
+       
+        if ($quiz->isIsVerified()|| $this->isGranted('ROLE_MODERATOR')) {
+            if (!$gamePlay || $now == $dateModify || $this->isGranted('ROLE_MODERATOR')){
+            
+                //si le formQuizulaire est remplie et valide
+                if ($formQuiz->isSubmitted() && $formQuiz->isValid()) {
+                    $quiz->addGame($game);// ajout du quiz dans Game
+                    $user = $this->getUser(); // on récupère l'user en session
+                    $game->setUserId($user); // on rajoute l'user en session a la Game
+
+                    $recapData = $request->request->get('recapData');//récupère le tableau de récapitulatif du quiz en json
+                    
+                    $recapDataArray = json_decode($recapData, true);// convertit en une structure de données PHP dans notre cas un tableau associatif
+                
+                foreach ($recapDataArray as $data) {
+                    if (isset($data['score'])) {
+                        $score = $data['score'];
+                        $scoreSum = $score * $scoreCoeff / 10;
+                    } else {
+                        foreach ($data as $response) {
+                            $answer = $entityManager->getRepository(Answer::class)->findOneBy(['id' => $response['answerId']]);//récupère la question grace a son id contenu dans le tableau
+                            $game->addAnswer($answer);//ajoute les question a la game
+                        }
+                    }
+                }
+                $now = new DateTime();
+                $game->setDateGame($now);
+                $game->setScore($scoreSum);//ajoute le score a la game
+                // dd($game);
+                    // prepare PDO(prepare la requete Insert ou Update)
+                    $entityManager->persist($game);
+                    // execute PDO(la requete Insert ou Update)
+                    $entityManager->flush();
+                    //redirige ver le home qui est la liste des formation
+                
+                    return $this->redirectToRoute('app_quiz');
+                
+                }
+            }else{
+            
+                $nbJour = $dateModify->diff($now)->format("%d");
+                $this->addFlash('error', 'Vous pourez rejouer le quiz dans '.$nbJour.' jours');
+                return $this->redirectToRoute('app_quiz');
+            }
+        }else{
+            $this->addFlash('error', "Ce quiz n'est pas encore disponible");
+            return $this->redirectToRoute('app_quiz');
+        }
+        
         return $this->render('quiz/playQuiz.html.twig', [
             'category' => $category,
             'quiz' => $quiz,

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello QuizController!{% endblock %}
+{% block title %}Quiz Quest{% endblock %}
 
 {% block body %}
 {% set labelLevel = "" %} {# déclaration d'une varibale pour les différentes section des level  #}
@@ -24,7 +24,10 @@
         </article>
 
     </div>
-
+    {% for error in app.flashes('error') %}
+    <div class="alert alert-danger" role="alert">{{ error }}</div>
+    {% endfor %}
+    
     <section id="list-theme">
 
         <ul class="list-theme">
@@ -79,12 +82,18 @@
                                                     <a class="detail" href="{{path('show_quiz', {'id': quiz.id})}}">Détail</a>
 
                                                 {% endif %}
-
+                                                
                                                 {% if quiz.questions|length > 0 %}
                                                 {#  condition si le quiz a plus de 8 question affiche le bouton  #}
                                                     {# route vers la page pour jouer un quiz  #}
-                                                    {# <a  class="play" href="{{path('app_play', {'id': quiz.id})}}">Afficher</a> #}
-
+                                                   
+                                                    {% if  game.quiz.id != quiz.id or 'now'|date('Y-m-d') == game.dateGame|date_modify("+7 day")|date('Y-m-d') %}
+                                                    <a  class="play" href="{{path('app_play', {'id': quiz.id})}}">Jouer</a>
+                                                    {% else %}
+                                                        {% set nbJour = date(game.dateGame|date_modify("+7 day")).diff(date('now')) %}
+                                                        
+                                                        <p>Vous pourez rejouer se quiz dans {{ nbJour|date|replace({'days' : 'jours', 'day' : 'jour'}) }}</p>
+                                                    {% endif %}
                                                 {% endif %} 
 
                                             {% endif %} {# fin {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}   #}
@@ -97,29 +106,6 @@
                                                 {# route pour afficher le détail d'un quiz  #}
                                                 <a class="detail" href="{{path('show_quiz', {'id': quiz.id})}}">Détail</a>
                                                  
-                                              
-                                                {% if quiz.questions|length > 0 %} 
-                                                    <a class="play" href="{{path('app_play', {'id': quiz.id})}}">Jouer</a>
-
-                                                        {% for game in games %}
-                                                            {% set idQuiz = game.id  %}
-
-                                                            {% if game.id == idQuiz %}
-
-                                                                {% set enddate =  game.dateGame|date_modify("+7 day")|date("m/d/Y")  %}
-
-
-                                                                {% if  app.user.id == game.userId.id and game.quiz.id == quiz.id and enddate 
-                                                                     == "now"|date("m/d/Y")  %}
-
-                                                                {% else %}
-
-                                                                    
-                                                                {% endif %}
-
-                                                            {% endif %}    
-                                                        {% endfor %} 
-                                                {% endif %}
 
                                             {% endif %}
 

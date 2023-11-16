@@ -8,19 +8,14 @@ window.addEventListener("load", (event) => {
     selectedAnswers = {}
     tableScore = {}
     let quizAnswer = document.getElementById('answer')
-
     let valider = document.getElementById('valider')
-
-    let nextQuestion = document.getElementById('next_question')
-
-    let quizContainer = document.getElementById('quiz-container')
     document.getElementById('show-recap').style.display = 'none'
 
     document.getElementById('submit').style.display = 'none'
     let play = document.getElementById('play')
     console.log(play);
     // nextQuestion.style.display = 'none'
-    let recapDataArray = {}; // Déclaration de la variable pour stocker le récapitulatif
+   
     let currentQuestionIndex = 0 // initialise a 0 utiliser pour parcourir les index du tableau de question
     let count = 0 
 
@@ -39,12 +34,13 @@ window.addEventListener("load", (event) => {
 
         // Affiche les réponses
 
-        currentQuestion.reponses.forEach(function (reponse, index) {
+        currentQuestion.reponses.forEach(function (reponse) {
             let label = document.createElement('label'); //creer un élément label
             let input = document.createElement('input'); // crer un élément input
-            input.type = 'checkbox'; // met un type checkbox sur l'élément input
-        
-            input.name = `${reponse.id}`; // ajoute l'id de la question et de la reponse dans le name du input
+            input.type = 'radio'; // met un type checkbox sur l'élément input
+            console.log(input);
+            input.name = `answer`; // ajoute l'id de la question et de la reponse dans le name du input
+            input.id =  `${reponse.id}`; // ajoute l'id de la question et de la reponse dans le name du input
             input.className = 'answers'
             label.appendChild(input); // place le input en ellement enfant de l'élément label 
             label.appendChild(document.createTextNode(reponse.intitulle)); //
@@ -57,7 +53,7 @@ window.addEventListener("load", (event) => {
 
     //function pour activer désactiver le bouton valider en fonction qu'une réponse soit coché ou non
     function validateAnswers() {
-        const checkboxes = quizAnswer.querySelectorAll('input[type="checkbox"]');
+        const checkboxes = quizAnswer.querySelectorAll('input[type="radio"]');
         let atLeastOneChecked = false; // initialise a false pour que le bouton valider ne sois pas cliquable au lancement du quiz
 
         checkboxes.forEach(function (checkbox) {
@@ -68,8 +64,10 @@ window.addEventListener("load", (event) => {
 
         if (atLeastOneChecked) { // si atLeastOneChecked = true
             valider.disabled = false; // le bouton valider est cliquable
+            
         } else {
-            valider.disabled = true; // sinon il est désactiver jusqu'a qu'on coche une réponse  
+            valider.disabled = true; // sinon il est désactiver jusqu'a qu'on coche une réponse 
+            
         }
     }
 
@@ -80,13 +78,14 @@ window.addEventListener("load", (event) => {
         // document.getElementById('next_question').style.display = 'block'; // affiche le bouton question suivante
         let currentQuestion = quizData.questions[currentQuestionIndex];
         
-        let checkboxes = quizAnswer.querySelectorAll('input[type="checkbox"]');
+        let checkboxes = quizAnswer.querySelectorAll('input[type="radio"]');
         // valider.style.display = 'none'
         checkboxes.forEach(function(checkbox) {
             if (checkbox.checked) {
                 
-                let answerId = checkbox.name;
+                let answerId = checkbox.id;
                 let answerIntitulle = checkbox.nextSibling.textContent; // Récupérez le texte associé à la case à cocher
+                console.log('reponse',answerIntitulle);
                 let answerIsRight = currentQuestion.reponses.find((reponse) => reponse.id == answerId ).isRihgt //cherche dans le tableau la réponse d'après son id
                 checkedAnswers.push({ 
                     questionId: currentQuestion.id, //id de la question
@@ -208,4 +207,26 @@ window.addEventListener("load", (event) => {
     displayQuestion();
     validateAnswers();
 
+
+    window.addEventListener("keyup", (event) => {
+        history.back();
+      });
+
+      document.onkeyup = function (event) {
+        if (event.which == 13 || event.keyCode == 13) {
+          alert("Wooohoo");
+        }
+      };
+      function isKeyPressed(event) {
+        let text = "";
+        if (event.metaKey) {
+          text = "The META key was pressed!";
+        } else {
+          text = "The META key was NOT pressed!";
+        }
+        document.getElementById("demo").innerHTML = text;
+      }
+      isKeyPressed()
+      console.log('text',text);
+      
 });

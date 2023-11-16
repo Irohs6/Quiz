@@ -154,4 +154,6 @@ $(document).ready(function() { // Une fois que le document (base.html.twig) HTML
         $('#modalPopup').modal('show')
     }
     
+    
+
 })
