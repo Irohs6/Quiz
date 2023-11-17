@@ -33,14 +33,7 @@ class RegistrationFormType extends AbstractType
                     'class' => 'form-control'
                 ]
             ])
-            ->add('agreeTerms', CheckboxType::class, [
-                'mapped' => false,
-                'constraints' => [
-                    new IsTrue([
-                        'message' => 'You should agree to our terms.',
-                    ]),
-                ],
-            ])
+            
             ->add('plainPassword', RepeatedType::class, [
                 'attr' =>[ 
                     'class' => 'form-control'
@@ -63,6 +56,17 @@ class RegistrationFormType extends AbstractType
                 'first_options'  => ['label' => 'Password'],
                 'second_options' => ['label' => 'Repeat Password']
             ])
+
+            ->add('agreeTerms', CheckboxType::class, [
+                'mapped' => false,
+                'constraints' => [
+                    new IsTrue([
+                        'message' => 'You should agree to our terms.',
+                    ]),
+                ],
+            ])
+
+            // ->add('_remember_me', Remem)
             ->add('profileImage', HiddenType::class)
             ->add('Valider', SubmitType::class)
         ;

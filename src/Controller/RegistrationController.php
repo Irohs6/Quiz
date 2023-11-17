@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authentication\Token\RememberMeToken;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
@@ -35,9 +36,11 @@ class RegistrationController extends AbstractController
         //VerifAdmin000@ 
         //AdminVerifMdp000@
         if ($form->isSubmitted() && $form->isValid()) {
+            
             $imageName =  $request->request->all('formEditUser')['selectedProfileImage']; //recupère l'image de profil selectioné
             $user->setProfileImage($imageName);//ajoute l'image au user
             $data = $form->getData();
+           
             $user->setIsBanned(false);//met le statut banni a false par défault
             $user->setRoles(['ROLE_USER']);//met le role user par default
             $email= $data->getEmail();

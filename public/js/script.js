@@ -82,7 +82,8 @@ window.addEventListener("load", (event) => {
         // valider.style.display = 'none'
         checkboxes.forEach(function(checkbox) {
             if (checkbox.checked) {
-                
+                console.log('checkbox =>',checkboxes);
+                console.log('statut =>', checkbox.checked);
                 let answerId = checkbox.id;
                 let answerIntitulle = checkbox.nextSibling.textContent; // Récupérez le texte associé à la case à cocher
                 console.log('reponse',answerIntitulle);
@@ -207,26 +208,5 @@ window.addEventListener("load", (event) => {
     displayQuestion();
     validateAnswers();
 
-
-    window.addEventListener("keyup", (event) => {
-        history.back();
-      });
-
-      document.onkeyup = function (event) {
-        if (event.which == 13 || event.keyCode == 13) {
-          alert("Wooohoo");
-        }
-      };
-      function isKeyPressed(event) {
-        let text = "";
-        if (event.metaKey) {
-          text = "The META key was pressed!";
-        } else {
-          text = "The META key was NOT pressed!";
-        }
-        document.getElementById("demo").innerHTML = text;
-      }
-      isKeyPressed()
-      console.log('text',text);
       
 });

@@ -1,5 +1,10 @@
 window.addEventListener("load", (event) => {
 
+categories = document.getElementsByClassName('category_home')
+console.log(categories);
+
+
+
   const swiper = new Swiper('.swiper', {
       // Optional parameters
       direction: 'horizontal',
@@ -22,22 +27,6 @@ window.addEventListener("load", (event) => {
       },
     });
 
-    document.addEventListener('DOMContentLoaded', function () {
-      const swiperContainers = document.querySelectorAll('.swiper-container');
-      swiperContainers.forEach(function (swiperContainer) {
-          new Swiper(swiperContainer, {
-            
-              loop: true,
-            
-              navigation: {
-                  nextEl: '.swiper-button-next',
-                  prevEl: '.swiper-button-prev',
-              },
-              scrollbar: {
-                  el: '.swiper-scrollbar',
-              },
-          });
-      });
-  });
+   
 
 });

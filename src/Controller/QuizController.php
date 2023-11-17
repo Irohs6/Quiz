@@ -29,15 +29,15 @@ class QuizController extends AbstractController
         $allCategories = $categoryRepository->findAll();//recupère toute les donné de la table category
         $allLevel = $levelRepository->findAll();//recupère toute les donné de la table level
         if (!$this->getUser()) {
-            $gamePlay = "";
+            $gamesPlay = "";
         }else{
-            $gamePlay = $gameRepository->findOneBy(['userId'=>$this->getUser()->getId()]);
+            $gamesPlay = $gameRepository->findBy(['userId'=>$this->getUser()->getId()]);
         }
         return $this->render('quiz/home.html.twig', [
             'allTheme' => $allTheme,
             'allCategories' => $allCategories,
             'allLevel'=>$allLevel,
-            'game' => $gamePlay
+            'games' => $gamesPlay
 
         ]);
     }

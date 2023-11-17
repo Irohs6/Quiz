@@ -3,6 +3,7 @@
 {% block title %}Quiz Quest{% endblock %}
 
 {% block body %}
+{% set allQuiz = [] %}
 {% set labelLevel = "" %} {# déclaration d'une varibale pour les différentes section des level  #}
 {% set nb = 1 %} {# déclaration d'une variable nb pour le nom des class des level #}
 
@@ -22,7 +23,6 @@
                 </p>
 
         </article>
-
     </div>
     {% for error in app.flashes('error') %}
     <div class="alert alert-danger" role="alert">{{ error }}</div>
@@ -65,6 +65,7 @@
                             {% endif %}
 
                             {% for quiz in level.quizzes %}{#  boucle pour afficher les quizs #}
+                                {% set allQuiz = [quiz.id] %}
                                 
                                 <ul class="quizList">  
 
@@ -87,13 +88,28 @@
                                                 {#  condition si le quiz a plus de 8 question affiche le bouton  #}
                                                     {# route vers la page pour jouer un quiz  #}
                                                    
-                                                    {% if  game.quiz.id != quiz.id or 'now'|date('Y-m-d') == game.dateGame|date_modify("+7 day")|date('Y-m-d') %}
-                                                    <a  class="play" href="{{path('app_play', {'id': quiz.id})}}">Jouer</a>
-                                                    {% else %}
-                                                        {% set nbJour = date(game.dateGame|date_modify("+7 day")).diff(date('now')) %}
-                                                        
-                                                        <p>Vous pourez rejouer se quiz dans {{ nbJour|date|replace({'days' : 'jours', 'day' : 'jour'}) }}</p>
-                                                    {% endif %}
+                                                    {% for game in games %}
+
+                                                        {% if quiz.id not in game.quiz.id %}
+
+                                                            {% if  'now'|date('Y-m-d') == game.dateGame|date_modify("+7 day")|date('Y-m-d') %}
+
+                                                                <a  class="play" href="{{path('app_play', {'id': quiz.id})}}">Jouer</a>
+
+                                                            {% else %}
+
+                                                                {% set nbJour = date(game.dateGame|date_modify("+7 day")).diff(date('now')) %} 
+                                                                        
+                                                                <p>Vous pourez rejouer se quiz dans {{ nbJour|date|replace({'days' : 'jours', 'day' : 'jour'}) }}</p> 
+
+                                                            {% endif %}
+
+                                                        {% else %}
+
+                                                            <a  class="play" href="{{path('app_play', {'id': quiz.id})}}">Jouer</a>
+                                                        {% endif %}
+                                                    {% endfor %}               
+                                                           
                                                 {% endif %} 
 
                                             {% endif %} {# fin {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}   #}
@@ -126,9 +142,9 @@
                                     {% endif %}  {# fin condition {% if category.label == quiz.category.label %}   #}
 
                                 </ul> {# fin <ul class="quizList"></ul> #}
-
+                               
                             {% endfor %} {# {% for quiz in level.quizzes %} %}   #}
-
+                               
                             {% set nb = nb + 1 %} {# on ajoute 1 a la variable pour que chaque class est un nom différent pour chaque level (level1) (level2) #}
                         </section> {# class="level"+nb#}
 

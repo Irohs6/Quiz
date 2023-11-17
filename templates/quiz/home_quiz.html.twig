@@ -4,9 +4,9 @@
 
 {% block body %}
 {% set labelLevel = "" %} {# déclaration d'une varibale pour les différentes section des level  #}
-{% set nb = 1 %} {# déclaration d'une variable nb pour le nom des class des level #}
+{% set id = 1 %} {# déclaration d'une variable nb pour le nom des class des level #}
 
-<div class="container">
+<div class="containe">
     <div id="hero">
         <article class="hero-text">
             <h1>Quiz Quest</h1>
@@ -24,24 +24,36 @@
         {% for theme in allTheme %}
             <h2>{{ theme.label }}</h2>
             {% for category in theme.categories %}
-                <!-- Slider main container -->
-                <div class="swiper-container">
-                    <div class="swiper-wrapper">
-                        {% for quiz in category.quizzes %}
-                            <div class="swiper-slide">
-                                <section class="slide-quiz">{{ quiz.title }}</section>
+            <h3>{{ category }}</h3>
+                <section id="{{id}}" class="category_home">
+
+                   
+
+                                    {% for quiz in category.quizzes %}
+
+                                        <section class="quiz_home_card">
+
+                                            <article  class="card_info">
+
+                                                {{ quiz.title }}
+                                           
+                                            </article>
+
+                                        </section>
+                                       
+                                    {% endfor %}
+                                  
                             </div>
-                        {% endfor %}
-                    </div>
-                    
-                    <!-- Navigation buttons inside the swiper-container -->
-                    <div class="swiper-button-prev"></div>
-                    <div class="swiper-button-next"></div>
-                    <!-- Pagination -->
-                    <div class="swiper-pagination"></div>
-                    <!-- Scrollbar -->
-                    <div class="swiper-scrollbar"></div>
-                </div>
+                                <a class="prev" onclick="plusSlides(-1)">❮</a>
+                                <a class="next" onclick="plusSlides(1)">❯</a>
+                            </div>
+
+                   
+
+
+
+                </section>  
+               {%  set id = id + 1 %}
             {% endfor %}
         {% endfor %}
     </section>
@@ -49,3 +61,11 @@
 
     
 {% endblock %}
+
+
+   
+     
+    
+    
+    
+    

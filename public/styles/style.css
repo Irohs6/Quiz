@@ -394,3 +394,49 @@ th, td {
 .profil-info{
     font-weight: bold;
 }
+
+/****************************************************/
+.quiz_home_card{
+  
+    background-image: url(../img/home_card.png);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    position: relative;
+    width: 24em;
+    height: 30em;
+    filter: blur(2px);
+    -webkit-filter: blur(2px);
+    -moz-filter: blur(2px);
+    -o-filter: blur(2px);
+    -ms-filter: blur(2px);
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+}
+
+.category_home{
+    gap: 0.5em;
+    display: flex;
+    flex-direction: row;
+
+}
+
+.card_info{
+    position: absolute;
+    top: 5%;
+    left: 10%;
+    display: flex;
+    align-items: center;
+    padding: 12px 0px;
+    width: 80%;
+    flex-direction: column;
+    padding-left: 12px;
+    color: rgb(5, 5, 5);
+    font-weight: bold;
+    font-size: 30px;
+    background-color: rgba(255, 255, 255, 0.4);
+
+}
