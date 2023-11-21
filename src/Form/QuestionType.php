@@ -2,14 +2,17 @@
 
 namespace App\Form;
 
+use App\Entity\Link;
 use App\Entity\Question;
 use App\Form\AnswerType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 class QuestionType extends AbstractType
 {
@@ -31,9 +34,11 @@ class QuestionType extends AbstractType
                 'by_reference' => false,// il est obligatoire car Quiz n'a pas de setQuestion mais c'est Question qui contient setQuiz
                 //Question est propriétaire de la relations. Pour éviter un mapping => false on est obligé de rajouter un by_reference => false
             ])
-
+            ->add('link', LinkType::class,[
+               'label' => false
+            ])
             ->add('Valider', SubmitType::class,[
-                'label' => 'Ajouter une autre question'
+                'label' => 'Valider'
             ])
           
         ;

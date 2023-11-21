@@ -21,26 +21,26 @@ use Symfony\Component\HttpFoundation\Session\Session;
 
 class QuizController extends AbstractController
 {
-    //pour afficher les theme les catégorie et leurs quiz
-    #[Route('/quiz', name: 'app_quiz')]
-    public function home(ThemeRepository $themeRepository, CategoryRepository $categoryRepository, LevelRepository $levelRepository,GameRepository $gameRepository): Response
-    {
-        $allTheme = $themeRepository->findAll();//recupère toute les donné de la table theme
-        $allCategories = $categoryRepository->findAll();//recupère toute les donné de la table category
-        $allLevel = $levelRepository->findAll();//recupère toute les donné de la table level
-        if (!$this->getUser()) {
-            $gamesPlay = "";
-        }else{
-            $gamesPlay = $gameRepository->findBy(['userId'=>$this->getUser()->getId()]);
-        }
-        return $this->render('quiz/home.html.twig', [
-            'allTheme' => $allTheme,
-            'allCategories' => $allCategories,
-            'allLevel'=>$allLevel,
-            'games' => $gamesPlay
+    // //pour afficher les theme les catégorie et leurs quiz
+    // #[Route('/quiz', name: 'app_quiz')]
+    // public function home(ThemeRepository $themeRepository, CategoryRepository $categoryRepository, LevelRepository $levelRepository,GameRepository $gameRepository): Response
+    // {
+    //     $allTheme = $themeRepository->findAll();//recupère toute les donné de la table theme
+    //     $allCategories = $categoryRepository->findAll();//recupère toute les donné de la table category
+    //     $allLevel = $levelRepository->findAll();//recupère toute les donné de la table level
+    //     if (!$this->getUser()) {
+    //         $gamesPlay = "";
+    //     }else{
+    //         $gamesPlay = $gameRepository->findBy(['userId'=>$this->getUser()->getId()]);
+    //     }
+    //     return $this->render('quiz/home.html.twig', [
+    //         'allTheme' => $allTheme,
+    //         'allCategories' => $allCategories,
+    //         'allLevel'=>$allLevel,
+    //         'games' => $gamesPlay
 
-        ]);
-    }
+    //     ]);
+    // }
 
     //futur home de quiz en cour de création
     #[Route('home/quiz', name: 'app_home_quiz')]
@@ -76,6 +76,7 @@ class QuizController extends AbstractController
             $questionData = [
                 'id' => $question->getId(),//ajoute l'id de la question
                 'question' => $question->getSentence(),//ajoute l'intitulé de la question
+                'link' => $question->getLink()->getUrl(),
                 'reponses' => [], // Initialise le tableau des réponses 
             ];
         
@@ -99,8 +100,8 @@ class QuizController extends AbstractController
         $formQuiz = $this->createForm(PlayQuizzType::class, $question, ['attr' => ['class' => 'formQuiz']]); //creer le formulaire
         
         $formQuiz->handleRequest($request);
-        $level = $quiz->getLevel(); // on récupère le niveaux de difficulté 
-        $scoreCoeff = $level->getScoreCoef(); //on récupère le coefficient
+        // $level = $quiz->getLevel(); // on récupère le niveaux de difficulté 
+        // $scoreCoeff = $level->getScoreCoef(); //on récupère le coefficient
 
         $gamePlay = $gameRepository->findOneBy(['userId'=>$this->getUser()->getId(), 'quiz' => $quiz->getId()]);
         if ($gamePlay) {
@@ -110,7 +111,6 @@ class QuizController extends AbstractController
        
         $now = new DateTime();
 
-       
         if ($quiz->isIsVerified()|| $this->isGranted('ROLE_MODERATOR')) {
             if (!$gamePlay || $now == $dateModify || $this->isGranted('ROLE_MODERATOR')){
             
@@ -124,21 +124,22 @@ class QuizController extends AbstractController
                     
                     $recapDataArray = json_decode($recapData, true);// convertit en une structure de données PHP dans notre cas un tableau associatif
                 
-                foreach ($recapDataArray as $data) {
-                    if (isset($data['score'])) {
-                        $score = $data['score'];
-                        // $scoreSum = $score * $scoreCoeff / 10;
-                    } else {
-                        foreach ($data as $response) {
-                            $answer = $entityManager->getRepository(Answer::class)->findOneBy(['id' => $response['answerId']]);//récupère la question grace a son id contenu dans le tableau
-                            $game->addAnswer($answer);//ajoute les question a la game
+                    foreach ($recapDataArray as $data) {
+                        if (isset($data['score'])) {
+                            $score = $data['score'];
+                            
+                        } else {
+                            foreach ($data as $response) {
+                                $answer = $entityManager->getRepository(Answer::class)->findOneBy(['id' => $response['answerId']]);//récupère la question grace a son id contenu dans le tableau
+                                $game->addAnswer($answer);//ajoute les question a la game
+                            }
                         }
                     }
-                }
-                $now = new DateTime();
-                $game->setDateGame($now);
-                $game->setScore($score);//ajoute le score a la game
-                // dd($game);
+
+                    $now = new DateTime();
+                    $game->setDateGame($now);
+                    $game->setScore($score);//ajoute le score a la game
+                
                     // prepare PDO(prepare la requete Insert ou Update)
                     $entityManager->persist($game);
                     // execute PDO(la requete Insert ou Update)
@@ -148,6 +149,7 @@ class QuizController extends AbstractController
                     return $this->redirectToRoute('app_home_quiz');
                 
                 }
+
             }else{
             
                 $nbJour = $dateModify->diff($now)->format("%d");

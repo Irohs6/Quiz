@@ -46,7 +46,15 @@
 
                                         <article  class="card_info">
 
-                                            <section class="quiz_title">{{ quiz.title }}</section>
+                                            <section class="quiz_title">
+                                                {{ quiz.title }}
+                                                {% if quiz in app.user.favoritesQuizzes %}
+                                                    <a href="{{ path('app_remove_favorite', {'id': quiz.id}) }}"><i class="fa-solid fa-star fa-xl" style="color: #dbc906;"></i></a>
+                                                {% else %}
+                                                    <a href="{{ path('app_add_favorite', {'id': quiz.id}) }}"><i class="fa-regular fa-star fa-xl" style="color: #dbc906;"></i></a>
+                                                {% endif %}
+                                            
+                                            </section>
 
                                             {% set lastGameDate = null %}
                                             {% set score = null %}
@@ -62,7 +70,7 @@
                                                     {% elseif game.dateGame > lastGameDate %} {# si la date de la partie est supérieur a la dernière partie jouer#}
 
                                                         {% set lastGameDate = game.dateGame %}{# on enregistre la nouvelle date #}
-                                                        {% set score = game.score %}
+                                                        {% set score = game.score %} {# on stoke le score dans la variable score #}
                                                     {% endif %}
 
                                                 {% endif %}
@@ -71,9 +79,9 @@
 
                                             {% if lastGameDate is not null %} {# si la variable a bien été set #}
                                               
-                                                {% if score >= 80 %}
+                                                {% if score >= 80 %} {# condition si score est supérieur a 80% affiche se message#}
                                                     {% set message = "Vous avez validé ce quiz en obtenant " ~ score ~ "%" ~ " de bonne réponse . Vous pourrez le refaire et tenter de faire mieux." %}
-                                                {% else %}
+                                                {% else %} {# sinon affiche se message #}
                                                     {% set message = "Vous n'avez pas validé ce quiz en obtenant " ~ score ~ "% de bonne réponse." %}
                                                 {% endif %}
                                                 {% set diffDays = lastGameDate|date_modify('+7 days').diff(date('now')) %} {# on fait la différence de la date de la partie + 7 j par rapport a la date du jours #}

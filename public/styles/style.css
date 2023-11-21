@@ -4,7 +4,7 @@
     box-sizing: 0;
 }
 /********************général***********************************/
-.add, .modify, .delete, .retirer{
+.add, .modify, .delete, .retirer, .detail{
     cursor: pointer;
     border: 2px solid #0B2443;
     border-radius: 5px;
@@ -293,10 +293,11 @@ a{
 }
 
 .category{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    flex-wrap: wrap;
+    list-style: none;
+}
+.li_category{
+    padding: 10px;
+    list-style: none;
 }
 
 

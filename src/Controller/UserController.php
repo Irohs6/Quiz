@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Quiz;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\GameRepository;
@@ -73,5 +74,37 @@ class UserController extends AbstractController
            'gamesUser' => $games
         ]);
 
+    }
+
+    #[Route('add/quiz/favorite/{id}', name: 'app_add_favorite')]
+    public function addFavoriteQuiz(Quiz $quiz, EntityManagerInterface $entityManager): Response
+    {
+        $user = $this->getUser();
+    
+        // Ajouter le quiz aux favoris de l'utilisateur s'il ne l'a pas déjà ajouté
+        if (!$user->getFavoritesQuizzes()->contains($quiz)) {
+            $user->addFavoritesQuiz($quiz);
+            $entityManager->persist($user);
+            $entityManager->flush();
+        }
+    
+        return $this->redirectToRoute('app_home_quiz');
+    }
+
+    #[Route('remove/quiz/favorite/{id}', name: 'app_remove_favorite')]
+    public function removeFavoriteQuiz(Quiz $quiz, EntityManagerInterface $entityManager): Response
+    {
+        $user = $this->getUser();
+
+        // Retirer le quiz des favoris de l'utilisateur s'il est présent
+        if ($user->getFavoritesQuizzes()->contains($quiz)) {
+            $user->removeFavoritesQuiz($quiz);
+        }
+
+        // Persister les modifications
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_home_quiz');
     }
 }

@@ -57,12 +57,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
 
+    #[ORM\ManyToMany(targetEntity: Quiz::class, mappedBy: 'usersFavorites')]
+    private Collection $favoritesQuizzes;
+
     public function __construct()
     {
         $this->topics = new ArrayCollection();
         $this->posts = new ArrayCollection();
         $this->Games = new ArrayCollection();
         $this->quizzes = new ArrayCollection();
+        $this->favoritesQuizzes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -299,6 +303,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsVerified(bool $isVerified): static
     {
         $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Quiz>
+     */
+    public function getFavoritesQuizzes(): Collection
+    {
+        return $this->favoritesQuizzes;
+    }
+
+    public function addFavoritesQuiz(Quiz $favoritesQuiz): static
+    {
+        if (!$this->favoritesQuizzes->contains($favoritesQuiz)) {
+            $this->favoritesQuizzes->add($favoritesQuiz);
+            $favoritesQuiz->addUsersFavorite($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFavoritesQuiz(Quiz $favoritesQuiz): static
+    {
+        if ($this->favoritesQuizzes->removeElement($favoritesQuiz)) {
+            $favoritesQuiz->removeUsersFavorite($this);
+        }
 
         return $this;
     }

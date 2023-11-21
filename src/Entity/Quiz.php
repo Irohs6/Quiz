@@ -38,10 +38,14 @@ class Quiz
     #[ORM\ManyToOne(inversedBy: 'quizzes')]
     private ?User $userId = null;
 
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'favoritesQuizzes')]
+    private Collection $usersFavorites;
+
     public function __construct()
     {
         $this->questions = new ArrayCollection();
         $this->games = new ArrayCollection();
+        $this->usersFavorites = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -165,6 +169,30 @@ class Quiz
     public function setUserId(?User $userId): static
     {
         $this->userId = $userId;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsersFavorites(): Collection
+    {
+        return $this->usersFavorites;
+    }
+
+    public function addUsersFavorite(User $usersFavorite): static
+    {
+        if (!$this->usersFavorites->contains($usersFavorite)) {
+            $this->usersFavorites->add($usersFavorite);
+        }
+
+        return $this;
+    }
+
+    public function removeUsersFavorite(User $usersFavorite): static
+    {
+        $this->usersFavorites->removeElement($usersFavorite);
 
         return $this;
     }

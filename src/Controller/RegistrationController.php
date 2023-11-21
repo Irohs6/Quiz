@@ -36,7 +36,6 @@ class RegistrationController extends AbstractController
         //VerifAdmin000@ 
         //AdminVerifMdp000@
         if ($form->isSubmitted() && $form->isValid()) {
-            
             $imageName =  $request->request->all('formEditUser')['selectedProfileImage']; //recupère l'image de profil selectioné
             $user->setProfileImage($imageName);//ajoute l'image au user
             $data = $form->getData();

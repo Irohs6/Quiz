@@ -66,7 +66,6 @@ class RegistrationFormType extends AbstractType
                 ],
             ])
 
-            // ->add('_remember_me', Remem)
             ->add('profileImage', HiddenType::class)
             ->add('Valider', SubmitType::class)
         ;

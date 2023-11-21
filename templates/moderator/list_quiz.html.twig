@@ -13,28 +13,28 @@
 
         <button id="button{{nb}}" class="showButton">Afficher</button>
 
-    <ul class="category{{nb}}">
+    <ul class="category" id="{{nb}}">
         {# boucle pour afficher les quiz  #}
         {% for quiz in quizes %} 
 
             {# condition qui vérifie que la catégorie n'est pas déja afficher pour qu'elle ne soit afficher qu'un seul fois pour tous les quiz de cet catégorie  #}
             {% if categoryExist == category  %}
-                <a class="add" href="{{path('new_quiz', {'idCategory': category.id})}}">Ajouter Quiz</a><br>
+                
                 {# condition pour afficher les quiz qui appartenant a cet catégorie #}
                 {% if category.id == quiz.category.id  %}
-
-                    <li>
+                <a class="add" href="{{path('new_quiz', {'idCategory': category.id})}}">Ajouter Quiz</a><br>
+                    <li class="li_category">
                         <h4>{{ quiz.title }}</h4>
                         
                         <a class="modify" href="{{path('edit_quiz', {'id': quiz.id})}}">Modifier</a>  
                     </li>
 
-                    <li>
+                    <li class="li_category">
                         <a class="add" href="{{path('new_question', {'idQuiz': quiz.id})}}">Ajouter Question</a>
                         Nb question:{{ quiz.questions|length}}
                     </li>
 
-                    <li>
+                    <li class="li_category">
                         Statut: 
                         {# condition pour afficher les différent statut d'un quiz  #}
                         {% if quiz.isVerified %}
@@ -44,20 +44,20 @@
                         {% endif %}
                     </li>
 
-                    <li>
+                    <li class="li_category">
                         {# route pour afficher le détail d'un quiz  #}
                         <a class="detail" href="{{path('show_quiz', {'id': quiz.id})}}">Détail</a>
                     </li>
 
-                    <li>
+                    <li class="li_category">
                         {# condition si le quiz a au moin une question on affiche un bouton pour tester le quiz #}
                         {% if quiz.questions|length > 0 %}   
 
-                                <a href="{{path('app_play', {'id': quiz.id})}}">Test Quiz</a>
+                                <a class="detail" href="{{path('app_play', {'id': quiz.id})}}">Test Quiz</a>
 
                         {% endif %}
                         {# route pour ajouter une nouvelle question et ses réponses  #}
-                        <a class="add" href="{{path('new_question', {'idQuiz': quiz.id})}}">Ajouter Question</a>
+                        
                     </li>
                     
 

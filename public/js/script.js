@@ -2,6 +2,7 @@ window.addEventListener("load", (event) => {
 
     // Récupération des données du quiz depuis l'attribut 'data-attribut'
     let quizData = JSON.parse(document.getElementById('quiz').getAttribute('data-attribut'));
+    console.log(quizData);
     let quizQuestion = document.getElementById('questions');
     let selectedAnswers = {};
     let quizAnswer = document.getElementById('answer');
@@ -10,8 +11,8 @@ window.addEventListener("load", (event) => {
     show_recap.style.display = 'none';
     document.getElementById('submit').style.display = 'none';
     let play = document.getElementById('play');
-    let askedQuestions = [];
-    let min = 0;
+    let askedQuestions = []; //tableau pour afficher les question dans l'ordre de leurs sortit
+    let min = 0; 
     let max = quizData.questions.length;
     let currentQuestionIndex = Math.floor(Math.random() * (max - min)) + min;
     let count = 0;
@@ -101,26 +102,27 @@ window.addEventListener("load", (event) => {
                 checkedAnswers.push({ 
                     questionId: currentQuestion.id, //id de la question
                     questionIntitulle: currentQuestion.question, // intitulé de la question
+                    link: currentQuestion.link,
                     answerId: answerId,  // id de la réponse
                     answerIntitulle: answerIntitulle,  //intitulé de la réponse
                     answerIsright: answerIsRight // réponse juste ou fausse
                 });//ajoute dans le tableau l'id de la question son intitule , l'id de la réponse selectioné son intitulé et si c'est la bonne réponse
             }
-
+        
         
         });
          // Si 10 questions ont été posées, affiche le récapitulatif
        
             if (count === 9 ) {
                 valider.style.display = 'none' //cache le bouton valider après la validation de la dernière question
-                document.getElementById('show-recap').style.display = 'block' //affiche le bouton recap après la validation de la dernière question
+                show_recap.style.display = 'block' //affiche le bouton recap après la validation de la dernière question
                 document.getElementById('quiz-container').style.display = 'none';//cache le contenu du quiz-container contenant les question et les réponse
             }
        
         // Stocke les réponses sélectionnées dans le tableau selectedAnswers
         selectedAnswers[currentQuestion.id] = selectedAnswers[currentQuestion.id] || [];
         selectedAnswers[currentQuestion.id].push(...checkedAnswers);
-    
+        console.log('curent',selectedAnswers);
         // incrément l'index du tableau pour passé a la question suivante
         
         currentQuestionIndex = Math.floor(Math.random() * (max - min)) + min;
@@ -155,6 +157,7 @@ window.addEventListener("load", (event) => {
             
             if (questionData) {
                 const questionElement = document.createElement('div');
+                
                 questionElement.innerHTML = `<strong>Question ${index + 1}:</strong>  ${questionData[0].questionIntitulle}`;
     
                 const answersElement = document.createElement('ul');
@@ -177,11 +180,12 @@ window.addEventListener("load", (event) => {
                 }
                     answerListItem.innerHTML = `<strong>Réponse:</strong> ${answerData.answerIntitulle}`;
                     answersElement.appendChild(answerListItem);//place le li enfant du ul
-                  
-                    
+                    const questionLink = document.createElement('li');
+                    answersElement.appendChild(questionLink);//place le li enfant du ul
+                    questionLink.innerHTML = `<strong>Lien doc:</strong>  <a target="blank" href="${questionData[0].link}">Lien documentation officielle</a>`;
                 });
                 questionElement.appendChild(answersElement); // place le ul en enfant de la div
-                recapContainer.appendChild(questionElement); //et palce la div en enfant de la div recap container
+                recapContainer.appendChild(questionElement); //et place la div en enfant de la div recap container
           
                 recapContainer.insertAdjacentElement('afterend',answerScoreTotal);
                 answerScoreTotal.innerHTML = `<strong>Score Total:</strong> ${scoreTotal}`+'%' ;
@@ -211,9 +215,9 @@ window.addEventListener("load", (event) => {
     
     }
 
-    document.getElementById('show-recap').addEventListener('click', function(){
+    show_recap.addEventListener('click', function(){
         displayRecap();  // Affichez le récapitulatif
-        document.getElementById('show-recap').style.display = 'none'
+        show_recap.style.display = 'none'
 
     });
 

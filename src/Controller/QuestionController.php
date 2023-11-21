@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Link;
 use App\Entity\Question;
 use App\Form\QuestionType;
 use App\Repository\QuizRepository;
@@ -14,23 +15,30 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class QuestionController extends AbstractController
 {
   
-    //pour créer un nouveau question ou editer une question 
+    //pour créer un nouvelle question ou editer une question 
     #[Route('/question/new/{idQuiz}', name: 'new_question')]
     #[Route('/question/edit/{id}', name: 'edit_question')]
-    public function addEditQuestion(Question $question = null, Request $request, EntityManagerInterface $entityManager, QuizRepository $quizRepository): Response
+    public function addEditQuestion(Question $question = null,Link $link = null, Request $request, EntityManagerInterface $entityManager, QuizRepository $quizRepository): Response
     {
         // si question n'existe pas 
         if(!$question){
             $question = new Question; // créer une nouvelle intance de question
+            $link = new Link;
             $quizId = $request->attributes->get('idQuiz');//on récupère l'id de quiz dans l'url
             $quiz = $quizRepository->findOneBy(['id' => $quizId]);// on récupére le quiz grace a son id
             $category = $quiz->getCategory();
+            
         }else{
             $quiz = $question->getQuiz();// si quiz existe on récupère le Quiz appartenant a la question
             $category = $quiz->getCategory(); //// si quiz existe on récupère la catégorie appartenant a la question
         }
         $question->setQuiz($quiz); //ajoute la question dans son  quiz
         $question->setCategory($category);// ajoute la catégorie a la question
+        if ($link) {
+            $link = $question->getLink();
+        }else{
+            $link = new Link;
+        }
         $formNewquestion = $this->createForm(QuestionType::class, $question);//crer le formulaire
 
         $formNewquestion->handleRequest($request);
@@ -38,13 +46,13 @@ class QuestionController extends AbstractController
         //si le formulaire de question est remplie et valide
         if ($formNewquestion->isSubmitted() && $formNewquestion->isValid()) {
             //récupère les donné du formulaire  
-            $formNewquestion->getData();
+            $question = $formNewquestion->getData();
             // prepare PDO(prepare la requete Insert ou Update)
             $entityManager->persist($question);
             // execute PDO(la requete Insert ou Update)
             $entityManager->flush();
             //redirige vers la liste des question
-            return $this->redirectToRoute('new_question',['idQuiz' => $quiz->getId()]); // redirige vers la création des question 
+            return $this->redirectToRoute('show_quiz',['id' => $quiz->getId()]); // redirige vers la création des question 
         }
 
         return $this->render('question/newQuestion.html.twig', [

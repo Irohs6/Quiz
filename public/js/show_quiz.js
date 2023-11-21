@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     buttons.forEach(function (button, index) {
-        let list_quiz = document.querySelector('.category' + (index + 1));
+        let list_quiz = document.getElementById((index + 1));
         console.log(list_quiz);
         button.addEventListener('click', function () {
             console.log(button);
