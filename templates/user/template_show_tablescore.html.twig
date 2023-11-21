@@ -7,6 +7,7 @@
             <td>Quiz</td>
             <td>Difficulter</td>
             <td>Score obtenue</td>
+            <td>Statue</td>
         </tr>
     </thead>
     <tbody>
@@ -16,6 +17,7 @@
                 <td>{{ gameUser.quiz.title }}</td>
                 <td>{{ gameUser.quiz.level }}</td>
                 <td> {{ gameUser.score }}</td>
+                <td> {{ (gameUser.score) > 80 ? 'Valider' : 'A refaire'  }} </td>
             </tr>
         {% endfor %}
     </tbody>

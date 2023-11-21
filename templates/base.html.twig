@@ -15,44 +15,48 @@
     <body>
         <header>
             <div id="nav">
-                <figure id="logo">
-                    <img class="logo" src="{{ asset('img/logo.jpg') }}" alt="Logo de Quiz Quest">
+                <figure id="logo"> 
+                    <a href="{{path('app_home_quiz')}}"><img class="logo" src="{{ asset('img/logo.png') }}" alt="Logo de Quiz Quest"></a>
                 </figure>
                 <nav>
                     {# visible que par admin #}
                     {% if is_granted('ROLE_ADMIN') %} 
                     {# route vers panel admin #}
-                        <a href="{{path('app_admin_panel')}}">Panel admin</a>
+                        <a class="lien_nav" href="{{path('app_admin_panel')}}">Panel admin</a>
                     {% endif %}
                     {# visible pour moderateur et admin  #}
                     {% if is_granted('ROLE_MODERATOR') %} 
                     {# pannel pour la modération  #}
-                        <a href="{{path('app_moderator_panel')}}">Modération</a>
+                        <a class="lien_nav" href="{{path('app_moderator_panel')}}">Modération</a>
                     {% endif %}
                     {# route vers l'accueil  #}
-                    <a href="{{path('app_quiz')}}">Accueil</a>
+                    <a class="lien_nav" href="{{path('app_home_quiz')}}">Accueil</a>
                         {# si l'utilisateur est connecté #}
                     {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}  
                         {# pseudo + image profil du user  #}
-                        <a href="{{path('user_profile',{'id': app.user.id})}}"><figure class="fig_nav"><figcaption> {{ app.user.username }}</figcaption><img class="img_nav" src="{{ asset('avatar/' ~ app.user.profileImage) }}" alt="Image de profil de {{ app.user.username }}"></figure></a>
+                        <a class="lien_nav" href="{{path('user_profile',{'id': app.user.id})}}"> {{ app.user.username }}</a>
+                        {# <figure class="fig_nav"><figcaption></figcaption><img class="img_nav" src="{{ asset('avatar/' ~ app.user.profileImage) }}" alt="Image de profil de {{ app.user.username }}"></figure> #}
                         {#affiche le bouton déconnection  #}
-                        <a href="{{path('app_logout')}}">Déconnexion</a>
+                        <a class="lien_nav" href="{{path('app_logout')}}">Déconnexion</a>
                     {% else %}
                         {# sinon connection et inscription #}
-                        <a href="{{path('app_register')}}">S'inscrire</a>
-                        <a href="{{path('app_login')}}">Connexion</a>
+                        <a class="lien_nav" href="{{path('app_register')}}">S'inscrire</a>
+                        <a class="lien_nav" href="{{path('app_login')}}">Connexion</a>
                     {% endif %}
                 </nav>
             </div>
         </header>
         <main>
-            <div class="containe">
+            <div class="container">
                 {% block body %}
                 {% endblock %} 
             </div>
         </main>
         <footer>
             <div class="footer">
+                <figure id="logo"> 
+                    <a href="{{path('app_home_quiz')}}"><img class="logo" src="{{ asset('img/logo.png') }}" alt="Logo de Quiz Quest"></a>
+                </figure>
                 <section class="contact">
                     <h3>Information</h3>
                     <ul>
@@ -100,6 +104,7 @@
         {% block javascripts %}
             <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
             <script src="{{ asset('js/swipper.js') }}"></script>
+           
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
             <script
             src="https://code.jquery.com/jquery-3.4.1.min.js"

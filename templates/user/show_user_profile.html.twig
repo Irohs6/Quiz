@@ -14,9 +14,9 @@
         {# Condition pour vérifier si une image de profil existe #}
         {% if app.user.profileImage %}
 
-            <figure id="img_profil">
+            {# <figure id="img_profil">
                 <img class="img_profil" src="{{ asset('avatar/' ~ app.user.profileImage) }}" alt="Image de profil de {{ app.user.username }}">
-            </figure>   
+            </figure>    #}
             <figcaption>
                 <p><span class="profil-info">Pseudo :</span>{{ app.user.username }}</p>
             </figcaption>
@@ -45,7 +45,7 @@
                 {% for quiz in app.user.quizzes %} 
                     {% if quiz.questions|length > 0 %}
                         <li>
-                            <a class="play" href="{{path('app_play', {'id': quiz.id})}}"><p>{{ quiz.title }} nombre de qustion: {{quiz.questions|length}}</p></a>
+                            <a class="play" href="{{path('app_play', {'id': quiz.id})}}"><p>{{ quiz.title }} nombre de question: {{quiz.questions|length}}</p></a>
                         </li>
                     {% else %}
                     <li>

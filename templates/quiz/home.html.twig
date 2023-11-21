@@ -111,7 +111,7 @@
                                                     {% endfor %}               
                                                            
                                                 {% endif %} 
-
+                                                <a  class="play" href="{{path('app_play', {'id': quiz.id})}}">Jouer</a>
                                             {% endif %} {# fin {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}   #}
 
                                          {% else %}{# {% if quiz.isVerified %} #}

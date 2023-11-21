@@ -1,44 +1,57 @@
 window.addEventListener("load", (event) => {
 
-    // Récupérez les données du quiz depuis le data  attribut
-    let quizData =   JSON.parse(document.getElementById('quiz').getAttribute('data-attribut'));
-    console.log(quizData);
-    let quizQuestion = document.getElementById('questions')
-    // Réinitialise la variable selectedAnswers à un objet vide
-    selectedAnswers = {}
-    tableScore = {}
-    let quizAnswer = document.getElementById('answer')
-    let valider = document.getElementById('valider')
-    document.getElementById('show-recap').style.display = 'none'
+    // Récupération des données du quiz depuis l'attribut 'data-attribut'
+    let quizData = JSON.parse(document.getElementById('quiz').getAttribute('data-attribut'));
+    let quizQuestion = document.getElementById('questions');
+    let selectedAnswers = {};
+    let quizAnswer = document.getElementById('answer');
+    let valider = document.getElementById('valider');
+    let show_recap = document.getElementById('show-recap')
+    show_recap.style.display = 'none';
+    document.getElementById('submit').style.display = 'none';
+    let play = document.getElementById('play');
+    let askedQuestions = [];
+    let min = 0;
+    let max = quizData.questions.length;
+    let currentQuestionIndex = Math.floor(Math.random() * (max - min)) + min;
+    let count = 0;
+    let askedQuestionsOrder = []; // Tableau pour stocker l'ordre des questions posées
 
-    document.getElementById('submit').style.display = 'none'
-    let play = document.getElementById('play')
-    console.log(play);
-    // nextQuestion.style.display = 'none'
-   
-    let currentQuestionIndex = 0 // initialise a 0 utiliser pour parcourir les index du tableau de question
-    let count = 0 
+   // Gestion du clic sur le bouton "Play"
+    play.addEventListener('click', function () {
+    document.getElementById('quiz-container-play').style.display = 'none';
+    });
 
-    play.addEventListener('click', function() {
-        document.getElementById('quiz-container-play').style.display = 'none'
-    })
 
-    // Initialisez les réponses actuelles
+    // Fonction pour obtenir un index unique aléatoire
+    function getRandomUniqueIndex(min, max) {
+        let newIndex = Math.floor(Math.random() * (max - min));
+        while (askedQuestions.includes(newIndex)) {
+            newIndex = Math.floor(Math.random() * (max - min));
+        }
+        return newIndex;
+    }
+
+    // Fonction pour afficher une question
     function displayQuestion() {
+        let newIndex = getRandomUniqueIndex(0, quizData.questions.length);
+        currentQuestionIndex = newIndex;
+        askedQuestions.push(newIndex);
+        askedQuestionsOrder.push(newIndex); // Ajoute l'index de la question posée à l'ordre des questions posées
         let currentQuestion = quizData.questions[currentQuestionIndex];// affiche la question
+       
         quizQuestion.textContent = currentQuestion.question;
         valider.disabled = true;//pour désactiver le bouton a l'affichage de chaque nouvelle question
 
         // Efface les réponses précédentes
         quizAnswer.innerHTML = '';
 
-        // Affiche les réponses
+          // Affichage des réponses possibles pour la question
 
         currentQuestion.reponses.forEach(function (reponse) {
             let label = document.createElement('label'); //creer un élément label
             let input = document.createElement('input'); // crer un élément input
             input.type = 'radio'; // met un type checkbox sur l'élément input
-            console.log(input);
             input.name = `answer`; // ajoute l'id de la question et de la reponse dans le name du input
             input.id =  `${reponse.id}`; // ajoute l'id de la question et de la reponse dans le name du input
             input.className = 'answers'
@@ -46,7 +59,7 @@ window.addEventListener("load", (event) => {
             label.appendChild(document.createTextNode(reponse.intitulle)); //
             quizAnswer.appendChild(label);
             
-            // Ajoutez un écouteur d'événements pour chaque case à cocher
+            // Ajoutez un écouteur d'événements pour bouton radio
             input.addEventListener('change', validateAnswers);
         });
     }
@@ -79,14 +92,11 @@ window.addEventListener("load", (event) => {
         let currentQuestion = quizData.questions[currentQuestionIndex];
         
         let checkboxes = quizAnswer.querySelectorAll('input[type="radio"]');
-        // valider.style.display = 'none'
+
         checkboxes.forEach(function(checkbox) {
             if (checkbox.checked) {
-                console.log('checkbox =>',checkboxes);
-                console.log('statut =>', checkbox.checked);
                 let answerId = checkbox.id;
                 let answerIntitulle = checkbox.nextSibling.textContent; // Récupérez le texte associé à la case à cocher
-                console.log('reponse',answerIntitulle);
                 let answerIsRight = currentQuestion.reponses.find((reponse) => reponse.id == answerId ).isRihgt //cherche dans le tableau la réponse d'après son id
                 checkedAnswers.push({ 
                     questionId: currentQuestion.id, //id de la question
@@ -99,24 +109,29 @@ window.addEventListener("load", (event) => {
 
         
         });
-
-        if (count === quizData.questions.length-1 ) {
-            valider.style.display = 'none' //cache le bouton valider après la validation de la dernière question
-            document.getElementById('show-recap').style.display = 'block' //affiche le bouton recap après la validation de la dernière question
-            document.getElementById('quiz-container').style.display = 'none';//cache le contenu du quiz-container contenant les question et les réponse
-        }
-        
+         // Si 10 questions ont été posées, affiche le récapitulatif
+       
+            if (count === 9 ) {
+                valider.style.display = 'none' //cache le bouton valider après la validation de la dernière question
+                document.getElementById('show-recap').style.display = 'block' //affiche le bouton recap après la validation de la dernière question
+                document.getElementById('quiz-container').style.display = 'none';//cache le contenu du quiz-container contenant les question et les réponse
+            }
+       
         // Stocke les réponses sélectionnées dans le tableau selectedAnswers
         selectedAnswers[currentQuestion.id] = selectedAnswers[currentQuestion.id] || [];
         selectedAnswers[currentQuestion.id].push(...checkedAnswers);
     
         // incrément l'index du tableau pour passé a la question suivante
-
-        currentQuestionIndex++;
+        
+        currentQuestionIndex = Math.floor(Math.random() * (max - min)) + min;
+        console.log('currentQuestionIndex=',currentQuestionIndex);
         count++
-        // Sinon, affichez la question suivante
-        if (currentQuestionIndex < quizData.questions.length) {
+        // Affichage de la prochaine question si elle existe
+        if (currentQuestionIndex < quizData.questions.length && count < 10) {
             displayQuestion();
+        } else {
+            // Affichage du récapitulatif si le maximum de 10 questions est atteint après affichage d'une question
+            displayRecap();
         }
     });
 
@@ -132,59 +147,57 @@ window.addEventListener("load", (event) => {
 
         const recapContainer = document.getElementById('recap-container');
         recapContainer.innerHTML = ''; // Efface le contenu précédent
-        document.getElementById('recap-container').style.display = 'block'; //met visible l'élément qui a l'id recap-container
+        document.getElementById('recap-container').style.display = 'block'; // Met visible l'élément avec l'id recap-container
 
-        for (const questionId in selectedAnswers) {
-            const questionData = selectedAnswers[questionId];
+        askedQuestionsOrder.forEach((questionIndex, index) => {
+            const questionData = selectedAnswers[quizData.questions[questionIndex].id];
         
             
-            if (selectedAnswers.hasOwnProperty(questionId)) {//hasOwnProperty renvoit true ou false dans l'exemple il vérifie si selectedAnswers posséde la propriété questionId si oui il renvoie True
-            
-                
-
+            if (questionData) {
                 const questionElement = document.createElement('div');
-
-                questionElement.innerHTML = `<strong>Question ${ num }:</strong>  ${questionData[0].questionIntitulle}`;
-
+                questionElement.innerHTML = `<strong>Question ${index + 1}:</strong>  ${questionData[0].questionIntitulle}`;
+    
                 const answersElement = document.createElement('ul');
                 answersElement.innerHTML = '<strong>Réponses sélectionnées:</strong>';
-
+    
                 questionData.forEach(answerData => {
-                const answerListItem = document.createElement('li');
-                const answerScore = document.createElement('li');
-                
-                
+                    const answerListItem = document.createElement('li');
+
                 /**************************************************************************************** */
                 //si la question sélection est vrais on lui ajoute la class success(couleur vert) sinon error(couleur rouge)
                 if (answerData.answerIsright) {
                 answerListItem.className = 'success' //ajoute la class success si la réponse est vrais
                 const score = 10 ;
                 scoreTotal = scoreTotal + score
-                answerScore.innerHTML = `<strong>Score:</strong> ${ score }`;
+                // answerScore.innerHTML = `<strong>Score:</strong> ${ score }`;
                 }else{
                     answerListItem.className = 'error'// error si la réponse sélectioné est fause
-                    const score = 0 ;
-                    answerScore.innerHTML = `<strong>Score:</strong> ${ score }`;
+                    
+                    // answerScore.innerHTML = `<strong>Score:</strong> ${ score }`;
                 }
                     answerListItem.innerHTML = `<strong>Réponse:</strong> ${answerData.answerIntitulle}`;
                     answersElement.appendChild(answerListItem);//place le li enfant du ul
-                    answerListItem.appendChild(answerScore);//place le li enfant du ul
+                  
                     
                 });
-                recapContainer.insertAdjacentElement('afterend',answerScoreTotal);
-                answerScoreTotal.innerHTML = `<strong>Score Total:</strong> ${ scoreTotal }`;
-                tableScore = []
-                tableScore.push({
-                        'score': scoreTotal //id de la question
-                    }
-                );
-                selectedAnswersScore = {
-                    ...selectedAnswers,...tableScore   
-                }
-                
-                console.log(selectedAnswersScore);
                 questionElement.appendChild(answersElement); // place le ul en enfant de la div
                 recapContainer.appendChild(questionElement); //et palce la div en enfant de la div recap container
+          
+                recapContainer.insertAdjacentElement('afterend',answerScoreTotal);
+                answerScoreTotal.innerHTML = `<strong>Score Total:</strong> ${scoreTotal}`+'%' ;
+                // Création de l'objet pour le score total
+                tableScore = []
+                tableScore.push({
+                        'score': scoreTotal //score ttoal
+                    }
+                );
+                 // Création de l'objet combiné avec les réponses et le score total
+                const selectedAnswersScore = {
+                    ...selectedAnswers,
+                    ...tableScore
+                };
+                
+               
                 const recapDataJSON = JSON.stringify(selectedAnswersScore);// JSON.stringify converti une variable Javascript/ un objet ou un tableau en un string JSON prend en premier paramamètre la value, peux accepter un second paramètre une fonction de remplacement et un 3ème paramètre pour l'indentation
                 const recapDataField = document.createElement('input');//créer un élément input
                 recapDataField.type = 'hidden';// met le input en type hidden(non visible)
@@ -194,7 +207,7 @@ window.addEventListener("load", (event) => {
                 num++// rajoute 1 a chaque tour de la boucle
             }
             
-        } 
+        }) 
     
     }
 

@@ -86,13 +86,13 @@ class RegistrationController extends AbstractController
         
         // Verify the user id exists and is not null
         if (null === $id) {
-            return $this->redirectToRoute('app_quiz');
+            return $this->redirectToRoute('app_home_quiz');
         }
         $user = $userRepository->findOneBy(['id' =>$id]);
         // Ensure the user exists in persistence
         if (null === $user) { 
                   
-            return $this->redirectToRoute('app_quiz');
+            return $this->redirectToRoute('app_home_quiz');
         }
         
       

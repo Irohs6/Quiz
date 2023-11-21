@@ -5,8 +5,10 @@
 {% block body %}
 {% set labelLevel = "" %} {# déclaration d'une varibale pour les différentes section des level  #}
 {% set id = 1 %} {# déclaration d'une variable nb pour le nom des class des level #}
+{% set nb = 1 %} {# déclaration d'une variable nb pour le nom des class des level #}
+{%  set nbSlide = 1 %}
+{%  set nbButton =  1 %}  
 
-<div class="containe">
     <div id="hero">
         <article class="hero-text">
             <h1>Quiz Quest</h1>
@@ -20,52 +22,106 @@
         </article>
     </div>
     
-    <section id="list-theme">
-        {% for theme in allTheme %}
-            <h2>{{ theme.label }}</h2>
+    {% for theme in allTheme %}
+
+        <h2>{{ theme.label }}</h2>
+
+        <section id="list-theme">
+
             {% for category in theme.categories %}
-            <h3>{{ category }}</h3>
+
+                <h3>{{ category }}</h3>
+
                 <section id="{{id}}" class="category_home">
 
-                   
+                    <div class="slideshow-container" id="{{nbButton}}" >
 
-                                    {% for quiz in category.quizzes %}
+                        {% for quiz in category.quizzes %}
+                        
+                            <div class="mySlides" id="{{nbSlide}}">
 
-                                        <section class="quiz_home_card">
+                                <section class="quiz_home_card" style="background-image: url('{{ asset('uploads/img/category/' ~ category.picture) }}');">
 
-                                            <article  class="card_info">
+                                    {% if app.user %}  
 
-                                                {{ quiz.title }}
-                                           
-                                            </article>
+                                        <article  class="card_info">
 
-                                        </section>
-                                       
-                                    {% endfor %}
-                                  
-                            </div>
-                                <a class="prev" onclick="plusSlides(-1)">❮</a>
-                                <a class="next" onclick="plusSlides(1)">❯</a>
-                            </div>
+                                            <section class="quiz_title">{{ quiz.title }}</section>
 
-                   
+                                            {% set lastGameDate = null %}
+                                            {% set score = null %}
 
+                                            {% for game in quiz.games %} {# boucle sur les parties jouer #}
+                                               
+                                                {% if game.userId.id == app.user.id %} {#condition si le joueur connecter a bien une partit enregistrer#}
 
+                                                    {% if loop.first %}
 
-                </section>  
-               {%  set id = id + 1 %}
-            {% endfor %}
-        {% endfor %}
-    </section>
-</div>
+                                                        {% set lastGameDate = game.dateGame %} {# on stock la date de la partie dans une variable#}
+                                                        {% set score = game.score %}
+                                                    {% elseif game.dateGame > lastGameDate %} {# si la date de la partie est supérieur a la dernière partie jouer#}
 
+                                                        {% set lastGameDate = game.dateGame %}{# on enregistre la nouvelle date #}
+                                                        {% set score = game.score %}
+                                                    {% endif %}
+
+                                                {% endif %}
+                                               
+                                            {% endfor %}
+
+                                            {% if lastGameDate is not null %} {# si la variable a bien été set #}
+                                              
+                                                {% if score >= 80 %}
+                                                    {% set message = "Vous avez validé ce quiz en obtenant " ~ score ~ "%" ~ " de bonne réponse . Vous pourrez le refaire et tenter de faire mieux." %}
+                                                {% else %}
+                                                    {% set message = "Vous n'avez pas validé ce quiz en obtenant " ~ score ~ "% de bonne réponse." %}
+                                                {% endif %}
+                                                {% set diffDays = lastGameDate|date_modify('+7 days').diff(date('now')) %} {# on fait la différence de la date de la partie + 7 j par rapport a la date du jours #}
+
+                                                {% if diffDays.days <= 0 %} {# si le résultat est inférieur ou égal a 0  il peux rejouer le quiz#}
+                                                    <p>{{ message }}</p>
+                                                    <a class="play" href="{{ path('app_play', {'id': quiz.id}) }}">Jouer</a>
+
+                                                {% else %} {# sinon il doit attendre le nombre de jour restant#}
+                                                    <p>{{ message }}</p>
+                                                    <p>Vous pourrez rejouer ce quiz dans {{ diffDays.days }} jour(s)</p>
+
+                                                {% endif %}
+
+                                            {% else %} {# si aucune partie enregistrer pour se quiz il peux le jouer #}
+
+                                                <a class="play" href="{{ path('app_play', {'id': quiz.id}) }}">Jouer</a>
+
+                                            {% endif %}
+
+                                        </article>
+
+                                    {% endif %}
+                                </section>
+                                {%  set id = id + 1 %}
+                                {%  set nb = nb + 1 %}
+                            </div>            
+                            {%  set nbSlide = nbSlide + 1 %} 
+
+                        {% endfor %}  {#{% for quiz in category.quizzes %} #}
+
+                        <a class="prev" id="prevButton{{nbButton}}">&#10094;</a>
+                        <a class="next" id="nextButton{{nbButton}}">&#10095;</a>
+
+                    </div> {#<div class="slideshow-container #}
+
+                </section> {# <section id="{{id}}" class="category_home"></section>  #}
+
+                {%  set nbButton = nbButton + 1 %}     
+
+            {% endfor %}{#  {% for category in theme.categories %} #}
+
+         </section>{#<section id="list-theme"></section> #}
+         
+     {% endfor %}{# {% for theme in allTheme %} #}
+
+    <script src="{{ asset('js/slide_home.js') }}"></script>
     
 {% endblock %}
-
-
    
-     
-    
-    
-    
     

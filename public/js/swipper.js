@@ -1,10 +1,5 @@
 window.addEventListener("load", (event) => {
 
-categories = document.getElementsByClassName('category_home')
-console.log(categories);
-
-
-
   const swiper = new Swiper('.swiper', {
       // Optional parameters
       direction: 'horizontal',

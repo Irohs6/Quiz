@@ -19,10 +19,11 @@
 #nav{
     display: flex;
     height: 150px;
-    background-color: #0B2443;
+    background: linear-gradient(0deg, #010000ff, #060DF4ff, #13264Bff, #0A249Bff, #0D1D6Fff);
     width: 100%;
     flex-direction: row;
     justify-content: space-around;
+    align-items: center;
 }
 nav{
     display: flex;
@@ -30,6 +31,7 @@ nav{
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
+    
 }
 .img_nav{
     height: 80px;
@@ -45,12 +47,13 @@ h1{
     padding: 10px;
 }
 #logo{
-    width: 150px;
-    height: 150px;
+    width: 200px;
+    height: 115px;
+    margin-left: 10px;
 }
 .logo{
-    width: 150px;
-    height: 150px;
+    width: 200px;
+    height: 115px;
 }
 
 /*****************************footer************************************/
@@ -70,13 +73,6 @@ footer{
     flex-direction: column;
 }
 
-.partenanire{
-
-}
-
-.reseau-sociaux{
-
-}
 /*****************************accueil**********************************/
 h1{
     font-weight: bold;
@@ -84,11 +80,14 @@ h1{
 h3{
     text-align: center;
 }
+h2{
+    text-align: center;
+}
 #hero{
     margin-top: 10px;
     width: 1320px;
     height: 500px;
-    background-image: url(../img/quiz_quest.jpg);
+    background-image: url(../img/home_hero.jpg);
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -115,7 +114,18 @@ h3{
 }
 
 a{
+    color: black;
     text-decoration: none;
+}
+
+.lien_nav{
+    padding: 5px;
+    background-color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.lien_nav:hover{
+    background-color: grey;
 }
 
 #list-theme{
@@ -396,27 +406,19 @@ th, td {
 }
 
 /****************************************************/
-.quiz_home_card{
-  
-    background-image: url(../img/home_card.png);
+.quiz_home_card {  
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
     position: relative;
     width: 24em;
     height: 30em;
-    filter: blur(2px);
-    -webkit-filter: blur(2px);
-    -moz-filter: blur(2px);
-    -o-filter: blur(2px);
-    -ms-filter: blur(2px);
-    position: relative;
+    border-radius: 15px;
     display: flex;
     flex-direction: row;
-    align-items: center;
-
+    border: 2px black solid;
+    background-size: 90% 70%;
 }
-
 .category_home{
     gap: 0.5em;
     display: flex;
@@ -424,19 +426,73 @@ th, td {
 
 }
 
-.card_info{
+.card_info {
+    text-align: center;
     position: absolute;
-    top: 5%;
-    left: 10%;
+    bottom: 0;
+    left: 0%;
     display: flex;
     align-items: center;
     padding: 12px 0px;
-    width: 80%;
+    width: 100%;
     flex-direction: column;
     padding-left: 12px;
     color: rgb(5, 5, 5);
     font-weight: bold;
-    font-size: 30px;
-    background-color: rgba(255, 255, 255, 0.4);
-
+    font-size: 1.5em;
+    background-color: rgba(128, 128, 128, 0.373);
+    z-index: 1; /* Ajout de z-index pour placer le texte au-dessus de l'image */
 }
+
+/* Animation pour les titres */
+.quiz_title, .card_info {
+    opacity: 0; /* Titre initialement transparent */
+    transform: translateY(-50px); /* Titre initialement déplacé vers le haut */
+    animation: fadeInUp 2s ease forwards; /* Animation fadeInUp pendant 1 seconde */
+}
+
+/* Animation keyframe */
+@keyframes fadeInUp {
+    to {
+        opacity: 1; /* Opacité complète à la fin de l'animation */
+        transform: translateY(0); /* Aucun déplacement à la fin de l'animation */
+    }
+}
+
+/* Slideshow container */
+.slideshow-container {
+  max-width: 1000px;
+  position: relative;
+  margin: auto;
+}
+
+/* Next & previous buttons */
+.prev, .next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: auto;
+  padding: 16px;
+  margin-top: -22px;
+  color: darkblue;
+  background: rgba(255, 255, 255, 0.536);
+  font-weight: bold;
+  font-size: 18px;
+  transition: 0.6s ease;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+  z-index: 99;
+}
+
+/* Position the "next button" to the right */
+.next {
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+/* On hover, add a grey background color */
+.prev:hover, .next:hover {
+  background-color: #f1f1f1;
+  color: black;
+}
+  

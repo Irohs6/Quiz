@@ -49,16 +49,16 @@ class QuizController extends AbstractController
         $allTheme = $themeRepository->findAll();//recupère toute les donné de la table theme
         $allCategories = $categoryRepository->findAll();//recupère toute les donné de la table category
         $allLevel = $levelRepository->findAll();//recupère toute les donné de la table level
-        if ($this->getUser()->getId()) {
-            $gamePlay = $gameRepository->findOneBy(['userId'=>$this->getUser()->getId()]);
+        if (!$this->getUser()) {
+            $gamesPlay = "";
         }else{
-            $gamePlay = "";
+            $gamesPlay = $gameRepository->findBy(['userId'=>$this->getUser()->getId()]);
         }
         return $this->render('quiz/home_quiz.html.twig', [
             'allTheme' => $allTheme,
             'allCategories' => $allCategories,
             'allLevel'=> $allLevel,
-            'game' => $gamePlay
+            'game' => $gamesPlay
         ]);
     }
 
@@ -127,7 +127,7 @@ class QuizController extends AbstractController
                 foreach ($recapDataArray as $data) {
                     if (isset($data['score'])) {
                         $score = $data['score'];
-                        $scoreSum = $score * $scoreCoeff / 10;
+                        // $scoreSum = $score * $scoreCoeff / 10;
                     } else {
                         foreach ($data as $response) {
                             $answer = $entityManager->getRepository(Answer::class)->findOneBy(['id' => $response['answerId']]);//récupère la question grace a son id contenu dans le tableau
@@ -137,7 +137,7 @@ class QuizController extends AbstractController
                 }
                 $now = new DateTime();
                 $game->setDateGame($now);
-                $game->setScore($scoreSum);//ajoute le score a la game
+                $game->setScore($score);//ajoute le score a la game
                 // dd($game);
                     // prepare PDO(prepare la requete Insert ou Update)
                     $entityManager->persist($game);
@@ -145,18 +145,18 @@ class QuizController extends AbstractController
                     $entityManager->flush();
                     //redirige ver le home qui est la liste des formation
                 
-                    return $this->redirectToRoute('app_quiz');
+                    return $this->redirectToRoute('app_home_quiz');
                 
                 }
             }else{
             
                 $nbJour = $dateModify->diff($now)->format("%d");
                 $this->addFlash('error', 'Vous pourez rejouer le quiz dans '.$nbJour.' jours');
-                return $this->redirectToRoute('app_quiz');
+                return $this->redirectToRoute('app_home_quiz');
             }
         }else{
             $this->addFlash('error', "Ce quiz n'est pas encore disponible");
-            return $this->redirectToRoute('app_quiz');
+            return $this->redirectToRoute('app_home_quiz');
         }
         
         return $this->render('quiz/playQuiz.html.twig', [
@@ -218,7 +218,7 @@ class QuizController extends AbstractController
         $entityManager->remove($quiz);//suprime un quiz
         $entityManager->flush();
 
-        return $this->redirectToRoute('app_quiz');
+        return $this->redirectToRoute('app_home_quiz');
     }
 
 }

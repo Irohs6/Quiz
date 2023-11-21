@@ -19,16 +19,18 @@
 
             {# condition qui vérifie que la catégorie n'est pas déja afficher pour qu'elle ne soit afficher qu'un seul fois pour tous les quiz de cet catégorie  #}
             {% if categoryExist == category  %}
-
+                <a class="add" href="{{path('new_quiz', {'idCategory': category.id})}}">Ajouter Quiz</a><br>
                 {# condition pour afficher les quiz qui appartenant a cet catégorie #}
                 {% if category.id == quiz.category.id  %}
 
                     <li>
                         <h4>{{ quiz.title }}</h4>
+                        
                         <a class="modify" href="{{path('edit_quiz', {'id': quiz.id})}}">Modifier</a>  
                     </li>
 
                     <li>
+                        <a class="add" href="{{path('new_question', {'idQuiz': quiz.id})}}">Ajouter Question</a>
                         Nb question:{{ quiz.questions|length}}
                     </li>
 
