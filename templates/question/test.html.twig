@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter une question et ses réponses{% endblock %}
+
+{% block body %}
+<div class="container">
+
+    
+        <h1>Ajouter les question aux: {{ quiz.title }}</h1>
+    
+        
+    <p>Vous devez ajouter un minimum de 10 question avec aux minimum 2 réponses pour qu'un quiz soit validé</p>
+    
+    {{ form_start(formNewQuestion) }}
+    <div id="questions-fields-list" class="col-sm-10 remove-collection-widget"
+                data-prototype="{{ form_widget(formNewQuestion.quiz.questions.vars.prototype)|e }}"
+                data-quiz="{{quizId}}"
+                data-widget-tags="{{ '<p></p>'|e }}"
+                data-widget-counter="{{ formNewQuestion.quiz.questions|length }}">    
+        {{ form_row(formNewQuestion.quiz) }}
+        {{ form_row(formNewQuestion.sentence) }}
+        {{ form_row(formNewQuestion.link) }}
+    </div>    
+        {# on va construire dynamiquement la liste des question a creer a partir de question #}
+        <h2>Ajout des réponses</h2>
+        <div class="formNewQuestion-group row ">
+
+            <div class="col-formNewQuestion-label col-sm-2">&nbsp;</div>
+
+            <div id="answers-fields-list" class="col-sm-10 remove-collection-widget"
+                {# data-prototype="{{ form_widget(formNewQuestion.answers.vars.prototype)|e }}" #}
+                data-question="{{questionId}}"
+                data-widget-tags="{{ '<p></p>'|e }}"
+                data-widget-counter="{{ formNewQuestion.answers|length }}">
+                
+                {% for answerField in formNewQuestion.answers %}
+
+                    <p>
+                        {{ form_errors(answerField) }}
+
+                        {{ form_widget(answerField, {'attr': {'class': 'borders'}}) }}
+
+                    </p>
+                   
+                {% endfor %} 
+
+                <div id="answers-fields-list" class="col-sm-10 remove-collection-widget"
+                data-prototype="{{ form_widget(formNewQuestion.answers.vars.prototype)|e }}"
+                data-question="{{questionId}}"
+                data-widget-tags="{{ '<p></p>'|e }}"
+                data-widget-counter="{{ formNewQuestion.answers|length }}">
+
+        </div>
+
+        <div class="formNewQuestion-group row flex-action">
+            <button type="button" 
+                class="add-another-collection-widget button"
+                data-list-selector="#answers-fields-list">
+                Ajouter une Réponse
+            </button>
+        </div>
+        
+        <div class="formNewQuestion-group row flex-action">
+            <button type="button" 
+                class="add-another-collection-widget button"
+                data-list-selector="#questions-fields-list">
+                Ajouter une Question
+            </button>
+        </div>
+
+        {# empêche l'apparition d'une légende "questions", si la collection est vide (en cas de création d'une nouvelle session) #}
+        {% do formNewQuestion.answers.setRendered %}
+    {{ form_end(formNewQuestion) }}
+</div>
+{% endblock %}
+

@@ -84,15 +84,16 @@
                                                 {% else %} {# sinon affiche se message #}
                                                     {% set message = "Vous n'avez pas validé ce quiz en obtenant " ~ score ~ "% de bonne réponse." %}
                                                 {% endif %}
-                                                {% set diffDays = lastGameDate|date_modify('+7 days').diff(date('now')) %} {# on fait la différence de la date de la partie + 7 j par rapport a la date du jours #}
-
-                                                {% if diffDays.days <= 0 %} {# si le résultat est inférieur ou égal a 0  il peux rejouer le quiz#}
+                                                {% set diffDays = date('now').diff(lastGameDate) %} {# on fait la différence de la date de la partie + 7 j par rapport a la date du jours #}
+                                                        
+                                                {% if diffDays.days > 7 %} {# si le résultat est inférieur ou égal a 0  il peux rejouer le quiz#}
                                                     <p>{{ message }}</p>
                                                     <a class="play" href="{{ path('app_play', {'id': quiz.id}) }}">Jouer</a>
 
                                                 {% else %} {# sinon il doit attendre le nombre de jour restant#}
                                                     <p>{{ message }}</p>
-                                                    <p>Vous pourrez rejouer ce quiz dans {{ diffDays.days }} jour(s)</p>
+                                                    {% set nbDay = lastGameDate|date_modify("+7 day").diff(date('now')) %}
+                                                    <p>Vous pourrez rejouer ce quiz dans {{ nbDay.days }} jour(s)</p>
 
                                                 {% endif %}
 

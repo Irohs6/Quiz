@@ -26,7 +26,7 @@ class Answer
     #[ORM\JoinColumn(nullable: false)]
     private ?Question $question = null;
 
-    #[ORM\ManyToMany(targetEntity: Game::class, inversedBy: 'answers')]
+    #[ORM\ManyToMany(targetEntity: Game::class, inversedBy: 'answers', cascade: ['persist', 'remove'])]
     private Collection $games;
 
     public function __construct()

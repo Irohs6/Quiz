@@ -26,7 +26,7 @@ class Game
     #[ORM\JoinColumn(nullable: true)]
     private ?Quiz $quiz = null;
 
-    #[ORM\ManyToMany(targetEntity: Answer::class, mappedBy: 'games')]
+    #[ORM\ManyToMany(targetEntity: Answer::class, mappedBy: 'games', cascade: ['persist', 'remove'])]
     private Collection $answers;
 
     #[ORM\ManyToOne(inversedBy: 'Games')]

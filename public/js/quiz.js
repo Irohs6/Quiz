@@ -10,6 +10,7 @@ $(document).ready(function() { // Une fois que le document (base.html.twig) HTML
         var quiz = list.data('quiz')
         // Extraction du prototype complet du champ (que l'on va adapter ci-dessous)
         var newWidget = list.attr('data-prototype')
+        var newWidgetanswer = list.attr('data-answer-prototype')
         console.log(newWidget);
         // Remplacement des séquences génériques "__name__" utilisées dans les parties "id" et "name" du prototype
         // par un numéro unique au sein de la collection de "questions" : ce numéro sera la valeur du compteur

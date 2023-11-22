@@ -73,10 +73,15 @@ class QuizController extends AbstractController
         ];
         
         foreach ($quiz->getQuestions() as $question) {
+            if ($question->getLink()) {
+                $link = $question->getLink()->getUrl();
+            }else{
+                $link = '';
+            }
             $questionData = [
                 'id' => $question->getId(),//ajoute l'id de la question
                 'question' => $question->getSentence(),//ajoute l'intitulé de la question
-                'link' => $question->getLink()->getUrl(),
+                'link' => $link,
                 'reponses' => [], // Initialise le tableau des réponses 
             ];
         
@@ -95,7 +100,7 @@ class QuizController extends AbstractController
         
         $quizJson = json_encode($quizData); //transforme le tableau en Json ((JavaScript Object Notation))
         $category = $quiz->getCategory(); // on récupère la catégorie pour en récupérer l'image
-        $game = new Game; // nouvelle instance de Game
+       
         
         $formQuiz = $this->createForm(PlayQuizzType::class, $question, ['attr' => ['class' => 'formQuiz']]); //creer le formulaire
         
@@ -113,12 +118,10 @@ class QuizController extends AbstractController
 
         if ($quiz->isIsVerified()|| $this->isGranted('ROLE_MODERATOR')) {
             if (!$gamePlay || $now == $dateModify || $this->isGranted('ROLE_MODERATOR')){
-            
+                $allGameUser = $gameRepository->findBy(['userId'=>$this->getUser()->getId(), 'quiz' => $quiz->getId()],['score'=> 'ASC']);
+               
                 //si le formQuizulaire est remplie et valide
                 if ($formQuiz->isSubmitted() && $formQuiz->isValid()) {
-                    $quiz->addGame($game);// ajout du quiz dans Game
-                    $user = $this->getUser(); // on récupère l'user en session
-                    $game->setUserId($user); // on rajoute l'user en session a la Game
 
                     $recapData = $request->request->get('recapData');//récupère le tableau de récapitulatif du quiz en json
                     
@@ -131,21 +134,38 @@ class QuizController extends AbstractController
                         } else {
                             foreach ($data as $response) {
                                 $answer = $entityManager->getRepository(Answer::class)->findOneBy(['id' => $response['answerId']]);//récupère la question grace a son id contenu dans le tableau
-                                $game->addAnswer($answer);//ajoute les question a la game
                             }
                         }
                     }
+                    if (count($allGameUser) == 5) {
+                        $game = $gameRepository->findOneBy(['userId'=>$this->getUser()->getId(), 'quiz' => $quiz->getId()],['score'=> 'ASC']);
+                        $now = new DateTime();
+                        $game->setDateGame($now);
+                        
+                        if ($game->getScore() < $score) {
+                            $game->setScore($score);
+                        }
+                      
+                        $entityManager->persist($game);
+                        // execute PDO(la requete Insert ou Update)
+                        $entityManager->flush();
+                    }else{
 
-                    $now = new DateTime();
-                    $game->setDateGame($now);
-                    $game->setScore($score);//ajoute le score a la game
-                
-                    // prepare PDO(prepare la requete Insert ou Update)
-                    $entityManager->persist($game);
-                    // execute PDO(la requete Insert ou Update)
-                    $entityManager->flush();
-                    //redirige ver le home qui est la liste des formation
-                
+                        $game = new Game; // nouvelle instance de Game
+                        $game->addAnswer($answer);//ajoute les question a la game
+                        $quiz->addGame($game);// ajout du quiz dans Game
+                        $user = $this->getUser(); // on récupère l'user en session
+                        $game->setUserId($user); // on rajoute l'user en session a la Game
+                        $now = new DateTime();
+                        $game->setDateGame($now);
+                        $game->setScore($score);//ajoute le score a la game
+                        // prepare PDO(prepare la requete Insert ou Update)
+                        $entityManager->persist($game);
+                        // execute PDO(la requete Insert ou Update)
+                        $entityManager->flush();
+                        //redirige ver le home qui est la liste des formation
+                    
+                    }
                     return $this->redirectToRoute('app_home_quiz');
                 
                 }

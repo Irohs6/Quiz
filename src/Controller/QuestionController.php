@@ -3,6 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Link;
+use App\Entity\Quiz;
+use App\Form\TestType;
+use App\Entity\Category;
 use App\Entity\Question;
 use App\Form\QuestionType;
 use App\Repository\QuizRepository;
@@ -60,6 +63,24 @@ class QuestionController extends AbstractController
             'edit' => $question->getId(),
             'formNewQuestion' => $formNewquestion,
             'questionId' => $question->getId(),
+        ]);
+    }
+
+
+
+    #[Route('/quiz/question/new/{id}', name: 'new_quiz_question')]
+    public function newQuizQuestion(Category $category, Question $question = null ,Quiz $quiz = null , Request $request, EntityManagerInterface $entityManager, QuizRepository $quizRepository): Response
+    {
+        $quiz = new Quiz;
+        $question = new Question;
+        $quiz->setCategory($category);
+        $question->setCategory($category);
+        $formNewquestion = $this->createForm(TestType::class, $question);//crer le formulaire
+        return $this->render('question/test.html.twig', [
+            'quiz' => $quiz,
+            'formNewQuestion' => $formNewquestion,
+            'questionId' => $question->getId(),
+            'quizId' => $quiz->getId(),
         ]);
     }
 
