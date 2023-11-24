@@ -2,22 +2,23 @@
 
 namespace App\Controller;
 
-use App\Entity\Answer;
+use DateTime;
 use App\Entity\Game;
 use App\Entity\Quiz;
+use App\Entity\Answer;
 use App\Form\QuizType;
+use App\Entity\Question;
 use App\Form\PlayQuizzType;
-use App\Repository\ThemeRepository;
-use App\Repository\CategoryRepository;
 use App\Repository\GameRepository;
 use App\Repository\LevelRepository;
-use DateTime;
+use App\Repository\ThemeRepository;
+use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class QuizController extends AbstractController
 {
@@ -191,48 +192,85 @@ class QuizController extends AbstractController
 
     //Pour créer ou modifier une catégorie
     #[Route('/quiz/{idCategory}/new/', name: 'new_quiz')]
-    #[Route('/quiz/{id}/edit/', name: 'edit_quiz')]
+    
     public function newQuiz(Quiz $quiz = null, Request $request, EntityManagerInterface $entityManager,CategoryRepository $categoryRepository): Response
     {
-        //si quiz n'éxiste pas
-        if (!$quiz) {
-            $quiz = new Quiz; // créer une nouvelle intance de Quiz
-            $idCategory = $request->attributes->get('idCategory'); // récupère l'id Category dans l'url
-            $category = $categoryRepository->findOneBy(['id' => $idCategory]); // on recupère l'entity category grace a son id
-            $user = $this->getUser();//on récupère le user connecté
-            $quiz->setUserId($user);//on ajoute le user au quiz
-        }else{
-            $category = $quiz->getCategory(); // si quiz existe on recupère la catégory contenu dans quiz
-        }
+        
+        $quiz = new Quiz;
+        $idCategory = $request->attributes->get('idCategory');
+        $category = $categoryRepository->findOneBy(['id' => $idCategory]);
+        $user = $this->getUser();
+        $quiz->setUserId($user); 
 
         $quiz->setCategory($category); //ajoute quiz a sa sous catégorie 
         $quiz->setIsVerified(false); // met a false par default
         $formNewQuiz= $this->createForm(QuizType::class, $quiz);//crer le formulaire
 
         $formNewQuiz->handleRequest($request);
-       
-        //si le formulaire de Quiz est remplie et valide
+   
         if ($formNewQuiz->isSubmitted() && $formNewQuiz->isValid()) {
-            //récupère les donné du formulaire  
-            $formNewQuiz->getData();
-            // prepare PDO(prepare la requete Insert ou Update)
+            // Récupérer les données du formulaire
+            $data = $formNewQuiz->getData();
+           
+            foreach ($quiz->getQuestions() as $question ) {
+                $question->setCategory($category); // Associer la catégorie à la nouvelle questio
+               
+            }
+            
+            // Créer la question après la soumission du formulaire de Quiz
+    
+            // Persistez le quiz mis à jour
             $entityManager->persist($quiz);
-            // execute PDO(la requete Insert ou Update)
             $entityManager->flush();
-            //redirige ajout de question et réponse
-            return $this->redirectToRoute('new_question',['idQuiz' => $quiz->getId()]);
+    
+            // Rediriger vers l'ajout de questions et de réponses
+            return $this->redirectToRoute('app_list_quiz'); //// redirige vers le détail d'un quiz
         }
-
+    
         return $this->render('quiz/newQuiz.html.twig', [
             'category' => $category,
             'quiz' => $quiz,
             'edit' => $quiz->getId(),
             'formNewQuiz' => $formNewQuiz,
             'quizId' => $quiz->getId(),
-            // 'questionId' => $question->getId(),
         ]);
     }
 
+    #[Route('/quiz/{id}/edit/', name: 'edit_quiz')]
+    public function editQuiz(Quiz $quiz, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        // Récupérer les questions et réponses associées au quiz existant
+        $questions = $quiz->getQuestions();
+        $category = $quiz->getCategory();
+
+        // Créer le formulaire en utilisant le quiz et ses données associées
+        $formEditQuiz = $this->createForm(QuizType::class, $quiz);
+
+        $formEditQuiz->handleRequest($request);
+
+        if ($formEditQuiz->isSubmitted() && $formEditQuiz->isValid()) {
+            // Mettre à jour les questions et réponses existantes si nécessaire
+            foreach ($questions as $question) {
+                $question->setCategory($category); // Associer la catégorie à la nouvelle questio
+                $question->setQuiz($quiz);
+            }
+
+            $entityManager->persist($quiz);
+            $entityManager->flush();
+
+            // Redirection vers une page de confirmation ou vers la gestion du quiz
+            return $this->redirectToRoute('show_quiz',['id',$quiz->getId()]);
+        }
+
+        return $this->render('quiz/edit_quiz.html.twig', [
+           
+            'quiz' => $quiz,
+            'edit' => $quiz->getId(),
+            
+            'quizId' => $quiz->getId(),
+            'formEditQuiz' => $formEditQuiz->createView(),
+        ]);
+    }
 
     #[Route('admin/quiz/{id}/delete', name: 'delete_quiz')]
     public function deleteQuiz(Quiz $quiz = null, EntityManagerInterface $entityManager): Response

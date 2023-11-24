@@ -21,25 +21,26 @@ class QuestionType extends AbstractType
         $builder
             ->add('sentence', TextType::class,[
                 'attr' =>[ 
-                    'class' => 'form-control'
+                    'class' => 'form-control',
+                    'label' => 'Question'
                 ]
             ])
+            ->add('link', LinkType::class,[
+                'label' => false
+                ])
             ->add('answers', CollectionType::class,[
                 'entry_type' => AnswerType::class,
-                'prototype' => true,
+                'prototype' => 'answers',
+                'label' => 'Réponses',
                 //autoriser l'ajout de nouveau élément qui seront persiter grace au cascade persit sur l'élément Question
                 //ca va va activer un data prototype qui sera un attribut html qu'on pourra manipuler en js
                 'allow_add' => true, //autorise l'ajout 
                 'allow_delete' => true, //autorise la suppression
                 'by_reference' => false,// il est obligatoire car Quiz n'a pas de setQuestion mais c'est Question qui contient setQuiz
                 //Question est propriétaire de la relations. Pour éviter un mapping => false on est obligé de rajouter un by_reference => false
+                
             ])
-            ->add('link', LinkType::class,[
-               'label' => false
-            ])
-            ->add('Valider', SubmitType::class,[
-                'label' => 'Valider'
-            ])
+        
           
         ;
     }

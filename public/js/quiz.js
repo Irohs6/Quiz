@@ -1,160 +1,131 @@
 // Scripts jQuery / JavaScript généraux
-$(document).ready(function() { // Une fois que le document (base.html.twig) HTML/CSS a bien été complètement chargé...
-    // add-collection-widget.js : fonction permettant d'ajouter un nouveau bloc "question" au sein d'un quiz (pour agrandir la collection)
+$(document).ready(function() { // Attend que le document (base.html.twig) soit complètement chargé
+
+    // Fonction déclenchée lors du clic sur le bouton d'ajout d'un nouveau bloc "question" au sein d'un quiz
     $('.add-another-collection-widget').click(function (e) {
-        var list = $($(this).attr('data-list-selector'))
-        
-        // Récupération du nombre actuel d'élément "question" dans la collection (à défaut, utilisation de la longueur de la collection)
-        var counter = list.data('widget-counter') || list.children().length
-        // Récupération de l'identifiant de la session concernée, en cours de création/modification
-        var quiz = list.data('quiz')
-        // Extraction du prototype complet du champ (que l'on va adapter ci-dessous)
-        var newWidget = list.attr('data-prototype')
-        var newWidgetanswer = list.attr('data-answer-prototype')
-        console.log(newWidget);
-        // Remplacement des séquences génériques "__name__" utilisées dans les parties "id" et "name" du prototype
-        // par un numéro unique au sein de la collection de "questions" : ce numéro sera la valeur du compteur
-        // courant (équivalent à l'index du prochain champ, en cours d'ajout).
-        // Au final, l'attribut ressemblera à "quiz[questions][n°]"
-        newWidget = newWidget.replace(/__name__/g, counter)
-        // Ajout également des attributs personnalisés "class" et "value", qui n'apparaissent pas dans le prototype original 
-        newWidget = newWidget.replace(/><input type="hidden"/, ' class="borders"><input type="hidden" value="'+quiz+'"')
-        // Incrément du compteur d'éléments et mise à jour de l'attribut correspondant
-        console.log(newWidget);
-        counter++
-        list.data('widget-counter', counter)
-        
-        // Création d'un nouvel élément (avec son bouton de suppression), et ajout à la fin de la liste des éléments existants
-        var newElem = $(list.attr('data-widget-tags')).html(newWidget)
-        addDeleteLink($(newElem).find('div.borders'))
-        newElem.appendTo(list)
-        console.log(newElem);
-    })
+        // Récupération des informations nécessaires
+        let list = $($(this).attr('data-list-selector'));
+        let counter = list.data('widget-counter') || list.children().length;
+        let quiz = list.data('quiz');
+        let newWidget = list.attr('data-prototype');
 
-    // anonymize-collection-widget.js : fonction permettant de supprimer un bloc "question" existant au sein d'une session
-    $('.remove-collection-widget').find('div.borders').each(function() {
-        addDeleteLink($(this))
-    })
-   
-    // fonction permettant l'ajout d'un bouton "Supprimer cet question" dans un bloc "questions", et d'enregistrer l'évenement "click" associé
+        // Remplacement des placeholders "__name__" par le compteur pour créer un nouvel élément de question
+        newWidget = newWidget.replace(/__name__/g, counter);
+        newWidget = newWidget.replace(/><input type="hidden"/, ' class="borders"><input type="hidden" value="'+quiz+'"');
+        counter++;
+        list.data('widget-counter', counter);
+        let newElem = $(list.attr('data-widget-tags')).html(newWidget);
+
+        // Ajout d'un bouton de suppression pour ce nouveau bloc de question
+        addDeleteLink($(newElem).find('div.borders'));
+        newElem.appendTo(list);
+
+    });
+
+    // Fonction pour ajouter un bouton de suppression pour un élément de réponse
     function addDeleteLink($moduleForm) {
-        var $removeFormButton = $('<div class="block"><button type="button" class="button">Supprimer cet réponse</button></div>');
-        $moduleForm.append($removeFormButton)
-    
+        let $removeFormButton = $('<div class="block"><button type="button" class="button">Supprimer cette réponse</button></div>');
+        $moduleForm.append($removeFormButton);
+
+        // Événement de suppression lié au bouton
         $removeFormButton.on('click', function(e) {
-            $moduleForm.remove()
-        })
+            $moduleForm.remove(); // Supprime l'élément de réponse
+        });
     }
-   
-    // remove-quiz.js : fonction permettant de demander la confirmation de suppression d'un quiz
+
+    // Fonction pour gérer la suppression d'un quiz après confirmation
     $('.remove-quiz-confirm').on('click', function(e) {
-        e.preventDefault()
-        let id=$(this).data('id')
-        let href=$(this).attr('href')
-        showModalConfirm(id, href, "Confirmation de suppression d'un quiz")
-    })
-    
-    
-    // Fonction permettant l'affichage de la fenêtre modale de confirmation pour chaque situation
-    function showModalConfirm($id, $href, $title) {
-        console.log("id   = "+$id)
-        console.log("href = "+$href)
-        $('#modalPopup .modal-title').html($title)
-        $('#modalPopup .modal-body').html("<span class='center'><i class='fas fa-spinner fa-spin fa-4x'></i></span>")
-        $.get(
-            "confirm", // La route doit toujours être accessible au moyen du chemin "confirm" dans le contrôleur associé à l'entité concernée 
-            {
-                'id' : $id
-            },
-            function(resView) {
-                $('#modalPopup .modal-body').html(resView)
-            }
-        )
-        $('#modalConfirm').on('click', function(e){
-            window.location.href = $href
-        })
-        $('#modalPopup').modal('show')
-    }
-    
-})
+        e.preventDefault();
+        let id=$(this).data('id');
+        let href=$(this).attr('href');
+        showModalConfirm(id, href, "Confirmation de suppression d'un quiz");
+    });
 
+  // Déclaration de la variable en dehors de la fonction
+  let count = 0;
 
-$(document).ready(function() { // Une fois que le document (base.html.twig) HTML/CSS a bien été complètement chargé...
-    // add-collection-widget.js : fonction permettant d'ajouter un nouveau bloc "question" au sein d'un quiz (pour agrandir la collection)
-    $('.add-another-collection-question-widget').click(function (e) {
-        var list = $($(this).attr('data-list-selector'))
+  function addAnswerButton($element) {
+    // Création d'un nouveau bouton "Ajouter une réponse"
+    let addAnswerButton = $('<button>', {
+        'type': 'button',
+        'class': 'add-answer-another-collection-widget',
+        'text': 'Ajouter une réponse'
+    });
+
+    // Ajout du bouton nouvellement créé à l'élément fourni en paramètre
+    $element.append(addAnswerButton);
+
+    // Gestionnaire d'événement au clic sur le bouton "Ajouter une réponse"
+    addAnswerButton.on('click', function() {
+        // Récupération de l'élément question associé au bouton cliqué
+        let $question = $(this).prev('div[id^="quiz_questions_"]');
         
-        // Récupération du nombre actuel d'élément "question" dans la collection (à défaut, utilisation de la longueur de la collection)
-        var counter = list.data('widget-counter') || list.children().length
-        // Récupération de l'identifiant de la session concernée, en cours de création/modification
-        var quiz = list.data('quiz')
-        // Extraction du prototype complet du champ (que l'on va adapter ci-dessous)
-        var newWidget = list.attr('data-question')
-        console.log(newWidget);
-        // Remplacement des séquences génériques "__name__" utilisées dans les parties "id" et "name" du prototype
-        // par un numéro unique au sein de la collection de "questions" : ce numéro sera la valeur du compteur
-        // courant (équivalent à l'index du prochain champ, en cours d'ajout).
-        // Au final, l'attribut ressemblera à "quiz[questions][n°]"
-        newWidget = newWidget.replace(/__name__/g, counter)
-        // Ajout également des attributs personnalisés "class" et "value", qui n'apparaissent pas dans le prototype original 
-        newWidget = newWidget.replace(/><input type="hidden"/, ' class="borders"><input type="hidden" value="'+quiz+'"')
-        // Incrément du compteur d'éléments et mise à jour de l'attribut correspondant
-        console.log(newWidget);
-        counter++
-        list.data('widget-counter', counter)
+        // Récupération du conteneur des réponses associé à la question
+        let $answersContainer = $question.find('[id$="_answers"]');
         
-        // Création d'un nouvel élément (avec son bouton de suppression), et ajout à la fin de la liste des éléments existants
-        var newElem = $(list.attr('data-widget-question')).html(newWidget)
-        addDeleteLink($(newElem).find('div.borders'))
-        newElem.appendTo(list)
-        console.log(newElem);
-    })
+        // Récupération du prototype des réponses depuis les attributs de l'élément
+        let prototype = $answersContainer.attr('data-prototype');
+        console.log(prototype);
+        // Modification du prototype pour enlever le label
+        prototype = prototype.replace('<label class="required">0label__</label>', '');
+        // Vérification si le prototype existe
+        if (typeof prototype !== 'undefined') {
+            // Comptage du nombre actuel de réponses dans le conteneur
+            let counterAnswer = $answersContainer.children().length;
 
-    // anonymize-collection-widget.js : fonction permettant de supprimer un bloc "question" existant au sein d'une session
-    $('.remove-collection-widget').find('div.borders').each(function() {
-        addDeleteLink($(this))
-    })
-   
-    // fonction permettant l'ajout d'un bouton "Supprimer cet question" dans un bloc "questions", et d'enregistrer l'évenement "click" associé
-    function addDeleteLink($moduleForm) {
-        var $removeFormButton = $('<div class="block"><button type="button" class="button">Supprimer cet réponse</button></div>');
-        $moduleForm.append($removeFormButton)
-    
-        $removeFormButton.on('click', function(e) {
-            $moduleForm.remove()
-        })
-    }
-   
-    // remove-quiz.js : fonction permettant de demander la confirmation de suppression d'un quiz
-    $('.remove-quiz-confirm').on('click', function(e) {
-        e.preventDefault()
-        let id=$(this).data('id')
-        let href=$(this).attr('href')
-        showModalConfirm(id, href, "Confirmation de suppression d'un quiz")
-    })
-    
-    
-    // Fonction permettant l'affichage de la fenêtre modale de confirmation pour chaque situation
-    function showModalConfirm($id, $href, $title) {
-        console.log("id   = "+$id)
-        console.log("href = "+$href)
-        $('#modalPopup .modal-title').html($title)
-        $('#modalPopup .modal-body').html("<span class='center'><i class='fas fa-spinner fa-spin fa-4x'></i></span>")
-        $.get(
-            "confirm", // La route doit toujours être accessible au moyen du chemin "confirm" dans le contrôleur associé à l'entité concernée 
-            {
-                'id' : $id
-            },
-            function(resView) {
-                $('#modalPopup .modal-body').html(resView)
+            // Vérification du nombre maximum de réponses (dans cet exemple, limite à 4 réponses)
+            if (counterAnswer < 4) {
+                // Récupération de l'index de la question actuelle
+                let questionIndex = $question.attr('id').split('_')[2];
+
+                // Création d'un préfixe pour l'identifiant unique de la nouvelle réponse
+                let prefix = 'quiz[questions][' + questionIndex + '][answers][' + count + ']';
+
+                // Remplacement des placeholders dans le prototype pour créer une nouvelle réponse
+                let newForm = prototype.replace(/quiz\[questions\]\[\d+\]\[answers\]\[\d+\]/g, prefix);
+
+                // Création d'un identifiant unique pour la nouvelle réponse
+                let uniqueId = 'quiz_questions_' + questionIndex + '_answers_' + count;
+
+                // Attribution de l'identifiant unique à la nouvelle réponse
+                newForm = $(newForm).attr('id', uniqueId);
+                // Ajout de la nouvelle réponse au conteneur
+                $answersContainer.append(newForm);
+
+                // Incrémentation du compteur pour maintenir les identifiants uniques
+                count++;
+            } else {
+                console.log("Limite de 4 réponses atteinte pour cette question.");
             }
-        )
-        $('#modalConfirm').on('click', function(e){
-            window.location.href = $href
-        })
-        $('#modalPopup').modal('show')
-    }
-    
-    
+        } else {
+            console.error("La valeur de prototype est undefined");
+        }
+    });
+}
 
-})
+
+
+    // Observer les modifications du DOM pour détecter l'ajout d'éléments dans la div avec l'ID questions-fields-list
+    let observer = new MutationObserver(function(mutationsList) {
+        mutationsList.forEach(function(mutation) {
+            if (mutation.type === 'childList' && mutation.target.id === 'questions-fields-list') {
+                $(mutation.addedNodes).each(function() {
+                    let $addedElement = $(this);
+                    addAnswerButton($addedElement); // Ajout du bouton "Ajouter une réponse" pour les nouveaux éléments ajoutés
+                });
+            }
+        });
+    });
+
+    // Options pour observer les modifications du DOM
+    let observerConfig = { childList: true, subtree: true };
+
+    // Commencer à observer les modifications sur la div avec l'ID questions-fields-list
+    observer.observe(document.getElementById('questions-fields-list'), observerConfig);
+
+    // Initialisation - Ajouter le bouton "Ajouter une réponse" pour les éléments déjà présents dans la div
+    $('#questions-fields-list > div').each(function() {
+        addAnswerButton($(this)); // Ajout du bouton "Ajouter une réponse" pour les éléments déjà présents
+    });
+
+});

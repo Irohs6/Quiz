@@ -23,7 +23,7 @@
                 {# condition pour afficher les quiz qui appartenant a cet catégorie #}
                 {% if category.id == quiz.category.id  %}
                 <a class="add" href="{{path('new_quiz', {'idCategory': category.id})}}">Ajouter Quiz</a><br>
-                {# <a class="add" href="{{path('new_quiz_question', {'id': category.id})}}">Ajouter test Quiz</a><br> #}
+                
                     <li class="li_category">
                         <h4>{{ quiz.title }}</h4>
                         

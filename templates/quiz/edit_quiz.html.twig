@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter une Session{% endblock %}
+
+{% block body %}
+
+<div class="container">
+   
+    <h1>Modifier un  Quiz à la sous-catégorie: {{ quiz.title }}</h1>    
+   
+    
+{{ form_start(formEditQuiz) }}
+    {{ form_row(formEditQuiz.title) }}
+    {{ form_row(formEditQuiz.level) }}
+    <div class="formEditQuestion-group row ">
+
+        <div class="col-formEditQuestion-label col-sm-2">&nbsp;</div>
+
+        <div id="questions-fields-list" class="col-sm-10 remove-collection-widget"
+        data-prototype="{{ form_widget(formEditQuiz.questions.vars.prototype)|e }}"
+        data-quiz="{{quizId}}"
+        data-widget-tags="{{ '<p></p>'|e }}"
+        data-widget-counter="{{ formEditQuiz.questions|length }}">
+            
+            {% for questionField in formEditQuiz.questions %}
+                <p>
+                 
+                </p>
+                
+               
+                {% for answerField in questionField.answers %}
+                <p>
+                  
+                </p>
+                {% endfor %}
+                
+
+            {% endfor %}
+
+         
+        </div>
+
+    <div class="formEditQuestion-group row flex-action">
+        <button type="button" 
+            class="add-another-collection-widget button"
+            data-list-selector="#questions-fields-list">
+            Ajouter une Question
+        </button>
+    </div>
+{{ form_end(formEditQuiz) }}
+</div>
+{% endblock %}
