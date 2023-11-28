@@ -20,18 +20,18 @@ class QuestionType extends AbstractType
     {
         $builder
             ->add('sentence', TextType::class,[
+                'label' => 'Question',
                 'attr' =>[ 
                     'class' => 'form-control',
-                    'label' => 'Question'
                 ]
             ])
             ->add('link', LinkType::class,[
-                'label' => false
+                'label' => 'Lien ver la documentation officielle'
                 ])
             ->add('answers', CollectionType::class,[
                 'entry_type' => AnswerType::class,
                 'prototype' => 'answers',
-                'label' => 'Réponses',
+                'label' => false,
                 //autoriser l'ajout de nouveau élément qui seront persiter grace au cascade persit sur l'élément Question
                 //ca va va activer un data prototype qui sera un attribut html qu'on pourra manipuler en js
                 'allow_add' => true, //autorise l'ajout 

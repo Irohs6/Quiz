@@ -18,9 +18,9 @@ class AnswerType extends AbstractType
 
         
         ->add('sentence', TextType::class,[
+            'label' => 'Réponse',
             'attr' =>[ 
                 'class' => 'form-control',
-                'label' => false
             ]
         ])
 

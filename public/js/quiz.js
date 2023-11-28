@@ -1,6 +1,7 @@
 // Scripts jQuery / JavaScript généraux
 $(document).ready(function() { // Attend que le document (base.html.twig) soit complètement chargé
-
+    let button = $('#quiz_Valider')
+    button.attr('disabled', true)// désactive le bouton valider
     // Fonction déclenchée lors du clic sur le bouton d'ajout d'un nouveau bloc "question" au sein d'un quiz
     $('.add-another-collection-widget').click(function (e) {
         // Récupération des informations nécessaires
@@ -8,18 +9,22 @@ $(document).ready(function() { // Attend que le document (base.html.twig) soit c
         let counter = list.data('widget-counter') || list.children().length;
         let quiz = list.data('quiz');
         let newWidget = list.attr('data-prototype');
-
+        
         // Remplacement des placeholders "__name__" par le compteur pour créer un nouvel élément de question
         newWidget = newWidget.replace(/__name__/g, counter);
         newWidget = newWidget.replace(/><input type="hidden"/, ' class="borders"><input type="hidden" value="'+quiz+'"');
+       
         counter++;
         list.data('widget-counter', counter);
         let newElem = $(list.attr('data-widget-tags')).html(newWidget);
-
+        
         // Ajout d'un bouton de suppression pour ce nouveau bloc de question
         addDeleteLink($(newElem).find('div.borders'));
-        newElem.appendTo(list);
-
+        newElem.appendTo(list); 
+       
+        if (counter > 9 ) {
+            button.attr('disabled', false)// réactive le bouton quand 10 question au minimum ont été ajouter
+        }
     });
 
     // Fonction pour ajouter un bouton de suppression pour un élément de réponse
@@ -40,9 +45,9 @@ $(document).ready(function() { // Attend que le document (base.html.twig) soit c
         let href=$(this).attr('href');
         showModalConfirm(id, href, "Confirmation de suppression d'un quiz");
     });
-
+  
   // Déclaration de la variable en dehors de la fonction
-  let count = 0;
+  let count = 1;
 
   function addAnswerButton($element) {
     // Création d'un nouveau bouton "Ajouter une réponse"
@@ -57,41 +62,50 @@ $(document).ready(function() { // Attend que le document (base.html.twig) soit c
 
     // Gestionnaire d'événement au clic sur le bouton "Ajouter une réponse"
     addAnswerButton.on('click', function() {
-        // Récupération de l'élément question associé au bouton cliqué
+    // Récupération de l'élément question associé au bouton cliqué
         let $question = $(this).prev('div[id^="quiz_questions_"]');
-        
-        // Récupération du conteneur des réponses associé à la question
+        let questionIndex = $question.attr('id').split('_')[2];
+    // Récupération du conteneur des réponses associé à la question
         let $answersContainer = $question.find('[id$="_answers"]');
-        
-        // Récupération du prototype des réponses depuis les attributs de l'élément
+    // Comptage du nombre actuel de réponses dans le conteneur    
+        let counterAnswer = $answersContainer.children().length;
+    // Récupération du prototype des réponses depuis les attributs de l'élément
         let prototype = $answersContainer.attr('data-prototype');
-        console.log(prototype);
-        // Modification du prototype pour enlever le label
-        prototype = prototype.replace('<label class="required">0label__</label>', '');
-        // Vérification si le prototype existe
+       
+    // Modification du prototype pour enlever le label
+        prototype = prototype.replace('<label class="required">'+questionIndex+'label__</label>', '');
+    // Vérification si le prototype existe
         if (typeof prototype !== 'undefined') {
-            // Comptage du nombre actuel de réponses dans le conteneur
-            let counterAnswer = $answersContainer.children().length;
-
-            // Vérification du nombre maximum de réponses (dans cet exemple, limite à 4 réponses)
+    
+            
+    // Vérification du nombre maximum de réponses (limite à 4 réponses)
             if (counterAnswer < 4) {
-                // Récupération de l'index de la question actuelle
-                let questionIndex = $question.attr('id').split('_')[2];
 
-                // Création d'un préfixe pour l'identifiant unique de la nouvelle réponse
-                let prefix = 'quiz[questions][' + questionIndex + '][answers][' + count + ']';
-
+                // Utilisation de RegExp pour construire dynamiquement l'expression régulière avec la variable questionIndex
+                let regex2 = new RegExp('quiz_questions_' + questionIndex + '_answers_' + questionIndex + '', 'g');
+                //éléméent a remplacer dans le prototype pour avoir les bon id de réponses a chaque question
+                let prefix2 = ('quiz_questions_' + questionIndex + '_answers_' + count);
+                //en remplace avec la nouvelle valeurs
+                let newForm = prototype.replace(regex2, prefix2) 
+                // préfix créer pour remplacer l'id réponse a chaque ajout de réponse
+                let prefix1 = 'quiz[questions][' + questionIndex + '][answers][' + count + ']';
                 // Remplacement des placeholders dans le prototype pour créer une nouvelle réponse
-                let newForm = prototype.replace(/quiz\[questions\]\[\d+\]\[answers\]\[\d+\]/g, prefix);
-
-                // Création d'un identifiant unique pour la nouvelle réponse
-                let uniqueId = 'quiz_questions_' + questionIndex + '_answers_' + count;
-
-                // Attribution de l'identifiant unique à la nouvelle réponse
-                newForm = $(newForm).attr('id', uniqueId);
+                newForm = newForm.replace(/quiz\[questions\]\[\d+\]\[answers\]\[\d+\]/g, prefix1);
                 // Ajout de la nouvelle réponse au conteneur
                 $answersContainer.append(newForm);
-
+                
+                let radio = $('#quiz_questions_'+questionIndex+'_answers_'+ count+'_isRight_0')
+                // Ajoutez cet événement lorsque vous créez vos boutons radio
+            
+                console.log('raido',radio);
+                console.log(radio.length);
+                // Ajoutez cet événement lorsque vous créez vos boutons radio
+                radio.on('change', function() {
+                   if (radio.prop('checked').length >= 1) {
+                        radio.prop('checked', false);
+                   }
+                      
+                });
                 // Incrémentation du compteur pour maintenir les identifiants uniques
                 count++;
             } else {

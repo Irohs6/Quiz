@@ -20,12 +20,14 @@ class QuizType extends AbstractType
     {
         $builder
             ->add('title', TextType::class,[
+                'label' => 'Titre',
                 'attr' =>[ 
                     'class' => 'form-control'
                 ]
             ])
             ->add('level', EntityType::class,[
                 'class' => Level::class,
+                'label' => 'Niveaux de difficulter',
                 'choice_label' => 'label',
                 'multiple' => false,
                 'expanded' => true, 

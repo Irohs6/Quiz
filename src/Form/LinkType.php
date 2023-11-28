@@ -15,9 +15,9 @@ class LinkType extends AbstractType
     {
         $builder
             ->add('url', UrlType::class,[
+                'label' => false,
                 'attr' =>[ 
                     'class' => 'form-control',
-                    'label' => 'Lien vers la documentation officielle en rapport avec la question'
                 ]
             ])
         ;
