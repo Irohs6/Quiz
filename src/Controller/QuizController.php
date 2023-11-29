@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class QuizController extends AbstractController
 {
@@ -68,6 +69,8 @@ class QuizController extends AbstractController
     #[Route('/quiz/play/{id}', name: 'app_play')]
     public function playQuiz(Quiz $quiz, Request $request, EntityManagerInterface $entityManager,GameRepository $gameRepository): Response
     {
+
+        $session = $request->getSession();
         $quizData = [
             'titre' => $quiz->getTitle(),//ajoute le titre du quiz
             'questions' => [], // Initialise le tableau des questions 
@@ -75,7 +78,7 @@ class QuizController extends AbstractController
         
         foreach ($quiz->getQuestions() as $question) {
             if ($question->getLink()) {
-                $link = $question->getLink()->getUrl();
+                $link = $question->getLink();
             }else{
                 $link = '';
             }
@@ -127,7 +130,9 @@ class QuizController extends AbstractController
                     $recapData = $request->request->get('recapData');//récupère le tableau de récapitulatif du quiz en json
                     
                     $recapDataArray = json_decode($recapData, true);// convertit en une structure de données PHP dans notre cas un tableau associatif
-                
+                    
+                    $session->set('recap', $recapDataArray);
+
                     foreach ($recapDataArray as $data) {
                         if (isset($data['score'])) {
                             $score = $data['score'];
@@ -167,7 +172,7 @@ class QuizController extends AbstractController
                         //redirige ver le home qui est la liste des formation
                     
                     }
-                    return $this->redirectToRoute('app_home_quiz');
+                    return $this->redirectToRoute('app_recap');
                 
                 }
 
@@ -190,6 +195,27 @@ class QuizController extends AbstractController
         ]);
     }
 
+    #[Route('/quiz/recap/', name: 'app_recap')]
+    public function recapQuiz()
+    {
+        $session = new Session();
+        $recapData = $session->get('recap');
+
+        foreach ($recapData as $data) {
+            if (isset($data['score'])) {
+                $score = $data['score'];
+                
+            } else {
+                foreach ($data as $quizRecap) {
+                    $quizRecaps = [$quizRecap] ;
+                }
+            }
+        }
+        return $this->render('quiz/recap_game_quiz.html.twig',[
+            'score' => $score,
+            'quizsRecap' => $quizRecaps
+        ]);
+    }
     //Pour créer ou modifier une catégorie
     #[Route('/quiz/{idCategory}/new/', name: 'new_quiz')]
     
@@ -207,24 +233,20 @@ class QuizController extends AbstractController
         $formNewQuiz= $this->createForm(QuizType::class, $quiz);//crer le formulaire
 
         $formNewQuiz->handleRequest($request);
-   
         if ($formNewQuiz->isSubmitted() && $formNewQuiz->isValid()) {
             // Récupérer les données du formulaire
             $data = $formNewQuiz->getData();
-           
             foreach ($quiz->getQuestions() as $question ) {
-                $question->setCategory($category); // Associer la catégorie à la nouvelle questio
+                $question->setCategory($category); // Associer la catégorie à la nouvelle question
                
             }
             
-            // Créer la question après la soumission du formulaire de Quiz
-    
             // Persistez le quiz mis à jour
             $entityManager->persist($quiz);
             $entityManager->flush();
     
-            // Rediriger vers l'ajout de questions et de réponses
-            return $this->redirectToRoute('app_list_quiz'); //// redirige vers le détail d'un quiz
+            
+            return $this->redirectToRoute('app_list_quiz'); // redirige vers le détail d'un quiz
         }
     
         return $this->render('quiz/newQuiz.html.twig', [

@@ -97,7 +97,7 @@ $(document).ready(function() { // Attend que le document (base.html.twig) soit c
                 let radio = $('#quiz_questions_'+questionIndex+'_answers_'+ count+'_isRight_0')
                 // Ajoutez cet événement lorsque vous créez vos boutons radio
             
-                console.log('raido',radio);
+                console.log('radio',radio);
                 console.log(radio.length);
                 // Ajoutez cet événement lorsque vous créez vos boutons radio
                 radio.on('change', function() {
@@ -119,27 +119,32 @@ $(document).ready(function() { // Attend que le document (base.html.twig) soit c
 
 
 
-    // Observer les modifications du DOM pour détecter l'ajout d'éléments dans la div avec l'ID questions-fields-list
-    let observer = new MutationObserver(function(mutationsList) {
-        mutationsList.forEach(function(mutation) {
-            if (mutation.type === 'childList' && mutation.target.id === 'questions-fields-list') {
-                $(mutation.addedNodes).each(function() {
-                    let $addedElement = $(this);
-                    addAnswerButton($addedElement); // Ajout du bouton "Ajouter une réponse" pour les nouveaux éléments ajoutés
-                });
-            }
+function initMutationObserver() {
+    const questionsFieldsList = document.getElementById('questions-fields-list');
+
+    if (questionsFieldsList) {
+        let observer = new MutationObserver(function(mutationsList) {
+            mutationsList.forEach(function(mutation) {
+                if (mutation.type === 'childList' && mutation.target.id === 'questions-fields-list') {
+                    $(mutation.addedNodes).each(function() {
+                        let $addedElement = $(this);
+                        addAnswerButton($addedElement); // Ajout du bouton "Ajouter une réponse" pour les nouveaux éléments ajoutés
+                    });
+                }
+            });
         });
-    });
 
-    // Options pour observer les modifications du DOM
-    let observerConfig = { childList: true, subtree: true };
+        let observerConfig = { childList: true, subtree: true };
+        observer.observe(questionsFieldsList, observerConfig);
 
-    // Commencer à observer les modifications sur la div avec l'ID questions-fields-list
-    observer.observe(document.getElementById('questions-fields-list'), observerConfig);
+        // Initialisation - Ajouter le bouton "Ajouter une réponse" pour les éléments déjà présents dans la div
+        $('#questions-fields-list > div').each(function() {
+            addAnswerButton($(this)); // Ajout du bouton "Ajouter une réponse" pour les éléments déjà présents
+        });
+    }
+}
 
-    // Initialisation - Ajouter le bouton "Ajouter une réponse" pour les éléments déjà présents dans la div
-    $('#questions-fields-list > div').each(function() {
-        addAnswerButton($(this)); // Ajout du bouton "Ajouter une réponse" pour les éléments déjà présents
-    });
+// Appel de la fonction d'initialisation de MutationObserver au chargement du DOM
+initMutationObserver();
 
 });

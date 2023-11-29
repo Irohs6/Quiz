@@ -2,10 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Link;
-use App\Entity\Quiz;
 
-use App\Entity\Category;
 use App\Entity\Question;
 use App\Form\QuestionType;
 use App\Repository\QuizRepository;
@@ -21,12 +18,12 @@ class QuestionController extends AbstractController
     //pour créer un nouvelle question ou editer une question 
     #[Route('/question/new/{idQuiz}', name: 'new_question')]
     #[Route('/question/edit/{id}', name: 'edit_question')]
-    public function addEditQuestion(Question $question = null,Link $link = null, Request $request, EntityManagerInterface $entityManager, QuizRepository $quizRepository): Response
+    public function addEditQuestion(Question $question = null, Request $request, EntityManagerInterface $entityManager, QuizRepository $quizRepository): Response
     {
         // si question n'existe pas 
         if(!$question){
             $question = new Question; // créer une nouvelle intance de question
-            $link = new Link;
+           
             $quizId = $request->attributes->get('idQuiz');//on récupère l'id de quiz dans l'url
             $quiz = $quizRepository->findOneBy(['id' => $quizId]);// on récupére le quiz grace a son id
             $category = $quiz->getCategory();
@@ -37,11 +34,7 @@ class QuestionController extends AbstractController
         }
         $question->setQuiz($quiz); //ajoute la question dans son  quiz
         $question->setCategory($category);// ajoute la catégorie a la question
-        if ($link) {
-            $link = $question->getLink();
-        }else{
-            $link = new Link;
-        }
+        
         $formNewquestion = $this->createForm(QuestionType::class, $question);//crer le formulaire
 
         $formNewquestion->handleRequest($request);

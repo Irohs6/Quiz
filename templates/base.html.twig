@@ -38,6 +38,15 @@
                         {# <figure class="fig_nav"><figcaption></figcaption><img class="img_nav" src="{{ asset('avatar/' ~ app.user.profileImage) }}" alt="Image de profil de {{ app.user.username }}"></figure> #}
                         {#affiche le bouton déconnection  #}
                         <a class="lien_nav" href="{{path('app_logout')}}">Déconnexion</a>
+                        <div id="searchBar">
+                            <form>
+                        
+                                <input id="searchInput" type="search" placeholder="Recherche un quiz">
+                        
+                                <div id="textHint"></div>
+                        
+                            </form>
+                        </div>
                     {% else %}
                         {# sinon connection et inscription #}
                         <a class="lien_nav" href="{{path('app_register')}}">S'inscrire</a>
@@ -47,7 +56,9 @@
             </div>
         </header>
         <main>
+
             <div class="container">
+                {# {{ dump() }} #}
                 {% block body %}
                 {% endblock %} 
             </div>
@@ -113,6 +124,7 @@
            </script>
            <script src="{{ asset('js/quiz.js') }}"></script>
            <script src="{{ asset('js/profil.js') }}"></script>
+           <script src="{{ asset('js/search.js') }}"></script>
         {% endblock %}
     </body>
 </html>

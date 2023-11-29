@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello QuizController!{% endblock %}
+
+{% block body %}
+{% set index = 1 %}
+
+<h1>Recap quiz</h1>
+
+
+    
+     {{ dump(quizsRecap) }}
+    {% for recap in quizsRecap %}
+        
+      
+    <strong>Question {{ index  }}: {{ recap.questionIntitulle }} </strong>  
+        
+        <ul>
+            <strong>Réponses sélectionnées:</strong>
+            <strong>Réponse:</strong> 
+            
+        
+            
+        <strong>Lien doc:</strong>  <a target="blank" href="">Lien documentation officielle</a>;
+        </ul>
+
+    {% endfor %}    
+            <strong>Score Total: {{ score }}</strong> ;
+        
+    
+
+   {% set index = index + 1 %}
+
+  
+      
+       
+        
+             
+           
+        
+       
+         
+    
+    
+{% endblock %}

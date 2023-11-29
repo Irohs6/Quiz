@@ -9,7 +9,8 @@ window.addEventListener("load", (event) => {
     let valider = document.getElementById('valider');
     let show_recap = document.getElementById('show-recap')
     show_recap.style.display = 'none';
-    document.getElementById('submit').style.display = 'none';
+    let submit = document.getElementById('submit');
+    submit.style.display = 'none'
     let play = document.getElementById('play');
     let askedQuestions = []; //tableau pour afficher les question dans l'ordre de leurs sortit
     let min = 0; 
@@ -115,7 +116,7 @@ window.addEventListener("load", (event) => {
        
             if (count === 9 ) {
                 valider.style.display = 'none' //cache le bouton valider après la validation de la dernière question
-                show_recap.style.display = 'block' //affiche le bouton recap après la validation de la dernière question
+                 //affiche le bouton recap après la validation de la dernière question
                 document.getElementById('quiz-container').style.display = 'none';//cache le contenu du quiz-container contenant les question et les réponse
             }
        
@@ -133,7 +134,7 @@ window.addEventListener("load", (event) => {
             displayQuestion();
         } else {
             // Affichage du récapitulatif si le maximum de 10 questions est atteint après affichage d'une question
-            displayRecap();
+            displayRecap()
         }
     });
 
@@ -145,11 +146,12 @@ window.addEventListener("load", (event) => {
     
 
         document.getElementById('quiz-container').style.display = 'none';//cache le contenu du quiz-container contenant les question et les réponse
-        document.getElementById('submit').style.display = 'block';//fait apparaitre le bouton de soumission
+        submit.style.display = 'block';//fait apparaitre le bouton de soumission
 
         const recapContainer = document.getElementById('recap-container');
         recapContainer.innerHTML = ''; // Efface le contenu précédent
-        document.getElementById('recap-container').style.display = 'block'; // Met visible l'élément avec l'id recap-container
+        recapContainer.innerHTML = 'Bravo vous avez Terminer'; // Efface le contenu précédent
+        document.getElementById('recap-container').style.display = 'none'; // Met visible l'élément avec l'id recap-container
 
         askedQuestionsOrder.forEach((questionIndex, index) => {
             const questionData = selectedAnswers[quizData.questions[questionIndex].id];

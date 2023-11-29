@@ -205,5 +205,22 @@ newForm
 newWidget2 
 <div id="quiz_questions_0"><div><label for="quiz_questions_0_sentence" class="required">Question</label><input type="text" id="quiz_questions_0_sentence" name="quiz[questions][0][sentence]" required="required" class="form-control" /></div><div><label class="required">Lien ver la documentation officielle</label><div id="quiz_questions_0_link"><div><input type="text" id="quiz_questions_0_link_url" name="quiz[questions][0][link][url]" required="required" class="form-control" inputmode="url" /></div></div></div><div><div id="quiz_questions_0_answers" data-prototype="&lt;div&gt;&lt;label class=&quot;required&quot;&gt;0label__&lt;/label&gt;&lt;div id=&quot;quiz_questions_0_answers_0&quot;&gt;&lt;div&gt;&lt;label for=&quot;quiz_questions_0_answers_0_sentence&quot; class=&quot;required&quot;&gt;Réponse&lt;/label&gt;&lt;input type=&quot;text&quot; id=&quot;quiz_questions_0_answers_0_sentence&quot; name=&quot;quiz[questions][0][answers][0][sentence]&quot; required=&quot;required&quot; class=&quot;form-control&quot; /&gt;&lt;/div&gt;&lt;div&gt;&lt;div id=&quot;quiz_questions_0_answers_0_isRight&quot;&gt;&lt;input type=&quot;radio&quot; id=&quot;quiz_questions_0_answers_0_isRight_0&quot; name=&quot;quiz[questions][0][answers][0][isRight]&quot; required=&quot;required&quot; value=&quot;1&quot; /&gt;&lt;label for=&quot;quiz_questions_0_answers_0_isRight_0&quot; class=&quot;required&quot;&gt;Bonne réponse&lt;/label&gt;&lt;input type=&quot;radio&quot; id=&quot;quiz_questions_0_answers_0_isRight_1&quot; name=&quot;quiz[questions][0][answers][0][isRight]&quot; required=&quot;required&quot; value=&quot;0&quot; /&gt;&lt;label for=&quot;quiz_questions_0_answers_0_isRight_1&quot; class=&quot;required&quot;&gt;Mauvaise réponse&lt;/label&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;"></div></div></div>
 
+
 prototype 
 <div><label class="required">0label__</label><div id="quiz_questions_0_answers_0"><div><label for="quiz_questions_0_answers_0_sentence" class="required">Réponse</label><input type="text" id="quiz_questions_0_answers_0_sentence" name="quiz[questions][0][answers][0][sentence]" required="required" class="form-control" /></div><div><div id="quiz_questions_0_answers_0_isRight"><input type="radio" id="quiz_questions_0_answers_0_isRight_0" name="quiz[questions][0][answers][0][isRight]" required="required" value="1" /><label for="quiz_questions_0_answers_0_isRight_0" class="required">Bonne réponse</label><input type="radio" id="quiz_questions_0_answers_0_isRight_1" name="quiz[questions][0][answers][0][isRight]" required="required" value="0" /><label for="quiz_questions_0_answers_0_isRight_1" class="required">Mauvaise réponse</label></div></div></div></div>
+
+
+1 https://symfony.com/what-is-symfony 51
+2 https://symfony.com/doc/current/the-fast-track/en/1-tools.html#composer 52
+3 https://symfony.com/doc/current/introduction/from_flat_php_to_symfony.html#from_flat_php-front-controller 55
+4 https://developer.mozilla.org/fr/docs/Learn/CSS/First_steps/What_is_CSS 4
+5 https://developer.mozilla.org/fr/docs/Web/HTML/Element/link 17
+6 https://developer.mozilla.org/fr/docs/Web/CSS/CSS_selectors 18, 20 , 23
+7 https://developer.mozilla.org/fr/docs/Web/CSS/CSS_colors/Applying_color 19
+8 https://developer.mozilla.org/fr/docs/Web/CSS/position 22
+9 https://developer.mozilla.org/fr/docs/Learn/CSS/Building_blocks/Values_and_units 24, 71
+10 https://developer.mozilla.org/fr/docs/Web/CSS/padding 25
+11 https://developer.mozilla.org/fr/docs/Web/CSS/background 21
+12 https://developer.mozilla.org/fr/docs/Web/HTML/Global_attributes/style 73
+13 https://developer.mozilla.org/fr/docs/Web/HTML/Element/table 74,
+

@@ -53,9 +53,10 @@
             </button>
         </div>
 
-        {% if quiz.questions|length >= 10 %}  
-            <a href="{{path('show_quiz', {'id': quiz.id})}}">Terminé</a>
-        {% endif %}
+        <button class="btn btn-lg btn-primary" type="submit">
+            Valider
+        </button>
+        
         
     
      

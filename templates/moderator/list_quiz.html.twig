@@ -6,7 +6,7 @@
 
 {# boucle pour afficher toute les catégorie  #}
 {% for category in categories %}
-        
+
         {% set categoryExist = category %} {# variable pour eviter les doublons#}
         {# affiche le nombre de quiz existant dans cet catégorie  #}
         <h2>Pour la categories {{category}} il y a  {{ category.quizzes|length }} quiz</h2>
@@ -14,6 +14,7 @@
         <button id="button{{nb}}" class="showButton">Afficher</button>
 
     <ul class="category" id="{{nb}}">
+        <a class="add" href="{{path('new_quiz', {'idCategory': category.id})}}">Ajouter Quiz</a>
         {# boucle pour afficher les quiz  #}
         {% for quiz in quizes %} 
 
@@ -22,12 +23,12 @@
                 
                 {# condition pour afficher les quiz qui appartenant a cet catégorie #}
                 {% if category.id == quiz.category.id  %}
-                <a class="add" href="{{path('new_quiz', {'idCategory': category.id})}}">Ajouter Quiz</a><br>
+                
                 
                     <li class="li_category">
                         <h4>{{ quiz.title }}</h4>
                         
-                        <a class="modify" href="{{path('edit_quiz', {'id': quiz.id})}}">Modifier</a>  
+                        {# <a class="modify" href="{{path('edit_quiz', {'id': quiz.id})}}">Modifier</a>   #}
                     </li>
 
                     <li class="li_category">

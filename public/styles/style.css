@@ -496,4 +496,65 @@ th, td {
   background-color: #f1f1f1;
   color: black;
 }
+
+/******************** searchBar ********************/
+#searchBar { /* div */
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+#searchBar form {
+    position: relative;
+}
+
+#searchInput { /* input type search */
+    width: 350px;
+    height: 40px;
+    padding-left: 11px;
+    font-size: 1.2em;
+    border: 0;
+    border-radius: 10px;
+
+    transition: 0.1s;
+}
+
+#searchInput:focus-visible { /* input type search */
+    border-bottom-right-radius: 0;
+    transition: 0.1s;
+}
+
+#searchInput:focus-visible {
+    outline: none;
+}
+
+#textHint { /* div */
+    color: black;
+}
+
+#textHint a {
+    text-decoration: none;
+}
+
+.dropDownMenuHint {
+    width: calc(100% + 1px);
+    height: fit-content;
+    max-height: calc(60px*10); /*60px car c'est la hauteur d'un item dans le menu  */
+    padding: 0 10px ;
+
+    background-color: white;
+    border-radius: 10px;
+    border: 1px solid black;
+    
+    position: absolute;
+    left: 0;
+    overflow-y:scroll;
+    scrollbar-width: thin;
+    z-index: 99;
+}
+
+.dropDownMenuHint a p {
+    margin: 10px 0;
+}
   

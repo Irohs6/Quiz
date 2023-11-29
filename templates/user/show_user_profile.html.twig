@@ -83,6 +83,10 @@
             <div id="show_table" class="table-score">
                 {{ include('user/template_show_tablescore.html.twig') }}
             </div>
+        {% else %}
+            <div id="show_table" class="table-score">
+                
+            </div>
         {% endif %}
 
         {% for game in app.user.games %}

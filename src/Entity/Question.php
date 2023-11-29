@@ -29,9 +29,10 @@ class Question
     #[ORM\OneToMany(mappedBy: 'question', targetEntity: Answer::class, cascade: ['persist', 'remove'])]
     private Collection $answers;
 
-    #[ORM\ManyToOne(inversedBy: 'questions',  cascade: ['persist', 'remove'])]
-    private ?Link $link = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $link = null;
 
+   
     public function __construct()
     {
         $this->answers = new ArrayCollection();
@@ -108,21 +109,22 @@ class Question
         return $this;
     }
     
-    public function getLink(): ?Link
-    {
-        return $this->link;
-    }
-
-    public function setLink(?Link $link): static
-    {
-        $this->link = $link;
-
-        return $this;
-    }
 
     public function __toString()
     {
         return $this->getSentence();
+    }
+
+    public function getLink(): ?string
+    {
+        return $this->link;
+    }
+
+    public function setLink(?string $link): static
+    {
+        $this->link = $link;
+
+        return $this;
     }
 
 }
