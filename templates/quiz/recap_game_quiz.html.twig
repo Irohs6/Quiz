@@ -9,27 +9,28 @@
 
 
     
-     {{ dump(quizsRecap) }}
+    <strong><p>Score Obtenue: {{ score }}% de bonnes réponses</p></strong>
     {% for recap in quizsRecap %}
         
       
     <strong>Question {{ index  }}: {{ recap.questionIntitulle }} </strong>  
         
         <ul>
-            <strong>Réponses sélectionnées:</strong>
-            <strong>Réponse:</strong> 
-            
-        
-            
-        <strong>Lien doc:</strong>  <a target="blank" href="">Lien documentation officielle</a>;
+            <strong><p>Réponses sélectionnées:</p></strong>
+            {% if recap.answerIsright %}
+                <strong class="success" >{{ recap.answerIntitulle }}</strong> 
+            {% else %}
+                <strong class="error" >{{ recap.answerIntitulle }}</strong> 
+            {% endif %}
+        <strong><p>Lien doc:</strong> <a target="blank" href="{{ recap.link }}">{{recap.link ? recap.link :  "Aucun lien " }} </a></p>
         </ul>
 
+        {% set index = index + 1 %}
     {% endfor %}    
-            <strong>Score Total: {{ score }}</strong> ;
+             
         
     
 
-   {% set index = index + 1 %}
 
   
       

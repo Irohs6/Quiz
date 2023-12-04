@@ -26,10 +26,12 @@ class Quiz
 
     #[ORM\ManyToOne(inversedBy: 'quizzes')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(groups:'category')]
     private ?Category $category = null;
 
     #[ORM\ManyToOne(inversedBy: 'quizzes')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(groups:'level')]
     private ?Level $level = null;
 
     #[ORM\OneToMany(mappedBy: 'quiz', targetEntity: Question::class,cascade: ['persist'] )]

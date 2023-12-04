@@ -224,3 +224,18 @@ prototype
 12 https://developer.mozilla.org/fr/docs/Web/HTML/Global_attributes/style 73
 13 https://developer.mozilla.org/fr/docs/Web/HTML/Element/table 74,
 
+
+$('input[type="radio"]').on('change', function() {
+                    let selectedRadio = $(this);
+                    console.log('selectedRadio', selectedRadio);
+                    let groupName = selectedRadio.attr('name');
+                    console.log('groupName', groupName);
+                    let isChecked = selectedRadio.prop('checked');
+                    console.log('isChecked', isChecked);
+                    // Si la réponse sélectionnée est une "Bonne réponse"
+                    if (isChecked && selectedRadio.val() === '1') { // Supposons que '1' représente la "Bonne réponse"
+                        $('input[type="radio"]').not(`[name="${groupName}"][value="0"]`).prop('checked', true); // Décocher la bonne réponse
+                        $('input[type="radio"][name^="${groupName}"][value!="0"]').prop('checked', true); // Cocher les mauvaises réponses
+                    }
+                });
+

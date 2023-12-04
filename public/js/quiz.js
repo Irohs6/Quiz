@@ -85,27 +85,37 @@ $(document).ready(function() { // Attend que le document (base.html.twig) soit c
                 let regex2 = new RegExp('quiz_questions_' + questionIndex + '_answers_' + questionIndex + '', 'g');
                 //éléméent a remplacer dans le prototype pour avoir les bon id de réponses a chaque question
                 let prefix2 = ('quiz_questions_' + questionIndex + '_answers_' + count);
-                //en remplace avec la nouvelle valeurs
+                //on remplace avec la nouvelle valeurs
                 let newForm = prototype.replace(regex2, prefix2) 
-                // préfix créer pour remplacer l'id réponse a chaque ajout de réponse
+                // préfix créer pour remplacer le name de réponse a chaque ajout de réponse
                 let prefix1 = 'quiz[questions][' + questionIndex + '][answers][' + count + ']';
-                // Remplacement des placeholders dans le prototype pour créer une nouvelle réponse
+                // Remplacement des name dans le prototype pour créer une nouvelle réponse
                 newForm = newForm.replace(/quiz\[questions\]\[\d+\]\[answers\]\[\d+\]/g, prefix1);
                 // Ajout de la nouvelle réponse au conteneur
                 $answersContainer.append(newForm);
+                // Sélection des boutons radio pour une question spécifique
+                // let $radioAnswers = $('[name^="quiz[questions]['+ questionIndex + '][answers]"][type="radio"]');
+
+                // // Ajout de la classe 'hidden' aux mauvaises réponses lors de la création
+                // $radioAnswers.filter('[value="0"]').prop('hidden', true);
+
+    //ajouter au clic sur le bouton le nombre de réponse shouaiter pour les créer tous d'un coup*********************************************************************
                 
-                let radio = $('#quiz_questions_'+questionIndex+'_answers_'+ count+'_isRight_0')
-                // Ajoutez cet événement lorsque vous créez vos boutons radio
-            
-                console.log('radio',radio);
-                console.log(radio.length);
-                // Ajoutez cet événement lorsque vous créez vos boutons radio
-                radio.on('change', function() {
-                   if (radio.prop('checked').length >= 1) {
-                        radio.prop('checked', false);
-                   }
-                      
+
+
+                $radioAnswer = $('[name^="quiz[questions]['+ questionIndex + '][answers]"][type="radio"]')
+                console.log('radio', $radioAnswer);
+
+                $('[name^="quiz[questions]['+ questionIndex + '][answers]"][type="radio"]').on('change', function() {
+                    // Vérifie si la réponse sélectionnée est une bonne réponse
+                    if ($(this).val() === '1') {
+                        // Si c'est une bonne réponse, décoche toutes les autres réponses de la même question
+                        $('[name^="quiz[questions]['+ questionIndex + '][answers]"][type="radio"][value="0"]').prop('checked', true);
+                        $(this).prop('checked', true);
+                    }
                 });
+
+            
                 // Incrémentation du compteur pour maintenir les identifiants uniques
                 count++;
             } else {

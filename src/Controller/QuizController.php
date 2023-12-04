@@ -200,18 +200,21 @@ class QuizController extends AbstractController
     {
         $session = new Session();
         $recapData = $session->get('recap');
-
+        
+        $score = 0; // Initialiser la variable $score
+        $quizRecaps = []; // Initialiser le tableau $quizRecaps
+        
         foreach ($recapData as $data) {
             if (isset($data['score'])) {
                 $score = $data['score'];
-                
             } else {
                 foreach ($data as $quizRecap) {
-                    $quizRecaps = [$quizRecap] ;
+                    $quizRecaps[] = $quizRecap; // Ajouter les éléments à $quizRecaps
                 }
             }
         }
-        return $this->render('quiz/recap_game_quiz.html.twig',[
+        
+        return $this->render('quiz/recap_game_quiz.html.twig', [
             'score' => $score,
             'quizsRecap' => $quizRecaps
         ]);

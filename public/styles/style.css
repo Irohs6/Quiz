@@ -498,12 +498,7 @@ th, td {
 }
 
 /******************** searchBar ********************/
-#searchBar { /* div */
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-}
+
 
 #searchBar form {
     position: relative;
@@ -519,6 +514,7 @@ th, td {
 
     transition: 0.1s;
 }
+
 
 #searchInput:focus-visible { /* input type search */
     border-bottom-right-radius: 0;
@@ -536,7 +532,13 @@ th, td {
 #textHint a {
     text-decoration: none;
 }
+#textHint a:hover{
+   color: grey;
+}
 
+.categroy_search{
+    font-weight: bold;
+}
 .dropDownMenuHint {
     width: calc(100% + 1px);
     height: fit-content;

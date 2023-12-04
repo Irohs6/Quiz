@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détail d'un quiz et de ses question{% endblock %}
+
+{% block body %}   
+
+   <h1>{{ quiz.title }}</h1>
+
+    <div id="quiz-detail-container">
+        <article id="quiz-detail"> 
+            <ul class="quiz-detail">
+                <h2>{{ quiz.category.label }}</h2>
+                {% for question in quiz.questions %}
+
+                    <li>{{ question.sentence }}</li>
+                        {% for reponse in question.answers %}
+                        
+                        <ul class="quiz-detail-reponse">
+                            {% if question.id == reponse.question.id %}
+                                <li>{{ reponse.sentence }}</li>
+                            {% endif %}
+                                
+                        </ul>
+                        {% endfor %}
+                    <a href="{{ path('app_unset_quiz',{'id' : question.id ,'idQuiz': quiz.id})}}">Enlever</a>
+                   
+
+                    <a href="{{path('edit_question', {'id': question.id})}}">Modifier</a>
+
+                {% endfor %}
+                    <a href="{{path('new_question', {'idQuiz': quiz.id})}}">Ajouter Question</a>
+            </ul>
+        </article>
+        <h3>Liste des questions non utilisées</h3>     
+        <ul>
+            {% for question in questionNotInQuiz %}
+                {% if question.category == quiz.category %}
+                    <li>{{ question }}<a class="add" href="{{ path('app_add_quiz',{'id' : question.id ,'idQuiz': quiz.id})}}"> Ajouter</a></li>
+                {% endif %}
+            {% endfor %}
+           
+        </ul>
+    </div>
+
+{% endblock %}

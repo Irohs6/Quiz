@@ -49,19 +49,18 @@ class QuizRepository extends ServiceEntityRepository
     public function findByMultiple($srch): array
     {
         return $this->createQueryBuilder('q')
-            ->join('q.category', 'c')
-            ->addSelect('c')
-            ->join('q.level', 'l')
-            ->addSelect('l')
+            ->leftJoin('q.category', 'c')
+            ->leftJoin('q.level', 'l')
+            ->select('q.id', 'q.title', 'c.label AS category_label', 'l.label AS level_label')
             ->where('q.title LIKE :title')
-            ->orWhere('c.label LIKE :label')
-            ->orWhere('l.label LIKE :lab')
+            // ->orWhere('c.label LIKE :label')
+            // ->orWhere('l.label LIKE :lab')
            
             ->setParameters(
                 [
                     'title' => '%'.$srch.'%',
-                    'label' => '%'.$srch.'%',
-                    'lab' =>'%'.$srch.'%'
+                    // 'label' => '%'.$srch.'%',
+                    // 'lab' =>'%'.$srch.'%'
                 ])
             // ->groupBy('q.title')
             ->getQuery()

@@ -1,39 +1,14 @@
 ////////////////////////////////////// search bar dynamique (AJAX) ///////////////////////////////////////
 
-// la function est appelé avec comme parametre le contenu de la search bar
-// function showHintOld(srch) {
-//     if (srch.length == 0) {
-//         // si la search bar est vide, le menu n'est pas affiché 
-//         textHint.innerHTML = "";    
-//         textHint.classList.remove("dropDownMenuHint");
-        
-//     } else {
-//         // si la search bar a du contenu, une requête XML est faite et stocké comme object dans une variable
-//         const xmlhttp = new XMLHttpRequest();
-
-//         // quand la requête à terminé de charger, textHint(la div ou le resultat de la recherche est affiché) aura comme contenu le resultat de la requête
-//         xmlhttp.onload = function() {
-//             textHint.innerHTML = this.responseText;
-//         }
-        
-//         // une requête GET est crée dans le xml, elle renvoie vers une action "search" et le contenu de la search bar
-//         xmlhttp.open("GET", "index.php?action=search&srch=" + srch);
-
-//         // envoie la requête qui sera intercepté par l'index
-//         xmlhttp.send();
-
-//         // et le menu sera affiché 
-//         textHint.classList.add("dropDownMenuHint");
-//     }
-// }
 const textHint = document.getElementById("textHint");
 
 const linkResult = document.createElement("A");
 
 const valueResult = document.createElement("P");
 
-const categoryResult = document.createElement("span");
-
+const categoryResult = document.createElement("h4");
+const levelResult = document.createElement("h5");
+linkResult.classList.add("search_link_item");
 
 // la function est appelé avec comme parametre le contenu de la search bar
 async function showHint(srch) {
@@ -49,34 +24,60 @@ async function showHint(srch) {
         // appel asynchrone
         const response = await fetch(
             "/search/bar/" + srch
-            // {
-            //     method: "GET",
-            //     headers: {},
-            //     body: {},
-            // }
+           
         );
         console.log("response = ", response);
 
         const data = await response.json();
-        // const data = await JSON.parse(response);
 
         console.log("data = ", data);
         if(data) {
 
+            const resultsByCategoryAndDifficulty = {};
+
             data.forEach((info) => {
-                console.log('info',info);
-                const newValueResult = valueResult.cloneNode();
-                const newLinkResult = linkResult.cloneNode();
-                const newCategoryResult = categoryResult.cloneNode();
-
-                newLinkResult.href = info["link"];
-                newValueResult.textContent = info["label"];
-                newCategoryResult.textContent = info["category"]+" -> ";
-
-                textHint.appendChild(newLinkResult);
-                newLinkResult.appendChild(newValueResult);
-                newValueResult.prepend(newCategoryResult);
+                const category = info["category_label"];
+                const difficulty = info["level_label"];
+        
+                if (!resultsByCategoryAndDifficulty[category]) {
+                    resultsByCategoryAndDifficulty[category] = {};
+                }
+        
+                if (!resultsByCategoryAndDifficulty[category][difficulty]) {
+                    resultsByCategoryAndDifficulty[category][difficulty] = [];
+                }
+        
+                resultsByCategoryAndDifficulty[category][difficulty].push(info);
             });
+        
+            // Afficher les résultats par catégorie et difficulté
+            for (const category in resultsByCategoryAndDifficulty) {
+                const difficulties = resultsByCategoryAndDifficulty[category];
+        
+                const categoryHeader = document.createElement("h5");
+                categoryHeader.textContent = category;
+                textHint.appendChild(categoryHeader);
+        
+                for (const difficulty in difficulties) {
+                    const results = difficulties[difficulty];
+        
+                    const difficultyHeader = document.createElement("ol");
+                    difficultyHeader.textContent = difficulty + ':';
+                    textHint.appendChild(difficultyHeader);
+        
+                    results.forEach((info) => {
+                        const resultLink = document.createElement("a");
+                        resultLink.href = `/quiz/play/${info.id}`; // Lien vers le quiz
+                        resultLink.textContent = info.title; // Titre du quiz
+        
+                        const resultItem = document.createElement("li");
+                        resultItem.appendChild(resultLink);
+                        difficultyHeader.appendChild(resultItem);
+                    });
+                }
+            }
+        
+    
 
         } else {
             

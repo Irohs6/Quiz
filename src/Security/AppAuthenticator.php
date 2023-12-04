@@ -40,10 +40,10 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
 
         $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $email);
 
-        // Obtenez l'utilisateur à partir du UserRepository
+        // On récupère le user grace a son email
         $userEntity = $this->userRepository->findOneBy(['email' => $email]);
 
-        // Vérifiez si l'utilisateur est vérifié ou banni
+        // Et on Vérifiez si l'eamil est vérifié ou si le user est  banni
         if (!$userEntity || !$userEntity->isVerified() || $userEntity->isIsBanned()) {
             $errorMessage = $userEntity && $userEntity->isIsBanned()
                 ? 'Votre compte est banni.'
