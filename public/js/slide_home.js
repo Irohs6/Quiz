@@ -9,7 +9,6 @@ window.addEventListener("load", (event) => {
    
   
     // Recherche de tous les ensembles de diapositives par classe
-    let slideGroups = document.querySelectorAll('[class^="mySlides"]');
     let slidesShows = document.querySelectorAll('[class^="slideshow-container"]');
 
   

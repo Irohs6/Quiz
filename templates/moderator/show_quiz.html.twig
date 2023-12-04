@@ -18,7 +18,8 @@
                 {#ajouter un bouton #}  
                 {% else %}
                 {# sinon affiche le bouton pour le valider  #}
-                    <a href="{{path('verified_quiz', {'id': quiz.id})}}">Vérifier</a>
+                    <a class="add" href="{{path('verified_quiz', {'id': quiz.id})}}">Valider se quiz</a>
+                    <a class="add" href="{{path('delete_quiz', {'id': quiz.id})}}">Supprimer se quiz</a>
 
                 {% endif %}
 

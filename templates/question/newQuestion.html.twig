@@ -53,7 +53,7 @@
             </button>
         </div>
 
-        <button class="btn btn-lg btn-primary" type="submit">
+        <button id="submit-answer" class="btn btn-lg btn-primary" type="submit">
             Valider
         </button>
         
@@ -65,5 +65,12 @@
         {% do formNewQuestion.answers.setRendered %}
     {{ form_end(formNewQuestion) }}
 </div>
+
+<script
+    src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+    crossorigin="anonymous">
+</script>
+<script src="{{ asset('js/question_quiz.js') }}"></script>
 {% endblock %}
 

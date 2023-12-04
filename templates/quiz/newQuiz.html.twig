@@ -3,52 +3,67 @@
 {% block title %}Ajouter un quiz question réponses{% endblock %}
 
 {% block body %}
+{% if edit %}
+<h1>Modifier le quiz: {{ quiz.title }}</h1>    
+{% else %}
+<h1>Ajouter un nouveau Quiz à la catégorie: {{ category.label }}</h1> 
+{% endif %}
 
-<div class="container">
     
-    <h1>Ajouter un nouveau Quiz à la sous-catégorie: {{ category.label }}</h1> 
+    
    
-    
-{{ form_start(formNewQuiz) }}
-    {{ form_row(formNewQuiz.title) }}
-    {{ form_row(formNewQuiz.level) }}
-    <div class="formNewQuestion-group row ">
-
-        <div class="col-formNewQuestion-label col-sm-2">&nbsp;</div>
-
-        <div id="questions-fields-list" class="col-sm-10 remove-collection-widget"
-        data-prototype="{{ form_widget(formNewQuiz.questions.vars.prototype)|e }}"
-        data-quiz="{{quizId}}"
-        data-widget-tags="{{ '<p></p>'|e }}"
-        data-widget-counter="{{ formNewQuiz.questions|length }}">
-            
-            {% for questionField in formNewQuiz.questions %}
-                <p>
-                    {{ form_errors(questionField) }}
-                    {{ form_widget(questionField, {'attr': {'class': 'borders'}}) }}
-                </p>
-                
-               
-                {% for answerField in questionField.answers %}
-                <p>
-                    {{ form_errors(answerField) }}
-                    {{ form_widget(answerField, {'attr': {'class': 'borders'}}) }}
-                </p>
-                {% endfor %}
-                
-
-            {% endfor %}
-
-         
-        </div>
-
-    <div class="formNewQuestion-group row flex-action">
-        <button type="button" 
-            class="add-another-collection-widget button"
-            data-list-selector="#questions-fields-list">
-            Ajouter une Question
-        </button>
+    <div id="questions-summary">
+        <h5>Sommaire des questions</h5>
+        <ul id="questions-list"></ul>
     </div>
-{{ form_end(formNewQuiz) }}
-</div>
+<section id="add-quiz">
+    {{ form_start(formNewQuiz) }}
+        {{ form_row(formNewQuiz.title) }}
+        {{ form_row(formNewQuiz.level) }}
+        <div class="formNewQuestion-group row ">
+
+            <div class="col-formNewQuestion-label col-sm-2">&nbsp;</div>
+
+            <div id="questions-fields-list" class="col-sm-10 remove-collection-widget"
+            data-prototype="{{ form_widget(formNewQuiz.questions.vars.prototype)|e }}"
+            data-quiz="{{quizId}}"
+            data-widget-tags="{{ '<p></p>'|e }}"
+            data-widget-counter="{{ formNewQuiz.questions|length }}">
+                
+                {% for questionField in formNewQuiz.questions %}
+                    <p>
+                        {{ form_errors(questionField) }}
+                        {{ form_widget(questionField, {'attr': {'class': 'borders'}}) }}
+                    </p>
+                    
+                
+                    {% for answerField in questionField.answers %}
+                    <p>
+                        {{ form_errors(answerField) }}
+                        {{ form_widget(answerField) }}
+                    </p>
+                    {% endfor %}
+                    
+
+                {% endfor %}
+
+            
+            </div>
+
+        <div class="formNewQuestion-group row flex-action">
+            <button type="button" 
+                class="add-another-collection-widget button"
+                data-list-selector="#questions-fields-list">
+                Ajouter une Question
+            </button>
+        </div>
+    {{ form_end(formNewQuiz) }}
+</section>
+
+<script
+    src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+    crossorigin="anonymous">
+</script>
+<script src="{{ asset('js/quiz.js') }}"></script>
 {% endblock %}

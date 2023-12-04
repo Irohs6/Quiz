@@ -43,16 +43,23 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
         // On récupère le user grace a son email
         $userEntity = $this->userRepository->findOneBy(['email' => $email]);
 
-        // Et on Vérifiez si l'eamil est vérifié ou si le user est  banni
-        if (!$userEntity || !$userEntity->isVerified() || $userEntity->isIsBanned()) {
-            $errorMessage = $userEntity && $userEntity->isIsBanned()
-                ? 'Votre compte est banni.'
-                : 'Votre adresse e-mail n\'est pas vérifiée.';
+        if ($userEntity) {
+            # code...
+        
+            // Et on Vérifiez si l'eamil est vérifié ou si le user est  banni
+            if (!$userEntity->isVerified() || $userEntity->isIsBanned()) {
+                $errorMessage = $userEntity && $userEntity->isIsBanned()
+                    ? 'Votre compte est banni.'
+                    : 'Votre adresse e-mail n\'est pas vérifiée.';
 
+                throw new CustomUserMessageAuthenticationException($errorMessage);
+            }
+
+        }else{
+            $errorMessage = "Cet email n'existe pas Veuillez créer un compte";
+                
             throw new CustomUserMessageAuthenticationException($errorMessage);
         }
-
-        // Ajoutez d'autres vérifications si nécessaires
 
         return new Passport(
             new UserBadge($email),

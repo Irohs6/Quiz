@@ -129,9 +129,12 @@ a{
 }
 
 #list-theme{
-    width: 90%;
+    width: 500px;
     display: flex;
     flex-direction: column;
+    margin-left: auto;
+    margin-right: auto;
+    align-items: center;
 }
 .list-theme{
     width: 100%;
@@ -299,7 +302,64 @@ a{
     padding: 10px;
     list-style: none;
 }
+/**********************add quiz ********************************/
+#questions-summary{
+    position: fixed;
+}
+.row{
+    justify-content: center;
+}
 
+
+#add-quiz{
+    display: flex;
+    width: 80%;
+    flex-direction: column;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+.add-answer-another-collection-widget{
+    text-decoration: none;
+    padding: 5px;
+    font-family: verdana;
+    font-size: 1em;
+    color: #FFFFFF;
+    background-color: #014F86;
+    border-radius: 25px;
+    -webkit-border-radius: 25px;
+    -moz-border-radius: 25px;
+    border: 5px outset #FFFFFF;
+    box-shadow: 3px 3px 12px #000000;
+    -webkit-box-shadow: 3px 3px 12px #000000;
+    -moz-box-shadow: 3px 3px 12px #000000;
+    width: 200px;
+}
+
+.button{
+    text-decoration: none;
+    padding: 5px;
+    font-family: verdana;
+    font-size: 0.8em;
+    color: #FFFFFF;
+    background-color: #014F86;
+    border-radius: 25px;
+    -webkit-border-radius: 25px;
+    -moz-border-radius: 25px;
+    border: 5px outset #FFFFFF;
+    box-shadow: 3px 3px 12px #000000;
+    -webkit-box-shadow: 3px 3px 12px #000000;
+    -moz-box-shadow: 3px 3px 12px #000000;
+    width: 200px;
+}
+.add-another-collection-widget:hover ,.add-answer-another-collection-widget:hover, .button:hover{
+    padding: 5px;
+    box-shadow: 0px 0px 3px #000000;
+    -webkit-box-shadow: 0px 0px 3px #000000;
+    -moz-box-shadow: 0px 0px 3px #000000;
+}
 
 /******************************Détail Quiz*************************************************/
 #quiz-detail-container{

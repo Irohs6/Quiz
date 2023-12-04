@@ -57,4 +57,19 @@ class ModeratorController extends AbstractController
        return $this->redirectToRoute('show_quiz',['id' => $quiz->getId()]);
        
     }
+
+    #[Route('moderator/quiz/{id}/delete', name: 'delete_quiz')]
+    public function deleteQuiz(Quiz $quiz = null, EntityManagerInterface $entityManager): Response
+    {
+        foreach ($quiz->getQuestions() as $question) {
+            $quiz->removeQuestion($question);
+        }
+
+        $entityManager->remove($quiz);//suprime un quiz
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_list_quiz');
+    }
+
+
 }

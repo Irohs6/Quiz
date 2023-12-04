@@ -297,13 +297,6 @@ class QuizController extends AbstractController
         ]);
     }
 
-    #[Route('admin/quiz/{id}/delete', name: 'delete_quiz')]
-    public function deleteQuiz(Quiz $quiz = null, EntityManagerInterface $entityManager): Response
-    {
-        $entityManager->remove($quiz);//suprime un quiz
-        $entityManager->flush();
-
-        return $this->redirectToRoute('app_home_quiz');
-    }
+  
 
 }
