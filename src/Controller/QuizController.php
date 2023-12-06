@@ -274,6 +274,7 @@ class QuizController extends AbstractController
         $formEditQuiz->handleRequest($request);
 
         if ($formEditQuiz->isSubmitted() && $formEditQuiz->isValid()) {
+            $data = $formEditQuiz->getData();
             // Mettre à jour les questions et réponses existantes si nécessaire
             foreach ($questions as $question) {
                 $question->setCategory($category); // Associer la catégorie à la nouvelle questio
@@ -284,7 +285,7 @@ class QuizController extends AbstractController
             $entityManager->flush();
 
             // Redirection vers une page de confirmation ou vers la gestion du quiz
-            return $this->redirectToRoute('show_quiz',['id',$quiz->getId()]);
+            return $this->redirectToRoute('show_quiz',['id'=> $quiz->getId()]);
         }
 
         return $this->render('quiz/edit_quiz.html.twig', [
