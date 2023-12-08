@@ -7,13 +7,12 @@ window.addEventListener("load", (event) => {
     let selectedAnswers = {}; // déclaration d'un tableau vide pour récupérer plus tard les réponse sélectionné a chaque question
     let quizAnswer = document.getElementById('answer'); // recupère la div qui a l'id answer qui servira de conteneur pour l'affichage des réponses
     let valider = document.getElementById('valider'); // recupère le bouton valider qui permettra de valider les réponse de chaque question et de passer a la suivante 
-    let show_recap = document.getElementById('show-recap')
-    show_recap.style.display = 'none'; 
+  
     let submit = document.getElementById('submit');// recupère le input type submit
     submit.style.display = 'none' // cache le bouton submit il apparaitra seullement une fois les 10 question répondu 
     let play = document.getElementById('play'); // récupère le bouton jouer
     let message = document.getElementById('message'); // div id message 
-    let askedQuestions = []; //tableau vide qui stockera les index des question déja sortit
+    let askedQuestions = []; //tableau pour afficher les question dans l'ordre de leurs sortit
     let min = 0;  // déclaration d'une variable min a 0 qui sera uttilisé pour l'affichage des question au hasard
     let max = quizData.questions.length; // variable max qui est set avec le nombre total de question du quiz
     let currentQuestionIndex = Math.floor(Math.random() * (max - min)) + min; //Créer un index de question aléatoire pour la première question
@@ -64,7 +63,7 @@ window.addEventListener("load", (event) => {
             let input = document.createElement('input'); // crer un élément input
             input.type = 'radio'; // ajoute un type"radio" sur l'élément input 
             input.name = `answer`; // créer un name 'answer pour tous les bouton radio pour limiter le choix de réponse a 1 seul 
-            input.id =  `${reponse.id}`; // ajoute l'id de la reponse dans l'id du input
+            input.id =  `${reponse.id}`; // ajoute l'id de la question et de la reponse dans l'id du input
             input.className = 'answers' // ajoute une class answer
             label.appendChild(input); // place le input en ellement enfant de l'élément label 
             label.appendChild(document.createTextNode(reponse.intitulle)); //affiche les réponses
@@ -133,8 +132,8 @@ window.addEventListener("load", (event) => {
         selectedAnswers[currentQuestion.id] = selectedAnswers[currentQuestion.id] || [];
         selectedAnswers[currentQuestion.id].push(...checkedAnswers);
         console.log('curent',selectedAnswers);
+        // incrément l'index du tableau pour passé a la question suivante
         
-         // Affichage de la prochaine question tant que count est inférieur a 9
         if (count < 9) {
             
             displayQuestion();
@@ -143,16 +142,17 @@ window.addEventListener("load", (event) => {
             displayRecap()
             message.innerHTML = 'Bravo vous avez Terminer ce quiz appuyer sur le bouton pour découvrir votre résultat'; //Affiche un message une fois le quiz terminer
         }
-        
         count++
-       
+        // Affichage de la prochaine question tant que count est inférieur a 10
     });
 
-    //function qui créer un tableau de recap d'un quiz
+    //function pour afficher le recap d'un quiz une fois fini
     function displayRecap() {
-
+        const answerScoreTotal = document.createElement('span');
         let scoreTotal = 0
-       
+        let num = 1
+    
+
         document.getElementById('quiz-container').style.display = 'none';//cache le contenu du quiz-container contenant les question et les réponse
         submit.style.display = 'block';//fait apparaitre le bouton de soumission
 
@@ -166,20 +166,44 @@ window.addEventListener("load", (event) => {
         
             
             if (questionData) {
+                // const questionElement = document.createElement('div');
+                
+                // questionElement.innerHTML = `<strong>Question ${index + 1}:</strong>  ${questionData[0].questionIntitulle}`;
+    
+                // const answersElement = document.createElement('ul');
+                // answersElement.innerHTML = '<strong>Réponses sélectionnées:</strong>';
     
                 questionData.forEach(answerData => {
-                
-                //si la question sélection est vrais on incrémente la variable scoreTotal de 10
+                    // const answerListItem = document.createElement('li');
+
+                /**************************************************************************************** */
+                //si la question sélection est vrais on lui ajoute la class success(couleur vert) sinon error(couleur rouge)
                     if (answerData.answerIsright) {
+                    // answerListItem.className = 'success' //ajoute la class success si la réponse est vrais
                         const score = 10 ;
                         scoreTotal = scoreTotal + score
+                    // answerScore.innerHTML = `<strong>Score:</strong> ${ score }`;
                     }
-                 
+                    // }else{
+                    //     answerListItem.className = 'error'// error si la réponse sélectioné est fause
+                        
+                    //     // answerScore.innerHTML = `<strong>Score:</strong> ${ score }`;
+                    // }
+                    //     answerListItem.innerHTML = `<strong>Réponse:</strong> ${answerData.answerIntitulle}`;
+                    //     answersElement.appendChild(answerListItem);//place le li enfant du ul
+                    //     const questionLink = document.createElement('li');
+                    //     answersElement.appendChild(questionLink);//place le li enfant du ul
+                    //     questionLink.innerHTML = `<strong>Lien doc:</strong>  <a target="blank" href="${questionData[0].link}">Lien documentation officielle</a>`;
                 });
-               
+                // questionElement.appendChild(answersElement); // place le ul en enfant de la div
+                // recapContainer.appendChild(questionElement); //et place la div en enfant de la div recap container
+          
+                // recapContainer.insertAdjacentElement('afterend',answerScoreTotal);
+                // answerScoreTotal.innerHTML = `<strong>Score Total:</strong> ${scoreTotal}`+'%' ;
+                // Création de l'objet pour le score total
                 tableScore = []
                 tableScore.push({
-                        'score': scoreTotal //score total
+                        'score': scoreTotal //score ttoal
                     }
                 );
                  // Création de l'objet combiné avec les réponses et le score total
@@ -195,12 +219,18 @@ window.addEventListener("load", (event) => {
                 recapDataField.name = 'recapData'; // lui ajoute le name recapData
                 recapContainer.appendChild(recapDataField);// place le input en enfant de la div recapContainer
                 recapDataField.value = recapDataJSON; // Ajoutez le Json a la value du input pour pouvoir le récupérer dans le controller
-               
+                num++// rajoute 1 a chaque tour de la boucle
             }
             
         }) 
     
     }
+
+    show_recap.addEventListener('click', function(){
+        displayRecap();  // Affichez le récapitulatif
+        show_recap.style.display = 'none'
+
+    });
 
     // Commencez par afficher la première question au chargement de la page
     displayQuestion();

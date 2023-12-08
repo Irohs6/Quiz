@@ -23,26 +23,6 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class QuizController extends AbstractController
 {
-    // //pour afficher les theme les catégorie et leurs quiz
-    // #[Route('/quiz', name: 'app_quiz')]
-    // public function home(ThemeRepository $themeRepository, CategoryRepository $categoryRepository, LevelRepository $levelRepository,GameRepository $gameRepository): Response
-    // {
-    //     $allTheme = $themeRepository->findAll();//recupère toute les donné de la table theme
-    //     $allCategories = $categoryRepository->findAll();//recupère toute les donné de la table category
-    //     $allLevel = $levelRepository->findAll();//recupère toute les donné de la table level
-    //     if (!$this->getUser()) {
-    //         $gamesPlay = "";
-    //     }else{
-    //         $gamesPlay = $gameRepository->findBy(['userId'=>$this->getUser()->getId()]);
-    //     }
-    //     return $this->render('quiz/home.html.twig', [
-    //         'allTheme' => $allTheme,
-    //         'allCategories' => $allCategories,
-    //         'allLevel'=>$allLevel,
-    //         'games' => $gamesPlay
-
-    //     ]);
-    // }
 
     //futur home de quiz en cour de création
     #[Route('home/quiz', name: 'app_home_quiz')]
@@ -55,12 +35,14 @@ class QuizController extends AbstractController
             $gamesPlay = "";
         }else{
             $gamesPlay = $gameRepository->findBy(['userId'=>$this->getUser()->getId()]);
+            $gameScore = $gameRepository->findOneBy(['userId'=>$this->getUser()->getId()],['score'=> 'DESC' ]);
         }
         return $this->render('quiz/home_quiz.html.twig', [
             'allTheme' => $allTheme,
             'allCategories' => $allCategories,
             'allLevel'=> $allLevel,
-            'game' => $gamesPlay
+            'gamesPlay' => $gamesPlay,
+            'gameScore' => $gameScore
         ]);
     }
 

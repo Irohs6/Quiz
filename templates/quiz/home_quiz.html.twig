@@ -78,11 +78,11 @@
                                                             {% if loop.first %}
 
                                                                 {% set lastGameDate = game.dateGame %} {# on stock la date de la partie dans une variable#}
-                                                                {% set score = game.score %}
+                                                                {% set score = gameScore.score %}
                                                             {% elseif game.dateGame > lastGameDate %} {# si la date de la partie est supérieur a la dernière partie jouer#}
 
                                                                 {% set lastGameDate = game.dateGame %}{# on enregistre la nouvelle date #}
-                                                                {% set score = game.score %} {# on stoke le score dans la variable score #}
+                                                                {% set score = gameScore.score %} {# on stoke le score dans la variable score #}
                                                             {% endif %}
 
                                                         {% endif %}{# fin {% if game.userId.id == app.user.id %}  #}
@@ -92,7 +92,7 @@
                                                     {% if lastGameDate is not null %} {# si la variable a bien été set et donc qu'une partit existe #}
                                                     
                                                         {% if score >= 80 %} {# condition si score est supérieur a 80% stock se message #}
-                                                            {% set message = "Vous avez validé ce quiz en obtenant " ~ score ~ "%" ~ " de bonne réponse . Vous pourrez le refaire et tenter de faire mieux." %}
+                                                            {% set message = "Vous avez validé ce quiz en obtenant " ~ score ~ "%" ~ " de bonne réponse . Vous pourrez quand même le rejouer et tenter de faire mieux si possible." %}
                                                         {% else %} {# sinon on stock se message #}
                                                             {% set message = "Vous n'avez pas validé ce quiz en obtenant " ~ score ~ "% de bonne réponse." %}
                                                         {% endif %} {# fin {% if score >= 80 %} #}

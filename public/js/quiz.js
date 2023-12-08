@@ -109,25 +109,25 @@ $(document).ready(function() { // Attend que le document (base.html.twig) soit c
     });
 
     function checkMinimumAnswers() {
-        let allQuestionsValid = true;
-        let totalQuestions = $('.borders').length;
+        let allQuestionsValid = true; // déclaration de la variable a true par défault
+        let totalQuestions = $('.borders').length; // la longueur total des question
     
         $('.borders').each(function() {
-            let questionIndex = $(this).attr('id').split('_')[2];
-            let answersContainer = $('#quiz_questions_' + questionIndex + '_answers');
-            let counterAnswer = answersContainer.children().length;
+            let questionIndex = $(this).attr('id').split('_')[2]; // on extrait l'index des question
+            let answersContainer = $('#quiz_questions_' + questionIndex + '_answers'); // on récupère le conteneur des question 
+            let counterAnswer = answersContainer.children().length; // on regarde le nombre de réponse dans le conteneur
     
-            if (counterAnswer < 2) {
-                allQuestionsValid = false;
+            if (counterAnswer < 2) { // si moi de 2 réponse pour chaque question 
+                allQuestionsValid = false; // alors allQuestion est faux
                 return false;
             }
         });
     
         // Activer le bouton Valider si  au moins 10 questions ajouté et que toutes les questions ont au moins deux réponses
         if (totalQuestions >= 10 && allQuestionsValid) {
-            button.attr('disabled', false);
-        } else {
-            button.attr('disabled', true);
+            button.attr('disabled', false); // si les deux sont vrais le bouton est actif
+        } else { 
+            button.attr('disabled', true);// sinon il est désactiver
         }
     }
     
@@ -165,13 +165,13 @@ $(document).ready(function() { // Attend que le document (base.html.twig) soit c
             'text': 'Ajouter une réponse'
         });
 
-        // Ajout du bouton nouvellement créé à l'élément fourni en paramètre
+        // Ajout du bouton ajouter réponse au container des questions
         $element.append(addAnswerButton);
 
-        // Gestionnaire d'événement au clic sur le bouton "Ajouter une réponse"
+        //Ajout des écouteur d’évènement sur le bouton ‘Ajouter réponses’
         addAnswerButton.on('click', function() {
             // Récupération de l'élément question associé au bouton cliqué
-            let $question = $(this).prev('div[id^="quiz_questions_"]'); // sélectionne tous le container de div#quiz_questions_0, qui sont créer a chaque apuis sur le bouton Ajouter réponse. 
+            let $question = $(this).prev('div[id^="quiz_questions_"]'); // sélectionne tous le container de div#quiz_questions_, qui sont créer a chaque apuis sur le bouton Ajouter réponse. 
             console.log('$question', $question);
             let questionIndex = $question.attr('id').split('_')[2]; // récupère l'index de la question pour l'uttiliser dans un replace 
             
@@ -182,15 +182,15 @@ $(document).ready(function() { // Attend que le document (base.html.twig) soit c
             // Comptage du nombre actuel de réponses dans le container   
             let counterAnswer = $answersContainer.children().length;
 
-            // Récupération du prototype des réponses depuis les attributs de du container des réponses
+            // Récupération du prototype des réponses depuis les attributs du container des réponses
             let prototype = $answersContainer.attr('data-prototype');
         
-            // Modification du prototype pour enlever le label
-            prototype = prototype.replace('<label class="required">'+questionIndex+'label__</label>', '');
-
+            
             // Vérification si le prototype existe
             if (typeof prototype !== 'undefined') {
-    
+                
+                // Modification du prototype pour enlever le label
+                prototype = prototype.replace('<label class="required">'+questionIndex+'label__</label>', '');
             
                 // Vérification du nombre maximum de réponses (limite à 4 réponses)
                 if (counterAnswer < 4) {
@@ -207,6 +207,7 @@ $(document).ready(function() { // Attend que le document (base.html.twig) soit c
                     newForm = newForm.replace(/quiz\[questions\]\[\d+\]\[answers\]\[\d+\]/g, prefix1);
                     // Ajout de la nouvelle réponse au conteneur
                     $answersContainer.append(newForm);
+
                     $('[name^="quiz[questions]['+ questionIndex + '][answers]"][type="radio"][value="0"]').prop('readonly', true);
                     checkMinimumAnswers();
                     // Sélection des boutons radio pour une question spécifique
@@ -267,9 +268,9 @@ $(document).ready(function() { // Attend que le document (base.html.twig) soit c
             let observerConfig = { childList: true, subtree: true };
             observer.observe(questionsFieldsList, observerConfig);
 
-            // Initialisation - Ajouter le bouton "Ajouter une réponse" pour les éléments déjà présents dans la div
+            
             $('#questions-fields-list > div').each(function() {
-                addAnswerButton($(this)); // Ajout du bouton "Ajouter une réponse" pour les éléments déjà présents
+                addAnswerButton($(this)); // Ajout du bouton "Ajouter une réponse" pour les container de question déja présents
             });
         }
     }
@@ -278,21 +279,7 @@ $(document).ready(function() { // Attend que le document (base.html.twig) soit c
     initMutationObserver();
 
 
-    function initializeEditForm() {
-        // Parcourir les réponses pré-remplies pour attribuer les gestionnaires d'événements
-        $('[name^="quiz[questions]"][type="radio"]').on('change', function() {
-            // Votre logique de gestion de la sélection de la bonne réponse ici...
-        });
     
-      
-      
-    
-        // ... Autres initialisations pour les fonctionnalités JavaScript nécessaires
-    }
-    
-    $(document).ready(function() {
-        initializeEditForm();
-        // Votre autre logique existante ici...
-    });
+  
 
 });

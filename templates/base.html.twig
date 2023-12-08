@@ -62,6 +62,9 @@
                     {# {{ dump() }} #}
                 
                     {% block body %}
+                        {% for error in app.flashes('error') %}
+                            <div class="alert alert-danger" role="alert">{{ error }}</div>
+                        {% endfor %}
                     {% endblock %} 
                 
             </main>
