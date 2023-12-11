@@ -1,0 +1,95 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello QuizController!{% endblock %}
+
+{% block body %}
+{% set message = '' %} {# Initialisation de la variable message à l'extérieur de la boucle #}
+    <section class="section-slide">
+        <div class="content">
+           
+            <div class="swiper">
+                {% for category in allCategories %}
+
+                    <div class="info">
+                        <h2>{{ category.label }}</h2>
+                        <p>
+                            Test swipper slide js <span class="quiz-night">sa doit ètre jolie</span>
+                        </p>
+                        <button class="btn-play"> Join</button>
+                    </div> 
+                
+                    <div class="swiper-wrapper">
+                        {% for quiz in category.quizzes %}
+
+                        
+                        {% set lastGameDate = null %}
+                        {% set score = null %}
+
+                        {% for game in quiz.games %} {# boucle sur les parties jouer #}
+                            
+                            {% if game.userId.id == app.user.id %} {#condition si le joueur connecter a bien une partit enregistrer#}
+
+                                {% if loop.first %}
+
+                                    {% set lastGameDate = game.dateGame %} {# on stock la date de la partie dans une variable#}
+                                    {% set score = gameScore.score %}
+                                {% elseif game.dateGame > lastGameDate %} {# si la date de la partie est supérieur a la dernière partie jouer#}
+
+                                    {% set lastGameDate = game.dateGame %}{# on enregistre la nouvelle date #}
+                                    {% set score = gameScore.score %} {# on stoke le score dans la variable score #}
+                                {% endif %}
+
+                            {% endif %}{# fin {% if game.userId.id == app.user.id %}  #}
+                    
+                        {% endfor %} {# {% for game in quiz.games %} #}
+
+                        {% if lastGameDate is not null %} {# si la variable a bien été set et donc qu'une partit existe #}
+                    
+                            {% if score >= 80 %} {# condition si score est supérieur a 80% stock se message #}
+                                {% set message = "Vous avez validé ce quiz en obtenant " ~ score ~ "%" ~ " de bonne réponse . Vous pourrez quand même le rejouer et tenter de faire mieux si possible." %}
+                            {% else %} {# sinon on stock se message #}
+                                {% set message = "Vous n'avez pas validé ce quiz en obtenant " ~ score ~ "% de bonne réponse." %}
+                            {% endif %} {# fin {% if score >= 80 %} #}
+
+                            {% set diffDays = date('now').diff(lastGameDate) %} {# on fait la différence de la date de la partie + 7 j par rapport a la date du jours #}
+                                
+                            {% if diffDays.days > 7 %} {# si le résultat est inférieur ou égal a 0  il peux rejouer le quiz et affiche le bon message #}
+                                {# <p>{{ message }}</p> #}
+                                {# lien pour jouer le quiz#}
+                               {% set playLink = path('app_play', {'id': quiz.id}) %}
+
+                            {% else %} {# sinon il doit attendre le nombre de jour restant#}
+                                {# <p>{{ message }}</p> #}
+                                {% set nbDay = lastGameDate|date_modify("+7 day").diff(date('now')) %}
+                                {# message avec nombre de jour restant avant de pouvoir rejouer#}
+                               {% set playLink = path('app_play', {'id': quiz.id}) %}
+
+                            {% endif %} {# fin {% if diffDays.days > 7 %}#}
+
+                        {% else %} {# si aucune partie enregistrer pour se quiz il peux le jouer #}
+                            {# lien vers la page pour jouer le quiz#}
+                           {% set playLink = path('app_play', {'id': quiz.id}) %}
+
+                        {% endif %} {# fin {% if lastGameDate is not null %} #}
+
+
+                            <div class="swiper-slide" style="background: linear-gradient(to top, #0f2027, #203a4300, #2c536400); background-image: url('{{ asset('uploads/img/category/' ~ category.picture) }}'); background-repeat: no-repeat; background-position: 50% 50%; background-size: cover;">
+                                {% if quiz in app.user.favoritesQuizzes %}
+                                    <h2>{{ quiz.title }}  <a href="{{ path('app_remove_favorite', {'id': quiz.id}) }}"><i class="fa-solid fa-star fa-xl" style="color: #dbc906;"></i></a> {{message}} <a href="{{playLink}}"></a></h2>
+                                {% else %}
+                                    <h2>{{ quiz.title }} <a href="{{ path('app_add_favorite', {'id': quiz.id}) }}"><i class="fa-regular fa-star fa-xl" style="color: #dbc906;"></i></a> {{message}} <a href="{{playLink}}"></a> </h2> 
+                                {% endif %}
+                                
+                                
+                            </div>
+                        
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+       
+    </section>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+                <script src="{{ asset('js/swipper.js') }}"></script>
+{% endblock %}

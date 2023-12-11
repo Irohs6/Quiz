@@ -34,10 +34,31 @@ class QuizController extends AbstractController
         if (!$this->getUser()) {
             $gamesPlay = "";
         }else{
-            $gamesPlay = $gameRepository->findBy(['userId'=>$this->getUser()->getId()]);
-            $gameScore = $gameRepository->findOneBy(['userId'=>$this->getUser()->getId()],['score'=> 'DESC' ]);
+            $gamesPlay = $gameRepository->findBy(['userId'=>$this->getUser()->getId()]);// récupère tous les Game d'un user
+            $gameScore = $gameRepository->findOneBy(['userId'=>$this->getUser()->getId()],['score'=> 'DESC' ]); // récupère seullement la Game avec le meilleur score 
         }
         return $this->render('quiz/home_quiz.html.twig', [
+            'allTheme' => $allTheme,
+            'allCategories' => $allCategories,
+            'allLevel'=> $allLevel,
+            'gamesPlay' => $gamesPlay,
+            'gameScore' => $gameScore
+        ]);
+    }
+    //futur home de quiz en cour de création
+    #[Route('home/test', name: 'app_home_test')]
+    public function home_test_quiz(ThemeRepository $themeRepository, CategoryRepository $categoryRepository, LevelRepository $levelRepository, GameRepository $gameRepository): Response
+    {
+        $allTheme = $themeRepository->findAll();//recupère toute les donné de la table theme
+        $allCategories = $categoryRepository->findAll();//recupère toute les donné de la table category
+        $allLevel = $levelRepository->findAll();//recupère toute les donné de la table level
+        if (!$this->getUser()) {
+            $gamesPlay = "";
+        }else{
+            $gamesPlay = $gameRepository->findBy(['userId'=>$this->getUser()->getId()]);// récupère tous les Game d'un user
+            $gameScore = $gameRepository->findOneBy(['userId'=>$this->getUser()->getId()],['score'=> 'DESC' ]); // récupère seullement la Game avec le meilleur score 
+        }
+        return $this->render('quiz/home_test.html.twig', [
             'allTheme' => $allTheme,
             'allCategories' => $allCategories,
             'allLevel'=> $allLevel,
@@ -57,20 +78,20 @@ class QuizController extends AbstractController
             'titre' => $quiz->getTitle(),//ajoute le titre du quiz
             'questions' => [], // Initialise le tableau des questions 
         ];
-        
+        // boucle sur la collection de question d'un quiz
         foreach ($quiz->getQuestions() as $question) {
             if ($question->getLink()) {
-                $link = $question->getLink();
+                $link = $question->getLink(); // si $link est vrais le stock dans la variable
             }else{
-                $link = '';
+                $link = ''; // si $link est faut set la varaible avec une chaine vide
             }
             $questionData = [
-                'id' => $question->getId(),//ajoute l'id de la question
-                'question' => $question->getSentence(),//ajoute l'intitulé de la question
-                'link' => $link,
-                'reponses' => [], // Initialise le tableau des réponses 
+                'id' => $question->getId(),//ajoute l'id de la question au tableau questionData
+                'question' => $question->getSentence(),//ajoute l'intitulé de la question au tableau questionData
+                'link' => $link, // ajoute le link ou la chaine de caractère vide au tableau questionData
+                'reponses' => [], // Initialise le tableau des réponses au tableau questionData
             ];
-        
+            
             foreach ($question->getAnswers() as $reponse) {
                 // Ajoutez les données de chaque réponse dans le tableau des réponses
                 $questionData['reponses'][] = [
@@ -94,17 +115,21 @@ class QuizController extends AbstractController
         // $level = $quiz->getLevel(); // on récupère le niveaux de difficulté 
         // $scoreCoeff = $level->getScoreCoef(); //on récupère le coefficient
 
-        $gamePlay = $gameRepository->findOneBy(['userId'=>$this->getUser()->getId(), 'quiz' => $quiz->getId()]);
+        $gamePlay = $gameRepository->findOneBy(['userId'=>$this->getUser()->getId(), 'quiz' => $quiz->getId()], ['dateGame'=> 'DESC' ]); // récupère la dernière partit de l'uttilisateur connecté sur ce quiz
+        // si une partie existe
         if ($gamePlay) {
-             $date = $gamePlay->getDateGame();
-             $dateModify = date_modify($date ,"+7 day");
+             $date = $gamePlay->getDateGame(); // Stocke la date dans une variable
+             $dateModify = date_modify($date ,"+7 day"); // modify la date de 7 jours
         }
        
-        $now = new DateTime();
+        $now = new DateTime(); // stocke la date du jour
 
+        //si le quiz est vérifier et si le role est modérateur ou admin
         if ($quiz->isIsVerified()|| $this->isGranted('ROLE_MODERATOR')) {
+            // si il n'y a pas de partie jouer ou si la date du jours est égal a la date modifier ou si le role est moderateur ou admin
             if (!$gamePlay || $now == $dateModify || $this->isGranted('ROLE_MODERATOR')){
-                $allGameUser = $gameRepository->findBy(['userId'=>$this->getUser()->getId(), 'quiz' => $quiz->getId()],['score'=> 'ASC']);
+
+                $allGameUser = $gameRepository->findBy(['userId'=>$this->getUser()->getId(), 'quiz' => $quiz->getId()],['score'=> 'ASC']); // récupère toute les partit du user sur se quiz 
                
                 //si le formQuizulaire est remplie et valide
                 if ($formQuiz->isSubmitted() && $formQuiz->isValid()) {
