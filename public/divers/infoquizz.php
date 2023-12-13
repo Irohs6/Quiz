@@ -1,241 +1,114 @@
+{% extends 'base.html.twig' %}
 
-<div id="quiz_questions___name__">
-  <div>
-    <label for="quiz_questions___name___sentence" class="required">
-      Question
-    </label>
-    <input type="text" id="quiz_questions___name___sentence" name="quiz[questions][__name__][sentence]" required="required" class="form-control" />
-  </div>
-  <div>
-    <label class="required">
-      Lien ver la documentation officielle
-    </label>
-    <div id="quiz_questions___name___link">
-      <div>
-        <input type="text" id="quiz_questions___name___link_url" name="quiz[questions][__name__][link][url]" required="required" class="form-control" inputmode="url" />
-      </div>
-    </div>
-  </div>
-  <div>
-    <div id="quiz_questions___name___answers" data-prototype="&lt;div&gt;&lt;label class=&quot;required&quot;&gt;__name__label__&lt;/label&gt;&lt;div id=&quot;quiz_questions___name___answers___name__&quot;&gt;&lt;div&gt;&lt;label for=&quot;quiz_questions___name___answers___name___sentence&quot; class=&quot;required&quot;&gt;Réponse&lt;/label&gt;&lt;input type=&quot;text&quot; id=&quot;quiz_questions___name___answers___name___sentence&quot; name=&quot;quiz[questions][__name__][answers][__name__][sentence]&quot; required=&quot;required&quot; class=&quot;form-control&quot; /&gt;&lt;/div&gt;&lt;div&gt;&lt;div id=&quot;quiz_questions___name___answers___name___isRight&quot;&gt;&lt;input type=&quot;radio&quot; id=&quot;quiz_questions___name___answers___name___isRight_0&quot; name=&quot;quiz[questions][__name__][answers][__name__][isRight]&quot; required=&quot;required&quot; value=&quot;1&quot; /&gt;&lt;label for=&quot;quiz_questions___name___answers___name___isRight_0&quot; class=&quot;required&quot;&gt;Bonne réponse&lt;/label&gt;&lt;input type=&quot;radio&quot; id=&quot;quiz_questions___name___answers___name___isRight_1&quot; name=&quot;quiz[questions][__name__][answers][__name__][isRight]&quot; required=&quot;required&quot; value=&quot;0&quot; /&gt;&lt;label for=&quot;quiz_questions___name___answers___name___isRight_1&quot; class=&quot;required&quot;&gt;Mauvaise réponse&lt;/label&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;">
+{% block title %}Hello QuizController!{% endblock %}
 
-    </div>
-  </div>
-</div>
+{% block body %}
+{% set message = '' %} {# Initialisation de la variable message à l'extérieur de la boucle #}
+{% set playLink = '' %} {# Initialisation de la variable message à l'extérieur de la boucle #}
+    <section class="section-slide">
+        <div class="content">
+           
+            {% for category in allCategories %}
+                <div class="info">
+                    <h2>{{ category.label }}</h2>
+                </div>  
 
-<div id="quiz_questions_0">
+                <div class="swiper">
 
-  <div>
+                
+                    <div class="swiper-wrapper">
+                        {% for quiz in category.quizzes %}
 
-    <label for="quiz_questions_0_sentence" class="required">
+                        
+                            {% if app.user %}  {# si le user est connecter#}
 
-      Question
+                                
+                                {% set lastGameDate = null %}
+                                {% set score = null %}
 
-    </label>
+                                {% for game in quiz.games %} {# boucle sur les parties jouer #}
+                                    
+                                    {% if game.userId.id == app.user.id %} {#condition si le joueur connecter a bien une partit enregistrer#}
 
-    <input type="text" id="quiz_questions_0_sentence" name="quiz[questions][0][sentence]" required="required" class="form-control" />
+                                        {% if loop.first %}
 
-  </div>
+                                            {% set lastGameDate = game.dateGame %} {# on stock la date de la partie dans une variable#}
+                                            {% if app.user.games %}
+                                                {% set score = gameScore.score %} {# on stoke le score dans la variable score #}
+                                            {% else %}
+                                                {% set score = "Vous n'avez pas encore enregistré de score sur se quiz" %} {# on stoke le score dans la variable score #}
+                                            {% endif %}
+                                        {% elseif game.dateGame > lastGameDate %} {# si la date de la partie est supérieur a la dernière partie jouer#}
 
-  <div>
+                                            {% set lastGameDate = game.dateGame %}{# on enregistre la nouvelle date #}
+                                            {% if app.user.games %}
+                                                {% set score = gameScore.score %} {# on stoke le score dans la variable score #}
+                                            {% else %}
+                                                {% set score = "Vous n'avez pas encore enregistré de score sur se quiz" %} {# on stoke le score dans la variable score #}
+                                            {% endif %}
+                                        {% endif %}
 
-    <label class="required">
+                                    {% endif %}{# fin {% if game.userId.id == app.user.id %}  #}
+                            
+                                {% endfor %} {# {% for game in quiz.games %} #}
 
-      Lien ver la documentation officielle
+                                {% if lastGameDate is not null %} {# si la variable a bien été set et donc qu'une partit existe #}
+                            
+                                    {% if score >= 80 %} {# condition si score est supérieur a 80% stock se message #}
+                                        {% set message = "Vous avez validé ce quiz en obtenant " ~ score ~ "%" ~ " de bonne réponse . Vous pourrez quand même le rejouer et tenter de faire mieux si possible." %}
+                                    {% else %} {# sinon on stock se message #}
+                                        {% set message = "Vous n'avez pas validé ce quiz en obtenant " ~ score ~ "% de bonne réponse." %}
+                                    {% endif %} {# fin {% if score >= 80 %} #}
 
-    </label>
+                                    {% set diffDays = date('now').diff(lastGameDate) %} {# on fait la différence de la date de la partie + 7 j par rapport a la date du jours #}
+                                        
+                                    {% if diffDays.days > 7 %} {# si le résultat est inférieur ou égal a 0  il peux rejouer le quiz et affiche le bon message #}
+                                        <p>{{ message }}</p>
+                                        {# lien pour jouer le quiz#}
+                                        <a class="play" href="{{ path('app_play', {'id': quiz.id}) }}">Jouer</a>
 
-    <div id="quiz_questions_0_link">
+                                    {% else %} {# sinon il doit attendre le nombre de jour restant#}
+                                        <p>{{ message }}</p>
+                                        {% set nbDay = lastGameDate|date_modify("+7 day").diff(date('now')) %}
+                                        {# message avec nombre de jour restant avant de pouvoir rejouer#}
+                                        <p>Vous pourrez rejouer ce quiz dans {{ nbDay.days }} jour(s)</p>
 
-      <div>
+                                    {% endif %} {# fin {% if diffDays.days > 7 %}#}
 
-        <input type="text" id="quiz_questions_0_link_url" name="quiz[questions][0][link][url]" required="required" class="form-control" inputmode="url" />
+                                {% else %} {# si aucune partie enregistrer pour se quiz il peux le jouer #}
+                                    {# lien vers la page pour jouer le quiz#}
+                                    <a class="play" href="{{ path('app_play', {'id': quiz.id}) }}">Jouer</a>
 
-      </div>
+                                {% endif %} {# fin {% if lastGameDate is not null %} #}
 
-    </div>
+                                        {# </article> #}
 
-  </div>
+                            {% endif %} {# fin {% if app.user %}  #}
+                    
+                 
 
-  <div>
-    <div id="quiz_questions_0_answers" data-prototype="&lt;div&gt;&lt;label class=&quot;required&quot;&gt;0label__&lt;/label&gt;&lt;div id=&quot;quiz_questions_0_answers_0&quot;&gt;&lt;div&gt;&lt;label for=&quot;quiz_questions_0_answers_0_sentence&quot; class=&quot;required&quot;&gt;Réponse&lt;/label&gt;&lt;input type=&quot;text&quot; id=&quot;quiz_questions_0_answers_0_sentence&quot; name=&quot;quiz[questions][0][answers][0][sentence]&quot; required=&quot;required&quot; class=&quot;form-control&quot; /&gt;&lt;/div&gt;&lt;div&gt;&lt;div id=&quot;quiz_questions_0_answers_0_isRight&quot;&gt;&lt;input type=&quot;radio&quot; id=&quot;quiz_questions_0_answers_0_isRight_0&quot; name=&quot;quiz[questions][0][answers][0][isRight]&quot; required=&quot;required&quot; value=&quot;1&quot; /&gt;&lt;label for=&quot;quiz_questions_0_answers_0_isRight_0&quot; class=&quot;required&quot;&gt;Bonne réponse&lt;/label&gt;&lt;input type=&quot;radio&quot; id=&quot;quiz_questions_0_answers_0_isRight_1&quot; name=&quot;quiz[questions][0][answers][0][isRight]&quot; required=&quot;required&quot; value=&quot;0&quot; /&gt;&lt;label for=&quot;quiz_questions_0_answers_0_isRight_1&quot; class=&quot;required&quot;&gt;Mauvaise réponse&lt;/label&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;">
 
-  </div>
-  </div>
-</div>
-
-"prototype"
-<div id="quiz_questions_0_answers" data-prototype="
-  <div>
-
-    <label class=&quot;required&quot;>
-
-      0label__
-
-    </label>
-
-    <div id=&quot;quiz_questions_0_answers_0&quot;>
-
-      <div>
-
-        <label for=&quot;quiz_questions_0_answers_0_sentence&quot; class=&quot;required&quot;>
-
-          Sentence
-
-        </label>
-
-        <input type=&quot;text&quot; id=&quot;quiz_questions_0_answers_0_sentence&quot; name=&quot;quiz[questions][0][answers][0][sentence]&quot; required=&quot;required&quot; class=&quot;form-control&quot;  />
-
-      </div>
-
-      <div>
-
-        <div id=&quot;quiz_questions_0_answers_0_isRight&quot;>
-
-          <input type=&quot;radio&quot; id=&quot;quiz_questions_0_answers_0_isRight_0&quot; name=&quot;quiz[questions][0][answers][0][isRight]&quot; required=&quot;required&quot; value=&quot;1&quot; />
-
-            <label for=&quot;quiz_questions_0_answers_0_isRight_0&quot; class=&quot;required&quot;>
-
-              Bonne réponse
-
-            </label>
-
-          <input type=&quot;radio&quot; id=&quot;quiz_questions_0_answers_0_isRight_1&quot; name=&quot;quiz[questions][0][answers][0][isRight]&quot; required=&quot;required&quot; value=&quot;0&quot; />
-
-          <label for=&quot;quiz_questions_0_answers_0_isRight_1&quot; class=&quot;required&quot;>
-
-            Mauvaise réponse
-
-          </label>
-
+                            <div class="swiper-slide" style="background: linear-gradient(to top, #0f2027, #203a43, #2c5364);  background-repeat: no-repeat; background-position: 50% 50%; background-size: cover;">
+                                {% if quiz in app.user.favoritesQuizzes %}
+                                    <h2>{{ quiz.title }}  <a href="{{ path('app_remove_favorite', {'id': quiz.id}) }}"><i class="fa-solid fa-star fa-xl" style="color: #dbc906;"></i></a></h2>
+                                {% else %}
+                                    <h2>{{ quiz.title }} <a href="{{ path('app_add_favorite', {'id': quiz.id}) }}"><i class="fa-regular fa-star fa-xl" style="color: #dbc906;"></i></a></h2> 
+                                {% endif %}
+                                
+                                
+                                  
+                                    <p>{{message}}</p> 
+                                 
+                            </div>
+                        
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                {% endfor %}
         </div>
-
-      </div>
-
-    </div>
-
-  </div>">
-
-</div>
-
-
-
-
-newForm 
-<div>
-  <div id="quiz_questions_0_answers_0">
-    <div>
-      <label for="quiz_questions_0_answers_0_sentence" class="required">
-        Réponse
-      </label>
-      <input type="text" id="quiz_questions_0_answers_0_sentence" name="0[0][sentence]" required="required" class="form-control" />
-    </div>
-  <div>
-
-  <div id="quiz_questions_0_answers_0_isRight">
-    <input type="radio" id="quiz_questions_0_answers_0_isRight_0" name="0[0][isRight]" required="required" value="1" />
-    <label for="quiz_questions_0_answers_0_isRight_0" class="required">
-      Bonne réponse
-    </label>
-    <input type="radio" id="quiz_questions_0_answers_0_isRight_1" name="0[0][isRight]" required="required" value="0" />
-    <label for="quiz_questions_0_answers_0_isRight_1" class="required">
-      Mauvaise réponse
-    </label>
-  </div>
-</div>
-</div>
-</div>
-
-
-newForm 
-<div>
-  <div id="quiz_questions_0_answers_0">
-    <div>
-      <label for="quiz_questions_0_answers_0_sentence" class="required">
-        Réponse
-      </label>
-      <input type="text" id="quiz_questions_0_answers_0_sentence" name="undefined[sentence]" required="required" class="form-control" />
-    </div>
-    <div>
-      <div id="quiz_questions_0_answers_0_isRight">
-        <input type="radio" id="quiz_questions_0_answers_0_isRight_0" name="undefined[isRight]" required="required" value="1" />
-        <label for="quiz_questions_0_answers_0_isRight_0" class="required">
-          Bonne réponse
-        </label>
-        <input type="radio" id="quiz_questions_0_answers_0_isRight_1" name="undefined[isRight]" required="required" value="0" />
-        <label for="quiz_questions_0_answers_0_isRight_1" class="required">
-          Mauvaise réponse
-        </label>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div id="quiz_questions_0_answers" data-prototype=
-  <div>
-    <label class=&quot;required&quot;>
-      0label__
-    </label>
-    <div id=&quot;quiz_questions_0_answers_0&quot;>
-      <div>
-        <label for=&quot;quiz_questions_0_answers_0_sentence&quot; class=&quot;required&quot;>
-          Réponse
-        </label>
-        <input type=&quot;text&quot; id=&quot;quiz_questions_0_answers_0_sentence&quot; name=&quot;quiz[questions][0][answers][0][sentence]&quot; required=&quot;required&quot; class=&quot;form-control&quot; />
-      </div>
-      <div>
-        <div id=&quot;quiz_questions_0_answers_0_isRight&quot;>
-          <input type=&quot;radio&quot; id=&quot;quiz_questions_0_answers_0_isRight_0&quot; name=&quot;quiz[questions][0][answers][0][isRight]&quot; required=&quot;required&quot; value=&quot;1&quot; />
-          <label for=&quot;quiz_questions_0_answers_0_isRight_0&quot; class=&quot;required&quot;>
-            Bonne réponse
-          </label>
-          <input type=&quot;radio&quot; id=&quot;quiz_questions_0_answers_0_isRight_1&quot; name=&quot;quiz[questions][0][answers][0][isRight]&quot; required=&quot;required&quot; value=&quot;0&quot; />
-          <label for=&quot;quiz_questions_0_answers_0_isRight_1&quot; class=&quot;required&quot;>
-            Mauvaise réponse
-          </label>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<div id="quiz_questions___name__"><div><label for="quiz_questions___name___sentence" class="required">Question</label><input type="text" id="quiz_questions___name___sentence" name="quiz[questions][__name__][sentence]" required="required" class="form-control" /></div><div><label class="required">Lien ver la documentation officielle</label><div id="quiz_questions___name___link"><div><input type="text" id="quiz_questions___name___link_url" name="quiz[questions][__name__][link][url]" required="required" class="form-control" inputmode="url" /></div></div></div><div><div id="quiz_questions___name___answers" data-prototype="&lt;div&gt;&lt;label class=&quot;required&quot;&gt;__name__label__&lt;/label&gt;&lt;div id=&quot;quiz_questions___name___answers___name__&quot;&gt;&lt;div&gt;&lt;label for=&quot;quiz_questions___name___answers___name___sentence&quot; class=&quot;required&quot;&gt;Réponse&lt;/label&gt;&lt;input type=&quot;text&quot; id=&quot;quiz_questions___name___answers___name___sentence&quot; name=&quot;quiz[questions][__name__][answers][__name__][sentence]&quot; required=&quot;required&quot; class=&quot;form-control&quot; /&gt;&lt;/div&gt;&lt;div&gt;&lt;div id=&quot;quiz_questions___name___answers___name___isRight&quot;&gt;&lt;input type=&quot;radio&quot; id=&quot;quiz_questions___name___answers___name___isRight_0&quot; name=&quot;quiz[questions][__name__][answers][__name__][isRight]&quot; required=&quot;required&quot; value=&quot;1&quot; /&gt;&lt;label for=&quot;quiz_questions___name___answers___name___isRight_0&quot; class=&quot;required&quot;&gt;Bonne réponse&lt;/label&gt;&lt;input type=&quot;radio&quot; id=&quot;quiz_questions___name___answers___name___isRight_1&quot; name=&quot;quiz[questions][__name__][answers][__name__][isRight]&quot; required=&quot;required&quot; value=&quot;0&quot; /&gt;&lt;label for=&quot;quiz_questions___name___answers___name___isRight_1&quot; class=&quot;required&quot;&gt;Mauvaise réponse&lt;/label&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;"></div></div></div>
-
-newWidget2 
-<div id="quiz_questions_0"><div><label for="quiz_questions_0_sentence" class="required">Question</label><input type="text" id="quiz_questions_0_sentence" name="quiz[questions][0][sentence]" required="required" class="form-control" /></div><div><label class="required">Lien ver la documentation officielle</label><div id="quiz_questions_0_link"><div><input type="text" id="quiz_questions_0_link_url" name="quiz[questions][0][link][url]" required="required" class="form-control" inputmode="url" /></div></div></div><div><div id="quiz_questions_0_answers" data-prototype="&lt;div&gt;&lt;label class=&quot;required&quot;&gt;0label__&lt;/label&gt;&lt;div id=&quot;quiz_questions_0_answers_0&quot;&gt;&lt;div&gt;&lt;label for=&quot;quiz_questions_0_answers_0_sentence&quot; class=&quot;required&quot;&gt;Réponse&lt;/label&gt;&lt;input type=&quot;text&quot; id=&quot;quiz_questions_0_answers_0_sentence&quot; name=&quot;quiz[questions][0][answers][0][sentence]&quot; required=&quot;required&quot; class=&quot;form-control&quot; /&gt;&lt;/div&gt;&lt;div&gt;&lt;div id=&quot;quiz_questions_0_answers_0_isRight&quot;&gt;&lt;input type=&quot;radio&quot; id=&quot;quiz_questions_0_answers_0_isRight_0&quot; name=&quot;quiz[questions][0][answers][0][isRight]&quot; required=&quot;required&quot; value=&quot;1&quot; /&gt;&lt;label for=&quot;quiz_questions_0_answers_0_isRight_0&quot; class=&quot;required&quot;&gt;Bonne réponse&lt;/label&gt;&lt;input type=&quot;radio&quot; id=&quot;quiz_questions_0_answers_0_isRight_1&quot; name=&quot;quiz[questions][0][answers][0][isRight]&quot; required=&quot;required&quot; value=&quot;0&quot; /&gt;&lt;label for=&quot;quiz_questions_0_answers_0_isRight_1&quot; class=&quot;required&quot;&gt;Mauvaise réponse&lt;/label&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;"></div></div></div>
-
-
-prototype 
-<div><label class="required">0label__</label><div id="quiz_questions_0_answers_0"><div><label for="quiz_questions_0_answers_0_sentence" class="required">Réponse</label><input type="text" id="quiz_questions_0_answers_0_sentence" name="quiz[questions][0][answers][0][sentence]" required="required" class="form-control" /></div><div><div id="quiz_questions_0_answers_0_isRight"><input type="radio" id="quiz_questions_0_answers_0_isRight_0" name="quiz[questions][0][answers][0][isRight]" required="required" value="1" /><label for="quiz_questions_0_answers_0_isRight_0" class="required">Bonne réponse</label><input type="radio" id="quiz_questions_0_answers_0_isRight_1" name="quiz[questions][0][answers][0][isRight]" required="required" value="0" /><label for="quiz_questions_0_answers_0_isRight_1" class="required">Mauvaise réponse</label></div></div></div></div>
-
-
-1 https://symfony.com/what-is-symfony 51
-2 https://symfony.com/doc/current/the-fast-track/en/1-tools.html#composer 52
-3 https://symfony.com/doc/current/introduction/from_flat_php_to_symfony.html#from_flat_php-front-controller 55
-4 https://developer.mozilla.org/fr/docs/Learn/CSS/First_steps/What_is_CSS 4
-5 https://developer.mozilla.org/fr/docs/Web/HTML/Element/link 17
-6 https://developer.mozilla.org/fr/docs/Web/CSS/CSS_selectors 18, 20 , 23
-7 https://developer.mozilla.org/fr/docs/Web/CSS/CSS_colors/Applying_color 19
-8 https://developer.mozilla.org/fr/docs/Web/CSS/position 22
-9 https://developer.mozilla.org/fr/docs/Learn/CSS/Building_blocks/Values_and_units 24, 71
-10 https://developer.mozilla.org/fr/docs/Web/CSS/padding 25
-11 https://developer.mozilla.org/fr/docs/Web/CSS/background 21
-12 https://developer.mozilla.org/fr/docs/Web/HTML/Global_attributes/style 73
-13 https://developer.mozilla.org/fr/docs/Web/HTML/Element/table 74,
-
-
-$('input[type="radio"]').on('change', function() {
-                    let selectedRadio = $(this);
-                    console.log('selectedRadio', selectedRadio);
-                    let groupName = selectedRadio.attr('name');
-                    console.log('groupName', groupName);
-                    let isChecked = selectedRadio.prop('checked');
-                    console.log('isChecked', isChecked);
-                    // Si la réponse sélectionnée est une "Bonne réponse"
-                    if (isChecked && selectedRadio.val() === '1') { // Supposons que '1' représente la "Bonne réponse"
-                        $('input[type="radio"]').not(`[name="${groupName}"][value="0"]`).prop('checked', true); // Décocher la bonne réponse
-                        $('input[type="radio"][name^="${groupName}"][value!="0"]').prop('checked', true); // Cocher les mauvaises réponses
-                    }
-                });
-
+       
+    </section>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+                <script src="{{ asset('js/swipper.js') }}"></script>
+{% endblock %}

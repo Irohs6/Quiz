@@ -417,14 +417,7 @@ a{
     align-items: center;
 }
 /***********************************Profil***********************************/
-#img_profil{
-    height: 100px;
-    width: 100px;
-}
-.img_profil{
-    height: 100px;
-    width: 100px;
-}
+
 #container-profil{
     position: relative;
     display: flex;
@@ -666,7 +659,7 @@ th, td {
 
 .content{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 30px;
@@ -680,11 +673,11 @@ th, td {
 
 .info{
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
-    align-items: center;
-    max-width: 450px;
-    padding: 0.35px;
+    /* align-items: center; */
+    width: 750px;
+    /* padding: 0.35px; */
     text-align: justify;
 }
 
@@ -750,6 +743,9 @@ swiper-slide{
     box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
     border-radius: 10px;
 }
+swiper-slide:active{
+   
+}
 
 .swiper-slide span{
     position: absolute;
@@ -778,27 +774,6 @@ swiper-slide{
     margin: 0 0 20px 20px;
 }
 
-.swiper-slide:nth-child(1n){
-    background: linear-gradient(to top, #0f2027, #203a4300, #2c536400), url(../img/8.png) no-repeat 50% 50%/cover;
-}
-.swiper-slide:nth-child(2n){
-    background: linear-gradient(to top, #0f2027, #203a4300, #2c536400), url(../img/2.png) no-repeat 50% 50%/cover;
-}
-.swiper-slide:nth-child(3n){
-    background: linear-gradient(to top, #0f2027, #203a4300, #2c536400), url(../img/3.png) no-repeat 50% 50%/cover;
-}
-.swiper-slide:nth-child(4n){
-    background: linear-gradient(to top, #0f2027, #203a4300, #2c536400), url(../img/4.png) no-repeat 50% 50%/cover;
-}
-.swiper-slide:nth-child(5n){
-    background: linear-gradient(to top, #0f2027, #203a4300, #2c536400), url(../img/5.png) no-repeat 50% 50%/cover;
-}
-.swiper-slide:nth-child(6n){
-    background: linear-gradient(to top, #0f2027, #203a4300, #2c536400), url(../img/6.png) no-repeat 50% 50%/cover;
-}
-.swiper-slide:nth-child(7n){
-    background: linear-gradient(to top, #0f2027, #203a4300, #2c536400), url(../img/7.png) no-repeat 50% 50%/cover;
-}
 
 .circles{
     position: absolute;
@@ -902,7 +877,3 @@ swiper-slide{
     }
 }
 
-@media (max-widht: 750px){
-    .content 
-
-}
