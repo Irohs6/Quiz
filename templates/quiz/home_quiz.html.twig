@@ -74,11 +74,19 @@
                                                                     {% if loop.first %}
 
                                                                         {% set lastGameDate = game.dateGame %} {# on stock la date de la partie dans une variable#}
-                                                                        {% set score = gameScore.score %}
+                                                                        {% if app.user.games %}
+                                                                            {% set score = gameScore.score %} {# on stoke le score dans la variable score #}
+                                                                        {% else %}
+                                                                            {% set score = "Vous n'avez pas encore enregistré de score sur se quiz" %} {# on stoke le score dans la variable score #}
+                                                                        {% endif %}
                                                                     {% elseif game.dateGame > lastGameDate %} {# si la date de la partie est supérieur a la dernière partie jouer#}
 
                                                                         {% set lastGameDate = game.dateGame %}{# on enregistre la nouvelle date #}
-                                                                        {% set score = gameScore.score %} {# on stoke le score dans la variable score #}
+                                                                        {% if app.user.games %}
+                                                                            {% set score = gameScore.score %} {# on stoke le score dans la variable score #}
+                                                                        {% else %}
+                                                                            {% set score = "Vous n'avez pas encore enregistré de score sur se quiz" %} {# on stoke le score dans la variable score #}
+                                                                        {% endif %}
                                                                     {% endif %}
 
                                                                 {% endif %}{# fin {% if game.userId.id == app.user.id %}  #}

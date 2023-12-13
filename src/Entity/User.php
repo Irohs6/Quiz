@@ -49,7 +49,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $posts;
 
     #[ORM\OneToMany(mappedBy: 'userId', targetEntity: Game::class)]
-    private Collection $Games;
+    private Collection $games;
 
     #[ORM\OneToMany(mappedBy: 'userId', targetEntity: Quiz::class)]
     private Collection $quizzes;
@@ -64,7 +64,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->topics = new ArrayCollection();
         $this->posts = new ArrayCollection();
-        $this->Games = new ArrayCollection();
+        $this->games = new ArrayCollection();
         $this->quizzes = new ArrayCollection();
         $this->favoritesQuizzes = new ArrayCollection();
     }
@@ -240,13 +240,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getGames(): Collection
     {
-        return $this->Games;
+        return $this->games;
     }
 
     public function addGame(Game $game): static
     {
-        if (!$this->Games->contains($game)) {
-            $this->Games->add($game);
+        if (!$this->games->contains($game)) {
+            $this->games->add($game);
             $game->setUserId($this);
         }
 
@@ -255,7 +255,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeGame(Game $game): static
     {
-        if ($this->Games->removeElement($game)) {
+        if ($this->games->removeElement($game)) {
             // set the owning side to null (unless already changed)
             if ($game->getUserId() === $this) {
                 $game->setUserId(null);

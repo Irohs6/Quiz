@@ -1,4 +1,7 @@
 window.addEventListener("load", (event) => {
+  
+  
+
 
   const swiper = new Swiper('.swiper', {
       effect: "cards",
