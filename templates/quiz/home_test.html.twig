@@ -9,9 +9,9 @@
         <div class="content">
            
             {% for category in allCategories %}
-                <div class="info">
+            <h2 class="title-category">{{ category.label }}</h2>
+            <div class="info">
                     {# </div>   #}
-                    <h2>{{ category.label }}</h2>
                         <div class="show_info">
                         </div>
                     <div class="swiper">
@@ -61,20 +61,20 @@
                                             {% if lastGameDate is not null %} {# si la variable a bien été set et donc qu'une partit existe #}
                                         
                                                 {% if score >= 80 %} {# condition si score est supérieur a 80% stock se message #}
-                                                    {% set message = "Vous avez validé ce quiz en obtenant " ~ score ~ "%" ~ " de bonne réponse . Vous pourrez quand même le rejouer et tenter de faire mieux si possible." %}
+                                                    {% set message = "Vous avez validé le quiz <span class='quiz-night'>" ~ quiz.title ~ "</span> en obtenant " ~ score ~ "%" ~ " de bonne réponse . Vous pourrez quand même le rejouer et tenter de faire mieux si possible." %}
                                                 {% else %} {# sinon on stock se message #}
-                                                    {% set message = "Vous n'avez pas validé ce quiz en obtenant " ~ score ~ "% de bonne réponse." %}
+                                                    {% set message = "Vous n'avez pas validé le quiz <span class='quiz-night'>" ~ quiz.title ~ "</span> en obtenant " ~ score ~ "% de bonne réponse." %}
                                                 {% endif %} {# fin {% if score >= 80 %} #}
 
                                                 {% set diffDays = date('now').diff(lastGameDate) %} {# on fait la différence de la date de la partie + 7 j par rapport a la date du jours #}
                                                     
                                                 {% if diffDays.days > 7 %} {# si le résultat est inférieur ou égal a 0  il peux rejouer le quiz et affiche le bon message #}
-                                                    {# <p>{{ message }}</p> #}
+                                                    <p>{{ message|raw }}</p>
                                                     {# lien pour jouer le quiz#}
                                                     <a class="play" href="{{ path('app_play', {'id': quiz.id}) }}">Jouer</a>
 
                                                 {% else %} {# sinon il doit attendre le nombre de jour restant#}
-                                                    <p>{{ message }}</p>
+                                                    <p>{{ message|raw }}</p>
                                                     {% set nbDay = lastGameDate|date_modify("+7 day").diff(date('now')) %}
                                                     {# message avec nombre de jour restant avant de pouvoir rejouer#}
                                                     <p>Vous pourrez rejouer ce quiz dans {{ nbDay.days }} jour(s)'</p>

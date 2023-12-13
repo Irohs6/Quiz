@@ -25,40 +25,22 @@ window.addEventListener("load", (event) => {
   
       on: {
         slideChange: function () {
-          const activeSlideIndex = this.activeIndex;
-          const currentSlide = this.slides[activeSlideIndex];
-  
-          const infoPlayElement = currentSlide.querySelector('.info-play');
-          const InfoElements = document.querySelectorAll('.info');
-          console.log(InfoElements);
-          const showInfoElements = document.querySelectorAll('.show_info');
-        showInfoElements.forEach(showInfoElement =>{
-          if (infoPlayElement && showInfoElement) {
-            showInfoElement.innerHTML = ''; // Efface le contenu actuel de show_info
-            showInfoElement.appendChild(infoPlayElement.cloneNode(true)); // Déplace info-play sous show_info
-          }})
+            const activeSlide = this.slides[this.activeIndex];
+            const infoPlay = activeSlide.querySelector('.info-play');
+            const showInfo = activeSlide.closest('.info').querySelector('.show_info');
+
+            if (infoPlay && showInfo) {
+              showInfo.innerHTML = ''; // Effacer le contenu actuel de show_info
+
+              const infoPlayContent = infoPlay.innerHTML;
+              showInfo.innerHTML = infoPlayContent; // Déplacer le contenu de info-play sous show_info
+
+              // Cacher le contenu de info-play sur la diapositive actuelle
+              infoPlay.style.display = 'none';
+          }
         }
       }
     });
   });
-
 });
-// on: {
-//   slideChange: function() {
-//     // Récupérer l'index de la diapositive active
-//     let activeSlideIndex = this.activeIndex;
-//     console.log('activeSlideIndex',activeSlideIndex);
-//     // Récupérer tous les éléments .info-play et .show_info de la diapositive active
-//     let infoPlayElements = element.querySelectorAll('.info-play');
-//     let showInfoElements = document.querySelectorAll('.show_info');
-//     console.log('showInfoElements',showInfoElements);
-//     // Déplacer chaque élément .info-play sous .show_info à l'intérieur de chaque instance de Swiper
-//     infoPlayElements.forEach(infoPlay => {
-//       console.log(infoPlay);
-//       showInfoElements.forEach(showInfo => {
-//         console.log('showInfo',showInfo);
-//           showInfo.appendChild(infoPlay.cloneNode(true));
-//       });
-//     }); 
-//   }
-// }
+
