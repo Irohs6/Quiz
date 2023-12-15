@@ -4,9 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Quiz;
 use App\Entity\User;
-use App\Repository\CategoryRepository;
+use App\Entity\Theme;
+use App\Entity\Category;
 use App\Repository\QuizRepository;
 use App\Repository\UserRepository;
+use App\Repository\CategoryRepository;
 use App\Repository\QuestionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -58,18 +60,7 @@ class ModeratorController extends AbstractController
        
     }
 
-    #[Route('moderator/quiz/{id}/delete', name: 'delete_quiz')]
-    public function deleteQuiz(Quiz $quiz = null, EntityManagerInterface $entityManager): Response
-    {
-        foreach ($quiz->getQuestions() as $question) {
-            $quiz->removeQuestion($question);
-        }
-
-        $entityManager->remove($quiz);//suprime un quiz
-        $entityManager->flush();
-
-        return $this->redirectToRoute('app_list_quiz');
-    }
+    
 
 
 }

@@ -20,6 +20,7 @@
                         <a href="{{path('app_home_quiz')}}"><img class="logo" src="{{ asset('img/logo1.png') }}" alt="Logo de Quiz Quest"></a>
                     </figure>
                     <nav class="nav_base">
+                        <a href="">Les thèmes</a>
                         {# visible que par admin #}
                         {% if is_granted('ROLE_ADMIN') %} 
                         {# route vers panel admin #}
@@ -49,6 +50,7 @@
                             </div>
                         {% else %}
                             {# sinon connection et inscription #}
+                          
                             <a class="lien_nav" href="{{path('app_register')}}">S'inscrire</a>
                             <a class="lien_nav" href="{{path('app_login')}}">Connexion</a>
                         {% endif %}

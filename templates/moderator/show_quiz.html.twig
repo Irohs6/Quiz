@@ -11,6 +11,7 @@
             <section class="quiz-detail">
 
                 <h2>{{ quiz.category.label }}</h2>
+                <a class="add" href="{{path('delete_quiz', {'id': quiz.id})}}">Supprimer se quiz</a>
                 {# si quiz est vérifier  #}
                 {% if quiz.isVerified %}
                 {# affiche le message  #}

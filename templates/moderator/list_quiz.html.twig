@@ -10,7 +10,7 @@
         {% set categoryExist = category %} {# variable pour eviter les doublons#}
         {# affiche le nombre de quiz existant dans cet catégorie  #}
         <h2>Pour la categories {{category}} il y a  {{ category.quizzes|length }} quiz</h2>
-
+        <a href="{{ path('delete_category', {'id': category.id})}}">Supprimer Category</a>
         <button id="button{{nb}}" class="showButton">Afficher</button>
 
     <ul class="category" id="{{nb}}">

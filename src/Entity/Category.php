@@ -25,10 +25,10 @@ class Category
     #[ORM\JoinColumn(nullable: false)]
     private ?Theme $theme = null;
 
-    #[ORM\OneToMany(mappedBy: 'category', targetEntity: Quiz::class)]
+    #[ORM\OneToMany(mappedBy: 'category', targetEntity: Quiz::class, cascade: ['persist', 'remove'])]
     private Collection $quizzes;
 
-    #[ORM\OneToMany(mappedBy: 'category', targetEntity: Question::class)]
+    #[ORM\OneToMany(mappedBy: 'category', targetEntity: Question::class, cascade: ['persist', 'remove'])]
     private Collection $questions;
 
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Topic::class)]

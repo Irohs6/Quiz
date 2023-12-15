@@ -4,6 +4,9 @@
     box-sizing: 0;
 }
 /********************général***********************************/
+body{
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
 .add, .modify, .delete, .retirer, .detail{
     cursor: pointer;
     border: 2px solid #0B2443;
@@ -14,14 +17,9 @@
     text-align: center;
 }
 .add_quiz{
-    position: absolute;
-    left: 80px;
-    top: auto;
-    align-self: baseline;
-    color: black;
-    padding: 3px;
-    width: 200px;
+    
     text-align: center;
+    padding: 10px 20px;
     font-size: 1.1rem;
     font-weight: 700;
     border-radius: 4px;
@@ -29,7 +27,6 @@
     text-decoration: none;
     color: white;
     background: #0B2443;
-    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.1);
     border: 2px solid rgba(255, 255, 255, 0.3);
     cursor: pointer;
 }
@@ -114,46 +111,57 @@ footer{
 }
 
 /*****************************HOME**********************************/
+
 h1{
     font-weight: bold;
 }
+
 h3{
     text-align: center;
 }
+
 h2{
     text-align: center;
+    font-size: xx-large;
 }
+
 #hero{
-    margin-top: 15px;
     width: 85%;
-    height: 300px;
-    position: relative;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin-left: auto;
-    margin-right: auto;
-    border-bottom: 2px solid #1C418C;
+    height: 400px;
+    padding: 5em;
+    margin: auto;
 }
+
 .hero-text{
-    position: absolute;
-    top: 5%;
-    left: 10%;
-    display: flex;
-    align-items: center;
-    padding: 12px 0px;
-    width: 80%;
-    flex-direction: column;
-    padding-left: 12px;
     color: rgb(5, 5, 5);
     font-weight: bold;
     font-size: 30px;
     background-color: rgba(255, 255, 255, 0.4);
 }
 
+.hero-text h2{
+    padding: 1em;
+}
+
 a{
     color: black;
     text-decoration: none;
+}
+.link_nav_category:hover{
+
+}
+.paralax{
+      /* The image used */
+  background-image: url("../img/pexels-christina-morillo-1181298.jpg");
+
+  /* Set a specific height */
+  min-height: 300px;
+
+  /* Create the parallax scrolling effect */
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .title_theme{
@@ -164,40 +172,40 @@ a{
     width: 95%;
     margin: auto;  
 }
+
 /******************************* home slide swipper************************************************/
 .section-slide{
     position: relative;
     display: flex;
     justify-content: center;
-    align-items: center;
-    min-height: 100vh;
 }
+.title-quiz{
 
+}
+.title-category{
+    color: #014F86;
+}
 .content{
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
     justify-content: center;
-    align-items: center;
     gap: 30px;
     border-radius: 20px;
     backdrop-filter: blur(30px);
-    width: min(900px, 100%);
+    width: 95%;
     z-index: 10;
 }
-
+.box_quiz{
+    width: 45%;
+    padding-top: 1.2em;
+}
 .show_info{
-    display: flex;
     width: 30%;
     text-align: center;
-    flex-direction: column;
 }
 .info{
     display: flex;
-    flex-direction: row;
-    justify-content: center;
     align-items: center;
-    width: 800px;
-    text-align: justify;
     border-bottom: 2px solid #1C418C;
 }
 .info-play{
@@ -206,9 +214,10 @@ a{
 .info p{
     color: #0B2443;
     font-weight: 500;
-    font-size: 1rem;
+    font-size: 1.4rem;
     margin-bottom: 20px;
     line-height: 1.5;
+    text-align: justify;
 }
 
 .quiz-night{
@@ -216,9 +225,8 @@ a{
 }
 
 .play{
-    display: block;
-    padding: 10px 40px ;
-    margin: 10px auto;
+    text-align: center;
+    padding: 10px 20px;
     font-size: 1.1rem;
     font-weight: 700;
     border-radius: 4px;
@@ -226,7 +234,6 @@ a{
     text-decoration: none;
     color: white;
     background: #0B2443;
-    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.1);
     border: 2px solid rgba(255, 255, 255, 0.3);
     cursor: pointer;
 }
@@ -238,8 +245,8 @@ a{
 
 
 .swiper{
-    width: 250px;
-    height: 450px;
+    width: 300px;
+    height: 500px;
     padding: 50px 0;
 }
 
@@ -255,10 +262,10 @@ a{
     bottom: 0;
     left: 0;
     color: white;
-    font-weight: 400;
-    font-size: 1.1rem;
+    font-weight: 700;
+    font-size: 1.6em;
     line-height: 1.4;
-    margin: 0 0 20px 20px;
+    margin: 10px;
 }
 
 
@@ -293,17 +300,22 @@ a{
     margin: auto;
     display: flex;
     width: 90%;
-    flex-direction: row;
+   padding: 5em;
     justify-content: space-evenly;
-    padding: 20px 0px 20px 0px;
-    border-top: 2px solid #014F86 ;
+
+    /* border-top: 2px solid #014F86 ; */
     border-bottom: 2px solid #014F86 ;
 }
 .img_category_nav{
-    width: 60px;
-    height: 60px;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
 }
+.img_category_nav:hover{
+    width: 110px;
+    height: 110px;
+}
+
 .fig_category_nav{
     display: flex;
     width: 80px;
@@ -316,22 +328,24 @@ a{
 
 .fig_caption_category{
     color: #014F86;
+    font-weight: 700;
     text-align: center;
+    font-size: 1.3em;
 }
 .fig_caption_category_card{
     color: white;
     text-align: center;
 }
 .img_category_card{
-    width: 60px;
-    height: 60px;
+    width: 140px;
+    height: 150px;
     border-radius: 50%;
 }
 .fig_category_card{
     margin: auto;
     display: flex;
-    width: 80px;
-    height: 80px;
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
     flex-direction: column;
     align-items: center;
@@ -665,7 +679,11 @@ th, td {
   background-color: #f1f1f1;
   color: black;
 }
-
+/**********Admin***************/
+.admin-theme{
+    width: 80%;
+    margin: auto;
+}
 /******************** searchBar ********************/
 
 

@@ -17,7 +17,7 @@ window.addEventListener("load", (event) => {
             const showInfo = activeSlide.closest('.info').querySelector('.show_info');
 
             if (infoPlay && showInfo) {
-              showInfo.innerHTML = ''; // Effacer le contenu actuel de show_info
+              // showInfo.innerHTML = ''; // Effacer le contenu actuel de show_info
 
               const infoPlayContent = infoPlay.innerHTML;
               showInfo.innerHTML = infoPlayContent; // Déplacer le contenu de info-play sous show_info

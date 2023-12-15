@@ -8,42 +8,45 @@
 {% set playLink = '' %} {# Initialisation de la variable message à l'extérieur de la boucle #}
 
 
-    <div id="hero">
+    <section id="hero">
         <article class="hero-text">
-            <h1>Dev Quiz</h1>
+            <h2>APPRENEZ EN VOUS AMUSANT</h2>
                 <p>
-                    Bienvenue sur Dev Quiz, le site de quiz sur le thème du développement web. 
-                    Pour tous niveaux, du débutant au développeur confirmé, venez tester vos connaissances ou réviser vos bases. 
+                    Bienvenue sur Dev Quiz, le site de <strong>quiz</strong> sur le thème du <strong>développement web.</strong> 
+                    Pour tous niveaux, du débutant au développeur confirmé, venez tester vos <strong>connaissances</strong> ou <strong>réviser</strong> vos bases. 
                     Le tout en vous amusant !
                     
                 </p>
         </article>
-    </div>
+    </section>
+    <section class="paralax">
+        
+    </section>
     
-    
-        {% for theme in allTheme %} {# boucle pour afficher tous les theme disponible #}
+        {% for theme in allTheme %} {# boucle pour afficher tous les theme disponible#}
 
-            <h2 class="title_theme">{{ theme.label }}</h2> {# affiche le label du theme#}
+     
                 <nav id="nav_category" class="nav_category">
-                    {% for category_nav in theme.categories %} {# boucle pour obtenir tous les category d'un theme#}
+                     {% for category_nav in theme.categories %}  
+                   {# boucle pour obtenir tous les category d'un theme #}
                         <figure class="fig_category_nav"> {# création d'une seconde nav qui servira de lien vers les slide de chaque catégory#}
-                            <a href="#{{category_nav.id}}"><img class="img_category_nav" src="{{ asset('uploads/img/category/' ~ category_nav.picture) }}" alt="{{category_nav.label}}">
+                            <a class="link_nav_category" href="#{{category_nav.id}}"><img class="img_category_nav" src="{{ asset('uploads/img/category/' ~ category_nav.picture) }}" alt="{{category_nav.label}}">
                             <figcaption class="fig_caption_category">{{ category_nav.label}}</figcaption></a>
                         </figure>
                     {% endfor %}
                 </nav>
             <section class="section-slide"> {# slide faite avec swiper.js#}
                 <div class="content">
-                   
+                  
                     {% for category in allCategories %}{# boucle sur les categorie#}
-                    
+                <div class="box_quiz">   
                     <h2 id="{{category.id}}" class="title-category">{{ category.label }}</h2> {# affiche les label de chaque catégorie + rajoute un dans l'id du he l'id de la catégorie pour créer une ancre#}
 
                     <div class="info">
-                        <a class="add_quiz" href="{{path('new_quiz', {'idCategory': category.id})}}">Créer un Quiz</a>    
-                                <div class="show_info">
-                                   
-                                </div>
+                        <div class="show_info">
+                                
+                            
+                        </div>
                             <div class="swiper">
         
                             
@@ -54,12 +57,12 @@
                                             {% if app.user %}  {# si le user est connecter#}
                                                 <figure class="fig_category_card">
                                                     <img class="img_category_card" src="{{ asset('uploads/img/category/' ~ category.picture) }}" alt="{{category.label}}">
-                                                    <figcaption class="fig_caption_category_card">{{ category.label}}</figcaption>
+                                                    <figcaption class="fig_caption_category_card">{{ category.label|upper}}</figcaption>
                                                 </figure>
                                                 {% if quiz in app.user.favoritesQuizzes %}
-                                                    <h2>{{ quiz.title }}  <a href="{{ path('app_remove_favorite', {'id': quiz.id}) }}"><i class="fa-solid fa-star fa-xl" style="color: #dbc906;"></i></a></h2>
+                                                    <h2 class="title-quiz" >{{ quiz.title|upper }}  <a href="{{ path('app_remove_favorite', {'id': quiz.id}) }}"><i class="fa-solid fa-star fa-xl" style="color: #dbc906;"></i></a></h2>
                                                 {% else %}
-                                                    <h2>{{ quiz.title }} <a href="{{ path('app_add_favorite', {'id': quiz.id}) }}"><i class="fa-regular fa-star fa-xl" style="color: #dbc906;"></i></a></h2> 
+                                                    <h2 class="title-quiz" >{{ quiz.title|upper }} <a href="{{ path('app_add_favorite', {'id': quiz.id}) }}"><i class="fa-regular fa-star fa-xl" style="color: #dbc906;"></i></a></h2> 
                                                 {% endif %}
         
                                                 {% set lastGameDate = null %}
@@ -103,11 +106,13 @@
                                                         {% set diffDays = date('now').diff(lastGameDate) %} {# on fait la différence de la date de la partie + 7 j par rapport a la date du jours #}
                                                             
                                                         {% if diffDays.days > 7 %} {# si le résultat est inférieur ou égal a 0  il peux rejouer le quiz et affiche le bon message #}
+                                                            <a class="add_quiz" href="{{path('new_quiz', {'idCategory': category.id})}}">Créer un Quiz</a>
                                                             <p>{{ message|raw }}</p>
                                                             {# lien pour jouer le quiz#}
                                                             <a class="play" href="{{ path('app_play', {'id': quiz.id}) }}">Jouer</a>
-        
+
                                                         {% else %} {# sinon il doit attendre le nombre de jour restant#}
+                                                            <a class="add_quiz" href="{{path('new_quiz', {'idCategory': category.id})}}">Créer un Quiz</a>
                                                             <p>{{ message|raw }}</p>
                                                             {% set nbDay = lastGameDate|date_modify("+7 day").diff(date('now')) %}
                                                             {# message avec nombre de jour restant avant de pouvoir rejouer#}
@@ -117,6 +122,7 @@
         
                                                     {% else %} {# si aucune partie enregistrer pour se quiz il peux le jouer #}
                                                         {# lien vers la page pour jouer le quiz#}
+                                                        
                                                         {% set message = "Vous n'avez pas encore enregistré de partie sur le quiz : <span class='quiz-night'>" ~ quiz.title ~ ".</span>" %}
                                                         <p>{{ message|raw }}</p>
                                                         <a class="play" href="{{ path('app_play', {'id': quiz.id}) }}">Jouer</a>
@@ -137,7 +143,8 @@
                                     {% endfor %}
                                 </div>
                             </div>
-                        </div>    
+                        </div> 
+                    </div>    
                     {% endfor %}
                 </div>
                <a id="scroll_to_top" href="#nav_category"><i class="fa-solid fa-arrow-turn-up fa-xl"></i></a>

@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AdminController!{% endblock %}
+
+{% block body %}
+    <p> Bienvenue {{ app.user.username }}</p>
+
+    <nav class="admin">
+        <ul class="admin_theme">
+            <h4>Theme</h4>
+            <li>
+                <a href="{{path('list_theme')}}">Liste Theme</a>
+            </li>
+            <li>
+                <a href="">Ajouter un Theme</a>
+            </li>
+        </ul>  
+
+        <ul class="admin_category"> 
+            <h4>Category</h4> 
+            <li>
+                <a href="">Liste Category</a>
+            </li>
+            <li>
+                <a href="">Ajouter une Categorie</a>
+            </li>
+        </ul>
+
+        <ul class="admin_quiz">
+            <h4>Quiz</h4>
+            <li>
+                <a href="">Liste des Quiz</a>
+            </li>
+            <li>
+                <a href="">Ajouter un Quiz</a>
+            </li>
+        </ul>
+
+        <ul class="admin_list_user">
+            <h4>User</h4>
+            <li>
+                {# lien vers la liste des utilisateur #}
+                <a href="{{path('app_userManagement')}}">Liste User</a>
+            </li>
+        </ul>
+    </nav>
+{% endblock %}

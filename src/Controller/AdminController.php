@@ -2,9 +2,15 @@
 
 namespace App\Controller;
 
+use App\Entity\Quiz;
 use App\Entity\User;
+use App\Entity\Theme;
+use App\Form\ThemeType;
+use App\Entity\Category;
 use App\Repository\UserRepository;
+use App\Repository\ThemeRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -61,5 +67,80 @@ class AdminController extends AbstractController
         return $this->redirectToRoute('app_userManagement');
     }
 
+    #[Route('admin/create/theme', name: 'new_theme')]
+    #[Route('admin/theme/edit/{id}', name: 'edit_theme')]
+    public function createEditTheme(Theme $theme = null, EntityManagerInterface $entityManager, Request $request): Response
+    {
+        //si theme n'existe pas 
+        if (!$theme) {
+            $theme = new Theme;//on créer une nouvelle instance de theme
+        }
+
+        $formNewTheme = $this->createForm(ThemeType::class, $theme);//crer le formulaire
+
+        $formNewTheme->handleRequest($request);
+       
+        //si le formulaire de Quiz est remplie et valide
+        if ($formNewTheme->isSubmitted() && $formNewTheme->isValid()) {
+            //récupère les donné du formulaire  
+            $formNewTheme->getData();
+            // prepare PDO(prepare la requete Insert ou Update)
+            $entityManager->persist($theme);
+            // execute PDO(la requete Insert ou Update)
+            $entityManager->flush();
+            //redirige vers la list des theme
+            return $this->redirectToRoute('list_theme');
+        }
+
+        return $this->render('admin/new_edit_theme.html.twig', [
+            'formNewTheme' => $formNewTheme,
+            'edit' => $theme->getId(),
+            'theme' =>$theme,
+        ]);
+    }
+
+    //pour afficher la liste des themes
+    #[Route('moderator/list/theme', name: 'list_theme')]
+    public function listTheme(ThemeRepository $themeRepository): Response
+    {
+        $themes = $themeRepository->findAll();
+    
+        return $this->render('theme/list_theme.html.twig', [
+            'themes' =>$themes
+        ]);
+    }
+     
+    #[Route('admin/quiz/{id}/delete', name: 'delete_quiz')]
+    public function deleteQuiz(Quiz $quiz, EntityManagerInterface $entityManager): Response
+    {
+        foreach ($quiz->getQuestions() as $question) {
+            $quiz->removeQuestion($question);
+        }
+
+        $entityManager->remove($quiz);//suprime un quiz
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_list_quiz');
+    }
+
+    #[Route('admin/category/{id}/delete', name: 'delete_category')]
+    public function deleteCategory(Category $category, EntityManagerInterface $entityManager): Response
+    {
+        
+        $entityManager->remove($category);//suprime cet category les quizs et les questions associer
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_list_quiz');
+    }
+
+    #[Route('admin/theme/{id}/delete', name: 'delete_theme')]
+    public function deleteTheme(Theme $theme, EntityManagerInterface $entityManager): Response
+    {
+        
+        $entityManager->remove($theme);//suprime ce theme
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_list_quiz');
+    }
 
 }

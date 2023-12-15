@@ -3,11 +3,35 @@
 {% block title %}Liste des themes!{% endblock %}
 
 {% block body %}
-<a class="add" href="{{path('new_theme')}}">Ajouter un theme</a>
-    {% for theme in themes %}
-        <li>
-            {{ theme }}
-            <a class="modify" href="{{path('edit_theme', {'id': theme.id})}}">Modifier un theme</a>
-        </li>
-    {% endfor %}
+{% include 'panel_admin_nav.html.twig' %}
+    <table class="admin-theme">
+        <thead>
+            <tr>
+                <td>ID</td>
+                <td>Nom</td>
+                <td>Action</td>
+            </tr>
+        </thead>
+        <tbody>
+           
+            {% for theme in themes %}
+                <tr>
+                    <td>{{ theme.id }}</td>
+                    <td>{{ theme }}</td>
+                    <td>
+                        <ul>
+                            <li>
+                                <a class="modify" href="{{path('edit_theme', {'id': theme.id})}}">Modifier un theme</a>
+                            </li>
+                            <li>
+                                <a class="modify" href="{{path('delete_theme', {'id': theme.id})}}">Supprimer un theme</a> 
+                            </li>
+                        </ul>
+                    </td>
+                    
+                    
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}
