@@ -1,9 +1,4 @@
-{% extends 'base.html.twig' %}
 
-{% block title %}Hello AdminController!{% endblock %}
-
-{% block body %}
-    <p> Bienvenue {{ app.user.username }}</p>
 
     <nav class="admin">
         <ul class="admin_theme">
@@ -12,27 +7,23 @@
                 <a href="{{path('list_theme')}}">Liste Theme</a>
             </li>
             <li>
-                <a href="">Ajouter un Theme</a>
+                <a href="{{path('new_theme')}}">Ajouter un Theme</a>
             </li>
         </ul>  
 
         <ul class="admin_category"> 
             <h4>Category</h4> 
+
             <li>
-                <a href="">Liste Category</a>
+                <a href="{{path('list_categories')}}">Liste Category</a>
             </li>
-            <li>
-                <a href="">Ajouter une Categorie</a>
-            </li>
+
         </ul>
 
         <ul class="admin_quiz">
             <h4>Quiz</h4>
             <li>
-                <a href="">Liste des Quiz</a>
-            </li>
-            <li>
-                <a href="">Ajouter un Quiz</a>
+                <a href="{{path('list_quizzes')}}">Liste des Quiz</a>
             </li>
         </ul>
 
@@ -44,4 +35,4 @@
             </li>
         </ul>
     </nav>
-{% endblock %}
+

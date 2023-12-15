@@ -5,6 +5,10 @@
 {% block body %}
 {% set message = '' %} {# Initialisation de la variable message à l'extérieur de la boucle #}
 {% set playLink = '' %} {# Initialisation de la variable message à l'extérieur de la boucle #}
+
+
+
+
     <section class="section-slide">
         <div class="content">
            

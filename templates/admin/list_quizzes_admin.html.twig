@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Quizs!{% endblock %}
+
+{% block body %}
+<div class="box_theme">
+    {{ include ('admin/panel_admin_nav.html.twig') }}
+    <table class="admin-theme">
+        <thead>
+            <tr>
+                <td>ID</td>
+                <td>Titre</td>
+                <td>Dificulter</td>
+                <td>Nombre question</td>
+                <td>Créateur</td>
+                <td>Statut</td>
+                <td>Catégorie</td>
+                <td>Action</td>
+            </tr>
+        </thead>
+        <tbody>
+           
+            {% for quiz in quizzes %}
+                <tr>
+                    <td>{{ quiz.id }}</td>
+                    <td>{{ quiz }}</td>
+                    <td>{{ quiz.level }}</td>
+                    <td>{{ quiz.questions|length }}</td>
+                    <td>{{ quiz.userId.username }}</td>
+                    <td>
+                        {% if quiz.isVerified %}
+                            <i class="fa-solid fa-check fa-2xl" style="color: #0dd10a;"></i>
+                        {% else %}
+                            <i class="fa-solid fa-xmark fa-2xl" style="color: #d40c0c;"></i>
+                        {% endif %}
+                    </td>
+                    <td>{{ quiz.category }}</td>
+                    <td>
+                        <ul class="ul_action">
+                            <li class="li_action">
+                                <a class="modify" href="{{path('edit_quiz', {'id': quiz.id})}}">Modifier un categorie</a>
+                            </li>
+                            <li class="li_action">
+                                <a class="modify" href="{{path('delete_quiz', {'id': quiz.id})}}">Supprimer un categorie</a> 
+                            </li>
+                            <li class="li_action">
+                                {% if quiz.isVerified %}
+                                    <a class="add" href="{{path('unVerified_quiz', {'id': quiz.id})}}">Invalider se quiz</a> 
+                                {% else %}
+                                    <a class="add" href="{{path('verified_quiz', {'id': quiz.id})}}">Valider se quiz</a> 
+                                {% endif %}
+                                
+                            </li>
+                        </ul>
+                    </td>
+                    
+                    
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

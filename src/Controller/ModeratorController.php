@@ -37,26 +37,23 @@ class ModeratorController extends AbstractController
         ]);
     }
 
-    //permet de voir le détail d'un quiz ou un modérateur pourra enlever ou ajouter des questions modifier une question et ses réponses
-    #[Route('/moderator/quiz/{id}/show', name: 'show_quiz')]
-    public function showQuiz(Quiz $quiz, QuestionRepository $questionRepository): Response
-    {
-        $questionNotInQuiz = $questionRepository->questionsNotInQuiz($quiz->getId());//pour afficher la liste des question qui ne sont pas dans ce quiz
-        return $this->render('moderator/show_quiz.html.twig', [
-            'questionNotInQuiz' => $questionNotInQuiz,
-            'quiz' => $quiz,
-        ]);
-    }
-
-
-    //
     #[Route('/moderator/verified/quiz/{id}', name: 'verified_quiz')]
     public function verifiedQuiz(Quiz $quiz, EntityManagerInterface $entityManager): Response
     {
        $quiz->setIsVerified(true);
        $entityManager->flush();
 
-       return $this->redirectToRoute('show_quiz',['id' => $quiz->getId()]);
+       return $this->redirectToRoute('list_quizzes');
+       
+    }
+
+    #[Route('/moderator/unVerified/quiz/{id}', name: 'unVerified_quiz')]
+    public function unVerifiedQuiz(Quiz $quiz, EntityManagerInterface $entityManager): Response
+    {
+       $quiz->setIsVerified(false);
+       $entityManager->flush();
+
+       return $this->redirectToRoute('list_quizzes');
        
     }
 

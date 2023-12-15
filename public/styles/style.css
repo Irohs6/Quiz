@@ -35,7 +35,7 @@ body{
     margin-left: auto;
 }
 main{
-    min-height: 55vh;
+    min-height: 65vh;
 }
 
 h1{
@@ -266,6 +266,7 @@ a{
     font-size: 1.6em;
     line-height: 1.4;
     margin: 10px;
+    padding: 15px;
 }
 
 
@@ -682,7 +683,28 @@ th, td {
 /**********Admin***************/
 .admin-theme{
     width: 80%;
+    margin: auto; 
+}
+
+.box_theme{
     margin: auto;
+    width: 95%;
+    padding: 2em;
+    display: flex;
+    flex-direction: row;
+}
+
+.admin_category, .admin_theme, .admin_quiz, .admin_list_user{
+    border: 2px solid black;
+    border-radius: 10px;
+    padding: 10px;
+    list-style: none;
+}
+.ul_action{
+    list-style: none;
+}
+.li_action{
+    padding: 0.8em;
 }
 /******************** searchBar ********************/
 

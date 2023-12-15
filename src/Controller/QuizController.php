@@ -12,6 +12,7 @@ use App\Repository\GameRepository;
 use App\Repository\LevelRepository;
 use App\Repository\ThemeRepository;
 use App\Repository\CategoryRepository;
+use App\Repository\QuestionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -206,7 +207,6 @@ class QuizController extends AbstractController
     }
     //Pour créer ou modifier une catégorie
     #[Route('/quiz/{idCategory}/new/', name: 'new_quiz')]
-    
     public function newQuiz(Quiz $quiz = null, Request $request, EntityManagerInterface $entityManager,CategoryRepository $categoryRepository): Response
     {
         
@@ -284,6 +284,15 @@ class QuizController extends AbstractController
         ]);
     }
 
-  
+    //permet de voir le détail d'un quiz ou un modérateur pourra enlever ou ajouter des questions modifier une question et ses réponses
+    #[Route('/quiz/{id}/show', name: 'show_quiz')]
+    public function showQuiz(Quiz $quiz, QuestionRepository $questionRepository): Response
+    {
+        $questionNotInQuiz = $questionRepository->questionsNotInQuiz($quiz->getId());//pour afficher la liste des question qui ne sont pas dans ce quiz
+        return $this->render('show_quiz.html.twig', [
+            'questionNotInQuiz' => $questionNotInQuiz,
+            'quiz' => $quiz,
+        ]);
+    }
 
 }

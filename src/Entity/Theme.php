@@ -18,7 +18,7 @@ class Theme
     #[ORM\Column(length: 50)]
     private ?string $label = null;
 
-    #[ORM\OneToMany(mappedBy: 'theme', targetEntity: Category::class)]
+    #[ORM\OneToMany(mappedBy: 'theme', targetEntity: Category::class, cascade: ['persist', 'remove'] )]
     private Collection $categories;
 
     public function __construct()

@@ -1,17 +1,72 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
+{% block title %}Liste des utilisateurs!{% endblock %}
 
 {% block body %}
-    {% for user in users %}
-        {% if 'ROLE_ADMIN' not in user.roles %}
-            <li>{{ user.username }}</li><a href="{{path('app_userManagementRole', {'id': user.id})}}"> Changer Role</a>
-            {% if not user.isBanned %}
-                <li><a href="{{path('app_userIsBanned', {'id': user.id})}}"> Bannir</a></li>
-            {% else %}
-                <li><a href="{{path('app_userUnBanned', {'id': user.id})}}"> Bannir</a></li>
-            {% endif %}
-
-        {% endif %}
-    {% endfor %}
+<div class="box_theme">
+    {{ include ('admin/panel_admin_nav.html.twig') }}
+    <table class="admin-theme">
+        <thead>
+            <tr>
+                <td>ID</td>
+                <td>Email</td>
+                <td>Username</td>
+                <td>Role</td>
+                <td>Statut</td>
+                <td>Action</td>
+            </tr>
+        </thead>
+        <tbody>
+           
+            {% for user in users %}
+                {% if 'ROLE_ADMIN' not in user.roles %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>
+                            {{ user.email }}
+                            {% if user.isVerified %}
+                                <i class="fa-solid fa-check fa-2xl" style="color: #0dd10a;"></i>
+                            {% else %}
+                                <i class="fa-solid fa-xmark fa-2xl" style="color: #d40c0c;"></i>
+                            {% endif %}
+                        </td>
+                        <td>{{ user.username }}</td>
+                        <td>
+                            {% for role in user.roles %}
+                                {{ role }}
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {% if user.isBanned %}
+                                <p>Banni</p>
+                            {% else %}
+                                <p>Non banni</p>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <ul class="ul_action">
+                                <li class="li_action">
+                                    <a href="{{path('app_userManagementRole', {'id': user.id})}}"> Changer Role</a>
+                                </li>
+                                {% if not user.isBanned %}
+                                    <li class="li_action">
+                                        <a href="{{path('app_userIsBanned', {'id': user.id})}}"> Bannir</a>
+                                    </li>
+                                {% else %}
+                                    <li class="li_action">
+                                        <a href="{{path('app_userUnBanned', {'id': user.id})}}"> Bannir</a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </td>
+                        
+                        
+                    </tr>
+                {% endif %}   
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endblock %}
+
+    

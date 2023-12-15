@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Liste des themes!{% endblock %}
+{% block title %}Liste des Categories!{% endblock %}
 
 {% block body %}
 <div class="box_theme">
@@ -10,27 +10,29 @@
             <tr>
                 <td>ID</td>
                 <td>Nom</td>
-                <td>Nombre de Categorie</td>
+                <td>Theme</td>
+                <td>Nombre de Quiz</td>
                 <td>Action</td>
             </tr>
         </thead>
         <tbody>
            
-            {% for theme in themes %}
+            {% for category in categories %}
                 <tr>
-                    <td>{{ theme.id }}</td>
-                    <td>{{ theme }}</td>
-                    <td>{{ theme.categories|length }}</td>
+                    <td>{{ category.id }}</td>
+                    <td>{{ category }}</td>
+                    <td>{{ category.theme }}</td>
+                    <td>{{ category.quizzes|length}}</td>
                     <td>
                         <ul class="ul_action">
                             <li class="li_action">
-                                <a href="{{path('new_category',{'idTheme': theme.id})}}">Ajouter une nouvelle catégorie</a>
+                                <a  href="{{path('new_quiz', {'idCategory': category.id})}}">Créer un Quiz</a>
                             </li>
                             <li class="li_action">
-                                <a class="modify" href="{{path('edit_theme', {'id': theme.id})}}">Modifier un theme</a>
+                                <a class="modify" href="{{path('edit_category', {'id': category.id})}}">Modifier un categorie</a>
                             </li>
                             <li class="li_action">
-                                <a class="modify" href="{{path('delete_theme', {'id': theme.id})}}">Supprimer un theme</a> 
+                                <a class="modify" href="{{path('delete_category', {'id': category.id})}}">Supprimer un categorie</a> 
                             </li>
                         </ul>
                     </td>
