@@ -42,7 +42,7 @@
                                                         {% if app.user.games %}
                                                             {% set score = gameScore.score %} {# on stoke le score dans la variable score #}
                                                         {% else %}
-                                                            {% set score = "Vous n'avez pas encore enregistré de score sur se quiz" %} {# on stoke le score dans la variable score #}
+                                                            {% set score = "Vous n'avez pas encore enregistré de partie sur le quiz : <span class='quiz-night'>" ~ quiz.title ~ "</span> ." %} {# on stoke le score dans la variable score #}
                                                         {% endif %}
                                                     {% elseif game.dateGame > lastGameDate %} {# si la date de la partie est supérieur a la dernière partie jouer#}
 
@@ -50,7 +50,7 @@
                                                         {% if app.user.games %}
                                                             {% set score = gameScore.score %} {# on stoke le score dans la variable score #}
                                                         {% else %}
-                                                            {% set score = "Vous n'avez pas encore enregistré de score sur se quiz" %} {# on stoke le score dans la variable score #}
+                                                            {% set score = "Vous n'avez pas encore enregistré de partie sur le quiz : <span class='quiz-night'>" ~ quiz.title ~ "</span> ." %} {# on stoke le score dans la variable score #}
                                                         {% endif %}
                                                     {% endif %}
 
@@ -69,6 +69,7 @@
                                                 {% set diffDays = date('now').diff(lastGameDate) %} {# on fait la différence de la date de la partie + 7 j par rapport a la date du jours #}
                                                     
                                                 {% if diffDays.days > 7 %} {# si le résultat est inférieur ou égal a 0  il peux rejouer le quiz et affiche le bon message #}
+                                                    {% set message = "Vous n'avez pas encore enregistré de partie sur le quiz : <span class='quiz-night'>" ~ quiz.title ~ "</span> ." %}
                                                     <p>{{ message|raw }}</p>
                                                     {# lien pour jouer le quiz#}
                                                     <a class="play" href="{{ path('app_play', {'id': quiz.id}) }}">Jouer</a>

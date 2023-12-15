@@ -1,17 +1,4 @@
 window.addEventListener("load", (event) => {
-  
-  
-
-
-  // const swiper = new Swiper('.swiper', {
-  //     effect: "cards",
-  //     grabCursor:true,
-  //     initialSlide:2,
-  //     loop:true,
-  //     rotate:true,
-      
-     
-  //   });
 
   const swiperElements = document.querySelectorAll('.swiper');
 
@@ -35,8 +22,6 @@ window.addEventListener("load", (event) => {
               const infoPlayContent = infoPlay.innerHTML;
               showInfo.innerHTML = infoPlayContent; // Déplacer le contenu de info-play sous show_info
 
-              // Cacher le contenu de info-play sur la diapositive actuelle
-              infoPlay.style.display = 'none';
           }
         }
       }

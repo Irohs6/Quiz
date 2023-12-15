@@ -7,7 +7,6 @@ use App\Entity\Game;
 use App\Entity\Quiz;
 use App\Entity\Answer;
 use App\Form\QuizType;
-use App\Entity\Question;
 use App\Form\PlayQuizzType;
 use App\Repository\GameRepository;
 use App\Repository\LevelRepository;
@@ -19,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+
 
 class QuizController extends AbstractController
 {
@@ -46,30 +45,7 @@ class QuizController extends AbstractController
             'gameScore' => $gameScore
         ]);
     }
-    //futur home de quiz en cour de création
-    #[Route('home/test', name: 'app_home_test')]
-    public function home_test_quiz(ThemeRepository $themeRepository, CategoryRepository $categoryRepository, LevelRepository $levelRepository, GameRepository $gameRepository): Response
-    {
-        $allTheme = $themeRepository->findAll();//recupère toute les donné de la table theme
-        $allCategories = $categoryRepository->findAll();//recupère toute les donné de la table category
-        $allLevel = $levelRepository->findAll();//recupère toute les donné de la table level
-        if (!$this->getUser()) {
-            $gamesPlay = "";
-            $gameScore = "";
-        }else{
-            $gamesPlay = $gameRepository->findBy(['userId'=>$this->getUser()->getId()]);// récupère tous les Game d'un user
-            $gameScore = $gameRepository->findOneBy(['userId'=>$this->getUser()->getId()],['score'=> 'DESC' ]); // récupère seullement la Game avec le meilleur score 
-        }
-        return $this->render('quiz/home_test.html.twig', [
-            'allTheme' => $allTheme,
-            'allCategories' => $allCategories,
-            'allLevel'=> $allLevel,
-            'gamesPlay' => $gamesPlay,
-            'gameScore' => $gameScore
-        ]);
-    }
-
-
+   
     //pages pour jouer un quiz
     #[Route('/quiz/play/{id}', name: 'app_play')]
     public function playQuiz(Quiz $quiz, Request $request, EntityManagerInterface $entityManager,GameRepository $gameRepository): Response
@@ -240,11 +216,12 @@ class QuizController extends AbstractController
         $user = $this->getUser();
         $quiz->setUserId($user); 
 
-        $quiz->setCategory($category); //ajoute quiz a sa sous catégorie 
+        $quiz->setCategory($category); //ajoute quiz a sa catégorie 
         $quiz->setIsVerified(false); // met a false par default
         $formNewQuiz= $this->createForm(QuizType::class, $quiz);//crer le formulaire
 
         $formNewQuiz->handleRequest($request);
+        
         if ($formNewQuiz->isSubmitted() && $formNewQuiz->isValid()) {
             // Récupérer les données du formulaire
             $data = $formNewQuiz->getData();

@@ -19,7 +19,7 @@
                     <figure id="logo"> 
                         <a href="{{path('app_home_quiz')}}"><img class="logo" src="{{ asset('img/logo1.png') }}" alt="Logo de Quiz Quest"></a>
                     </figure>
-                    <nav>
+                    <nav class="nav_base">
                         {# visible que par admin #}
                         {% if is_granted('ROLE_ADMIN') %} 
                         {# route vers panel admin #}
@@ -30,8 +30,7 @@
                         {# pannel pour la modération  #}
                             <a class="lien_nav" href="{{path('app_moderator_panel')}}">Modération</a>
                         {% endif %}
-                        {# route vers l'accueil  #}
-                        <a class="lien_nav" href="{{path('app_home_quiz')}}">Accueil</a>
+                        
                             {# si l'utilisateur est connecté #}
                         {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}  
                             {# pseudo + image profil du user  #}
