@@ -9,7 +9,7 @@ window.addEventListener("load", (event) => {
       initialSlide: 2,
       loop: true,
       rotate: true,
-  
+      
       on: {
         slideChange: function () {
             const activeSlide = this.slides[this.activeIndex];

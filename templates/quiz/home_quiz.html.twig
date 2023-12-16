@@ -54,11 +54,14 @@
                                     {% for quiz in category.quizzes %}
         
                                         <div class="swiper-slide" style="background: linear-gradient(to top, #0f2027, #203a43, #2c5364);  background-repeat: no-repeat; background-position: 50% 50%; background-size: cover;">
+                
                                             {% if app.user %}  {# si le user est connecter#}
-                                                <figure class="fig_category_card">
-                                                    <img class="img_category_card" src="{{ asset('uploads/img/category/' ~ category.picture) }}" alt="{{category.label}}">
+                                                <figure class="fig_card_category">
+                                                    <img class="img_card_category" src="{{ asset('uploads/img/category/' ~ category.picture) }}" alt="{{category.label}}">
                                                     <figcaption class="fig_caption_category_card">{{ category.label|upper}}</figcaption>
                                                 </figure>
+
+                                        
                                                 {% if quiz in app.user.favoritesQuizzes %}
                                                     <h2 class="title-quiz" >{{ quiz.title|upper }}  <a href="{{ path('app_remove_favorite', {'id': quiz.id}) }}"><i class="fa-solid fa-star fa-xl" style="color: #dbc906;"></i></a></h2>
                                                 {% else %}
@@ -122,7 +125,7 @@
         
                                                     {% else %} {# si aucune partie enregistrer pour se quiz il peux le jouer #}
                                                         {# lien vers la page pour jouer le quiz#}
-                                                        
+                                                        <a class="add_quiz" href="{{path('new_quiz', {'idCategory': category.id})}}">Créer un Quiz</a>
                                                         {% set message = "Vous n'avez pas encore enregistré de partie sur le quiz : <span class='quiz-night'>" ~ quiz.title ~ ".</span>" %}
                                                         <p>{{ message|raw }}</p>
                                                         <a class="play" href="{{ path('app_play', {'id': quiz.id}) }}">Jouer</a>
@@ -132,14 +135,15 @@
                                                 </div>         
         
                                             {% else %} {# fin {% if app.user %}  #}
-                                                <figure class="fig_category_nav">
-                                                    <img class="img_category_nav" src="{{ asset('uploads/img/category/' ~ category.picture) }}" alt="{{category.label}}">
+                                                <figure class="fig_card_category">
+                                                    <img class="img_card_category" src="{{ asset('uploads/img/category/' ~ category.picture) }}" alt="{{category.label}}">
                                                     <figcaption class="fig_caption_category_card">{{ category.label}}</figcaption>
                                                 </figure>
+                                               
                                                 <h2>{{ quiz.title }}</h2>
                                             {% endif %}
                                         </div>
-        
+                                        
                                     {% endfor %}
                                 </div>
                             </div>

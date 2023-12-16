@@ -38,9 +38,10 @@ main{
     min-height: 65vh;
 }
 
-h1{
+.h1{
+    font-size: 1.6em;
+    font-weight: bold;
     text-align: center;
-    padding: 10px;
     color: #1C418C;
 }
 /*******************NAV*****************************************/
@@ -66,7 +67,7 @@ h1{
 #logo{
     width: 150px;
     height: 120px;
-    margin-left: 10px;
+    margin-bottom: 40px
     
 }
 
@@ -103,6 +104,7 @@ footer{
     flex-direction: row;
     width: 100%;
     justify-content: space-around;
+    align-items: center;
 }
 
 .contatc{
@@ -112,9 +114,7 @@ footer{
 
 /*****************************HOME**********************************/
 
-h1{
-    font-weight: bold;
-}
+
 
 h3{
     text-align: center;
@@ -191,7 +191,6 @@ a{
     justify-content: center;
     gap: 30px;
     border-radius: 20px;
-    backdrop-filter: blur(30px);
     width: 95%;
     z-index: 10;
 }
@@ -200,8 +199,11 @@ a{
     padding-top: 1.2em;
 }
 .show_info{
-    width: 30%;
+    width: 33%;
+    gap: 0.6em;
     text-align: center;
+    display: flex;
+    flex-direction: column;
 }
 .info{
     display: flex;
@@ -221,7 +223,11 @@ a{
 }
 
 .quiz-night{
-    background: linear-gradient(255deg, #ff3cac 0%, #7B4ba0 50%);
+    background-image: linear-gradient(255deg, #c726eb 0%, #7B4ba0 75%, #14afd6 50%);
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    background-clip: text;
+    color: transparent;
 }
 
 .play{
@@ -243,7 +249,9 @@ a{
     
 }
 
-
+.swiper-pagination{
+    color: white;
+}
 .swiper{
     width: 300px;
     height: 500px;
@@ -337,12 +345,12 @@ a{
     color: white;
     text-align: center;
 }
-.img_category_card{
+.img_card_category{
     width: 140px;
     height: 150px;
     border-radius: 50%;
 }
-.fig_category_card{
+.fig_card_category{
     margin: auto;
     display: flex;
     width: 150px;
@@ -519,77 +527,100 @@ a{
 }
 /***********************************Profil***********************************/
 
-#container-profil{
-    position: relative;
-    display: flex;
-    width: 80%;
-    flex-wrap: wrap;
-    flex-direction: row;
-    align-items: flex-start;
-    border: 2px solid black;
-    margin: 10px;
-    border-radius: 10px;
-    height: 600px;
-    padding-left: 10px;
-    justify-content: center;
-    margin-left: auto;
-    margin-right: auto;
+#section_profil{   
+    width: 20%; 
 }
-#section_profil{
-    display: flex;
-    width: 100%;
-    flex-direction: column;
-    align-items: center;
-}
-#quiz_profil{
-    width: 45%; 
-}
-#forum_profil{
-    width: 45%;
-}
-.table-score{
-    width: 60%;
-    height: 60%;
-    position: absolute;
-    top: 10%;
-    left: 25%;
-    background-color: rgba(255, 255, 255);
-    border: 2px solid black;
-    padding: 15px;
-    border-radius: 10px;
-}
-thead th,thead td{
-    color: #DF9409;
-}
-#table_score, th, td{
-    border: 1px solid black;
-    border-collapse: collapse;
-    width: 100%;
-    padding-left: 5px;
-}
-th, td {
-    color: white;
-    width: 3%;
-    background-color: #0b2443b8;
-    text-align: center;
-}
-#list-quiz{
-    font-weight: bold;
-    list-style: none;
-    width: 60%;
-    height: 60%;
-    position: absolute;
-    top: 10%;
-    left: 25%;
-    background-color: rgba(255, 255, 255);
-    border: 2px solid black;
-    padding: 15px;
-    border-radius: 10px;
-}
+
 .profil-info{
     font-weight: bold;
 }
 
+
+
+.topper {
+    width: 95%;
+    max-width: 1252px;
+    font-family: sans-serif;
+    margin-top: 30px;
+    background: black;
+}
+
+.container-profil {
+    margin: 3em auto;
+    display: flex;
+    width: 90%;
+    border: 1px solid #ebebeb;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.personal {
+    width:20%;
+}  
+
+.box_mail {
+   
+}
+
+.email {
+    font-weight:600;
+}
+
+.points {
+    width:25%; 
+    text-align:center;
+}
+.score {
+    font-size:8em;
+    font-weight:800;
+}
+.info_score {
+    font-weight:600;
+    font-size:1.2em;
+}
+    
+.deal {
+    display:block;
+    float:left;
+    width:48%;
+    clear:left;
+    margin-left:2%;
+}
+.best_score{
+    font-weight:600;
+    color:#fff;
+    background-color:#222;
+    padding:10px 5px;
+}
+       
+.recent, .bought {
+    display:block;
+    float:left;
+    margin-left:1%;
+    width:23%;
+    max-height:300px;
+    overflow:auto;
+}
+.recent_acti, .create_quiz {
+    color:#fff;
+    background-color:#222;
+    padding:10px 5px;
+}
+        
+.game_quiz, .profil_quiz_info {
+    display:block;
+    padding:10px 0;
+    padding-left:5px;
+}
+.game_score {
+    float:right; 
+    margin-right:2px;
+}
+            
+li:nth-child(even) {
+    background-color:#ebebeb - 50; 
+}
+      
+    
 /****************************************************/
 .quiz_home_card {  
     background-position: center;
