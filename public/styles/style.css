@@ -119,8 +119,8 @@ h3{
     text-align: center;
 }
 
-h2{
-    
+.title_home{
+    text-align: center;
     font-size: xx-large;
 }
 
@@ -366,6 +366,7 @@ a{
     bottom: 40px;
     right: 30px;
   }
+
 #quiz-container-play{
     position: absolute;
     top: 170px;
