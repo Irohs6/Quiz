@@ -66,6 +66,7 @@ window.addEventListener("load", (event) => {
             input.name = `answer`; // créer un name 'answer pour tous les bouton radio pour limiter le choix de réponse a 1 seul 
             input.id =  `${reponse.id}`; // ajoute l'id de la reponse dans l'id du input
             input.className = 'answers' // ajoute une class answer
+            label.className = 'label_answer';
             label.appendChild(input); // place le input en ellement enfant de l'élément label 
             label.appendChild(document.createTextNode(reponse.intitulle)); //affiche les réponses
             quizAnswer.appendChild(label);// place les réponse dans la div du conteneur de réponses 

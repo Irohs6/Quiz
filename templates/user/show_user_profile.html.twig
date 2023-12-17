@@ -9,25 +9,24 @@
 
     <div class="container-profil">
         <div class="topper">
-            <h2>Profil Utilisateur</h2>
+            <h2 class="title_profil">Profil Utilisateur</h2>
         </div> 
+            <section class="edit_profil">
+                <section class="section_profil">  
+                        <h2 class="profil-info">{{ app.user.username|upper }}</h2>
+                    {# nombre de quiz creer pour cet utilisateur + bouton voir liste de tous ses quiz #}
+                </section> {# fin section <section id="section_profil"> #}
 
-        <section id="section_profil">  
-                <p><span class="profil-info">Pseudo :</span>{{ app.user.username }}</p>
-            {# lien vers le formulaire de modification de profil(username, email, image) #}
-            <a href="{{path('edit_profile', {'id': app.user.id})}}">Modifier profil</a>
-            {# nombre de quiz creer pour cet utilisateur + bouton voir liste de tous ses quiz #}
-        </section> {# fin section <section id="section_profil"> #}
-
-        <div class="personal">
-            <section class="box_mail">
-                <h3 class="email">Email</h3>
-                <p>{{ app.user.email }}</p>
-                <input type="submit" value="Edit" />
+                <div class="personal">
+                    <section class="box_mail">
+                        <h2 class="email">Email:</h2>
+                        <p class='email'>{{ app.user.email }}</p>
+                    </section>
+                </div>
+                {# lien vers le formulaire de modification de profil(username, email, image) #}
+                <a class="btn_edit_profil" href="{{path('edit_profile', {'id': app.user.id})}}">Modifier profil</a>
             </section>
-        </div>
-
-        <div class="points"></div>
+        <div class="points">
             {% for game in app.user.games %}
                 {# calcul pour le score total  #}
                 {% set scoretotal = scoretotal + game.score %}
@@ -39,10 +38,10 @@
         </div>
 
         <div class="deal">
-            <h3 class="best_score"><span class="profil-info">Mes 3 meilleurs scores :</span></h3>
+            <h3 class="best_score">Mes 3 meilleurs scores :</h3>
             {% for bestGame in games %}
 
-                <p><span class="profil-info">Quiz {{ nb }}:</span> {{ bestGame.quiz.title }} score: {{ bestGame.score }}</p>
+                <p><span class="profil-info">{{ nb }} :</span> {{ bestGame.quiz.title }} score: {{ bestGame.score }}</p>
 
                 {% set nb = nb + 1 %} 
 
@@ -51,10 +50,10 @@
 
         <div class="recent">
             <div>
-                <h4 class="recent_acti">Recent Activity</h4>
+                <h3 class="recent_acti">Recent Activity</h3>
 
-                <ul>
-                    {% for game in app.user.games %}
+                <ul class="list_profil">
+                    {% for game in gamesUser %}
                         <li class="game_quiz"> {{ game.quiz.title }} <span class="game_score"> {{ game.score }}</span></li>
                     {% endfor %}
                 </ul>  
@@ -66,21 +65,17 @@
         <div class="bought">
 
             <div>
-                <h4 class="create_quiz">Vos Quiz créer</h4>
+                <h3 class="create_quiz">Vos Quiz créer</h3>
                 {# condition si l'utilisateur a créer un quiz ou non  #}
                     {% if not app.user.quizzes|length == 0  %}
                     
-                    <ul >
+                    <ul class="list_profil" >
 
                         {# boucle pour afficher les quiz de cet utilisateur #}
                         {% for quiz in app.user.quizzes %} 
-                            {% if quiz.questions|length >= 10 %}
-                                <li class="profil_quiz_info">{{ quiz.title }} <span> nombre de question: {{quiz.questions|length}}</span></li>
-                            {% else %}
-                                <li>
-                                    <p>{{ quiz.title }}<a  href="{{path('new_question', {'idQuiz': quiz.id})}}">Modifier Quiz</a></p>
-                                </li>
-                            {% endif %}
+                           
+                                <li class="profil_quiz_info">{{ quiz.title }} <span> nombre de question: {{quiz.questions|length}}</span><a class="btn_edit_quiz" href="{{path('new_question', {'idQuiz': quiz.id})}}">Modifier Quiz</a></li>
+                           
                         {% endfor %}
                     </ul>
 
@@ -92,15 +87,7 @@
                     </ul>
 
                 {% endif %}
-                <h4>Recent Purchases</h4>
-
-                <ul>
-                    
-                    <li>Item 2 <span> 50pts</span></li>
-                    <li>Item 3 <span> 120pts</span></li>
-                    <li>Item 4 <span> 100pts</span></li>
-                    <li>Item 5 <span> 50pts</span></li>
-                </ul> 
+                
 
             </div>
         </div>

@@ -13,10 +13,10 @@
             {{ form_row(formEditUser.username) }}
             
         
-            <div class="swiper">
-            <!-- Additional required wrapper -->
+            {# <div class="swiper">
+           
             <div class="swiper-wrapper">
-                {# liste des choix des images pour le profil  #}
+              
                 {% for image in ['chat_profil.png', 'lion_profil.png', 'chat_astronaute_profil.png','dragon_profil.png', 'ecureil_profil.png', 'hiboux.png', 'panda_profil.png','tigre_profil.png'] %}
 
                     <div class="swiper-slide">
@@ -28,9 +28,9 @@
                     </div>
 
                 {% endfor %}
-            </div>
+            </div> #}
             
-        </div>
+        {# </div> #}
         {{ form_end(formEditUser) }} 
     
 </div>

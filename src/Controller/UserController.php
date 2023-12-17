@@ -18,8 +18,8 @@ class UserController extends AbstractController
     #[Route('/user/profile/{id}/', name: 'user_profile')]
     public function showProfile(User $user, GameRepository $gameRepository): Response
     {   
-        $games = $gameRepository->findBy(['userId'=> $user->getId()],[],3);
-        $gamesUser = $gameRepository->findBy(['userId'=> $user->getId()]);
+        $games = $gameRepository->findBy(['userId'=> $user->getId()],['score'=>'DESC'],3);
+        $gamesUser = $gameRepository->findBy(['userId'=> $user->getId()],['dateGame' => 'DESC'],5);
         return $this->render('user/show_user_profile.html.twig', [
             'games' => $games,
             'gamesUser' => $gamesUser

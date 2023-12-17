@@ -4,30 +4,31 @@
 
 {% block body %}
 {% set index = 1 %}
+<section class="container_recap">
+    <h2 class="title">Recapitulatif de votre partie</h2>
+    <article>
+        <p class="detail_recap">Ici vous trouverez votre score obtenu, le détail de vos réponses <span class="success">juste</span>  et <span class="error">fausse</span> , ainsi qu'un lien vers la documentation officielle pour comprendre vos erreur et vous améliorer </p>
+    </article>
 
-<h1>Recap quiz</h1>
-
-
-    
-    <strong><p>Score Obtenue: {{ score }}% de bonnes réponses</p></strong>
+    <strong ><p class="p_score">Score Obtenue: <span class="score_recap">{{ score }}%</span> de bonnes réponses</p></strong>
     {% for recap in quizsRecap %}
         
       
-    <strong>Question {{ index  }}: {{ recap.questionIntitulle }} </strong>  
+    <section class="recap_question_answer">
+        <strong class="info_recap">Question {{ index  }}:</strong> <span class="intitule_question">{{ recap.questionIntitulle }}</span>   
         
-        <ul>
-            <strong><p>Réponses sélectionnées:</p></strong>
-            {% if recap.answerIsright %}
-                <strong class="success" >{{ recap.answerIntitulle }}</strong> 
-            {% else %}
-                <strong class="error" >{{ recap.answerIntitulle }}</strong> 
-            {% endif %}
-        <strong><p>Lien doc:</strong> <a target="blank" href="{{ recap.link }}">{{recap.link ? recap.link :  "Aucun lien " }} </a></p>
-        </ul>
+        <strong class="info_recap"><p>Réponses sélectionnées:</p></strong>
+        {% if recap.answerIsright %}
+            <strong  ><p class="success">{{ recap.answerIntitulle }}</p></strong> 
+        {% else %}
+            <strong  ><p class="error">{{ recap.answerIntitulle }}</p></strong> 
+        {% endif %}
+        <strong><p>Lien doc:</strong> <span class="link"><a target="blank" href="{{ recap.link }}">{{recap.link ? recap.link :  "Aucun lien " }} </a></span></p>
+    </section>
 
         {% set index = index + 1 %}
     {% endfor %}    
-             
+</section>             
         
     
 

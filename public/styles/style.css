@@ -38,6 +38,9 @@ main{
     min-height: 65vh;
 }
 
+ul{
+    list-style: none;
+}
 .h1{
     font-size: 1.6em;
     font-weight: bold;
@@ -53,6 +56,7 @@ main{
     width: 85%;
     margin: auto;
     border-bottom: 2px solid #1C418C;
+    
 }
 .nav_base{
     display: flex;
@@ -78,20 +82,15 @@ main{
 
 .lien_nav{
     text-decoration: none;
-    
-    font-family: tahoma;
-    font-size: 1em;
-    color: #0D0D0D;
+    font-size: 1.2em;
+    font-weight: 700;
     font-weight: bold;
-    
     border-right: 2px solid #1C418C;
     width: 12%;
     text-align: center;
 }
 .lien_nav:hover{
-    padding: 8px;
-    background-color: wheat;
-   
+    font-size: 1em; 
 }
 /*****************************footer************************************/
 footer{
@@ -121,7 +120,7 @@ h3{
 }
 
 h2{
-    text-align: center;
+    
     font-size: xx-large;
 }
 
@@ -144,7 +143,6 @@ h2{
 }
 
 a{
-    color: black;
     text-decoration: none;
 }
 .link_nav_category:hover{
@@ -297,7 +295,6 @@ a{
     align-items: center;
     width: 50%;
     color: rgb(11, 11, 11);
-    height: 600px;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -379,7 +376,7 @@ a{
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 50%;
+    width: 55%;
     color: white;
     height: 680px;
     background-position: center;
@@ -391,34 +388,72 @@ a{
 .quiz-container{
     border-radius: 15px;
     padding: 15px;
-    height: 80%;
-    width: 80%;
+    height: 85%;
+    width: 85%;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
-    background-color: rgba(255, 255, 255, 0.4);
+    background-color: #0B2443;
+    color: white;
+    border: 4px solid silver;
 }
 
+#questions{
+    text-align: justify;
+    font-size: 2em;
+    font-weight: 700;
+}
 #recap-container{
     display: none;
 }
 
 #answer{
+    width: 95%;
     padding: 10px;
     font-size: 1.5em;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4em;
 }
-
+.label_answer{
+    width: 80%;
+    background: white;
+    /* display: inline-block; */
+    color: #0c5283;
+    border-radius: 10px;
+    padding: 0.3em;
+    font-weight: 700;
+}
 #valider{
     border-radius: 10px;
     padding: 7.5px;
     background: white;
 }
+/********************Recap**************************/
+.container_recap{
+    width: 70%;
+    margin: auto; 
+    text-align: center;
+}
+
+.detail_recap{
+    font-weight: 700;
+    text-align: justify;
+    width: 50%;
+    margin: auto;
+    padding-bottom: 0.8em;
+    font-size: 1.2em;
+}
 
 .success{
     color: green;
+    font-size: 1.1em;
+    
 }
+
 .error{
+    font-size: 1.1em;
     color: red;
 }
 
@@ -433,7 +468,36 @@ a{
     flex-direction: column;
     display: flex;
 }
+.link{
+    color: #14afd6;
+    font-weight: 700;
+    font-size: 1.05em;
+}
+.link:hover{
+    font-size: 1em;
+}
 
+.recap_question_answer{
+    border-top: 1px dashed blue;
+    padding:  0.6em 0;
+}
+.intitule_question{
+    color: #0c5283;
+    font-size: 1.2em;
+    font-weight: 700; 
+}
+.score_recap{
+    color: #14afd6;
+    font-size: 1.1em;
+}
+
+.p_score{
+    text-align: center;
+    margin: auto;
+    padding-bottom: 0.5em;
+    border-top: 1px dashed blue;
+    font-size: 1.2em;
+}
 
 .category{
     list-style: none;
@@ -441,6 +505,13 @@ a{
 .li_category{
     padding: 10px;
     list-style: none;
+}
+
+.title{
+    text-transform: uppercase;
+    text-align: center;
+    color: #0c5283;
+    padding: 0.5em;
 }
 /**********************add quiz ********************************/
 #questions-summary{
@@ -527,49 +598,81 @@ a{
 }
 /***********************************Profil***********************************/
 
-#section_profil{   
-    width: 20%; 
-}
-
-.profil-info{
-    font-weight: bold;
-}
-
-
-
-.topper {
-    width: 95%;
-    max-width: 1252px;
-    font-family: sans-serif;
-    margin-top: 30px;
-    background: black;
-}
-
 .container-profil {
     margin: 3em auto;
     display: flex;
-    width: 90%;
+    width: 80%;
     border: 1px solid #ebebeb;
     flex-direction: row;
     flex-wrap: wrap;
+    justify-content: space-between;
 }
+
+.topper {
+    width: 100%;
+    font-family: sans-serif;
+    background: #014F86;
+}
+.title_profil{
+    color: white;
+    font-weight: 600;
+    padding: 0.3em;
+}
+.edit_profil{
+    width: 35%;
+    display: flex;
+    flex-wrap: wrap;
+}
+.section_profil, .box_mail{   
+    width: 40%;
+    padding-top: 0.5em;
+    padding-left: 1em;
+}
+.btn_edit_profil{
+    margin: auto;
+    border: #014F86 solid 3px;
+    padding: 0.3em;
+    border-radius: 0.8em;
+    color: #0B2443;
+    font-weight: bold;
+}
+.btn_edit_profil:hover{ 
+    border: #014F86 solid 1px;
+}
+.btn_edit_quiz{
+    margin-left: 20px;
+    border: #014F86 solid 3px;
+    padding: 0.2em;
+    border-radius: 0.8em;
+    color: #0B2443;
+    font-weight: bold;
+}
+.btn_edit_quiz:hover{ 
+    border: #014F86 solid 1px;
+}
+.profil-info, .email{
+    font-weight: bold;
+    color: #0B2443;
+}
+
 .personal {
-    width:20%;
+    width:55%;
 }  
 
 .box_mail {
-   
+    width: 100%;
+    padding-top: 0.5em;
 }
 
-.email {
-    font-weight:600;
-}
+
 
 .points {
-    width:25%; 
+    width:55%; 
     text-align:center;
 }
+
 .score {
+    color: #0B2443;
     font-size:8em;
     font-weight:800;
 }
@@ -578,31 +681,29 @@ a{
     font-size:1.2em;
 }
     
-.deal {
-    display:block;
-    float:left;
-    width:48%;
-    clear:left;
-    margin-left:2%;
+.deal {  
+    width:28%;
 }
 .best_score{
     font-weight:600;
     color:#fff;
-    background-color:#222;
+    background-color:#014F86;
     padding:10px 5px;
 }
-       
-.recent, .bought {
-    display:block;
-    float:left;
-    margin-left:1%;
-    width:23%;
+     
+.recent{
+    width:25%;
+    max-height:300px;
+    overflow:auto;
+}
+.bought{
+    width:45%;
     max-height:300px;
     overflow:auto;
 }
 .recent_acti, .create_quiz {
     color:#fff;
-    background-color:#222;
+    background-color:#014F86;
     padding:10px 5px;
 }
         
@@ -615,9 +716,14 @@ a{
     float:right; 
     margin-right:2px;
 }
-            
+
+.list_profil{
+    padding-left: 0.2em;
+    color: #0B2443;
+    font-weight: 500;
+}
 li:nth-child(even) {
-    background-color:#ebebeb - 50; 
+    background-color:#ebebeb; 
 }
       
     
@@ -632,7 +738,7 @@ li:nth-child(even) {
     border-radius: 15px;
     display: flex;
     flex-direction: row;
-    border: 2px black solid;
+    border: 2px #0B2443 solid;
     background-size: 90% 70%;
 }
 .category_home{
@@ -709,7 +815,7 @@ li:nth-child(even) {
 /* On hover, add a grey background color */
 .prev:hover, .next:hover {
   background-color: #f1f1f1;
-  color: black;
+  color: #0B2443;
 }
 /**********Admin***************/
 .admin-theme{
@@ -726,7 +832,7 @@ li:nth-child(even) {
 }
 
 .admin_category, .admin_theme, .admin_quiz, .admin_list_user{
-    border: 2px solid black;
+    border: 2px solid #0B2443;
     border-radius: 10px;
     padding: 10px;
     list-style: none;
@@ -749,7 +855,7 @@ li:nth-child(even) {
     height: 40px;
     padding-left: 11px;
     font-size: 1.2em;
-    border: 2px solid black;
+    border: 2px solid #0B2443;
     border-radius: 10px;
 
     transition: 0.1s;
@@ -769,7 +875,7 @@ li:nth-child(even) {
 }
 
 #textHint { /* div */
-    color: black;
+    color: #0B2443;
 }
 
 #textHint a {
@@ -789,7 +895,7 @@ li:nth-child(even) {
     padding: 0 10px ;
     background-color: white;
     border-radius: 10px;
-    border: 1px solid black;
+    border: 1px solid #0B2443;
     position: absolute;
     left: 0;
     overflow-y:scroll;
