@@ -6,7 +6,7 @@
 {# fichier json en hidden récupérer par le fichier scrip.js et traité pour afficher les question et les réponse du quiz de façon dynamique  #}
 <input hidden id="quiz" type="text" data-attribut="{{ quizJson }} ">
 
-<h1>{{ quiz.title }}</h1>
+<h2 class="title">{{ quiz.title }}</h2>
 
     <article id="quiz-container-play"> 
         {# container qui affiche le nombre de question la difficulter la catégorie d'un quiz et le bouton pour jouer#}
@@ -24,6 +24,7 @@
     </article>
   
         {{ form_start(formQuiz) }}
+        <section id="info_question">Question n°<strong id="number_question"></strong>/10</section>
         {# affiche l'image liée a la catégorie du quiz  #}
         <div id="quiz-container">
 
@@ -38,7 +39,7 @@
                 
 
             </div>   
-                <div id="message"></div> 
+                <article id="message"></article> 
                 {# div ou sera afficher le recapitulatif du quiz une fois terminer  #}
                 <div id="recap-container"></div>
                 {# bouton qui permettra d'afficher le tableaux récapitulatif a la fin du quiz  #}

@@ -26,18 +26,7 @@
             label: 'Password'
         }) }}
 
-        <div class="swiper">
-            <!-- Additional required wrapper -->
-            <div class="swiper-wrapper">
-                {% for image in ['chat_profil.png', 'lion_profil.png', 'chat_astronaute_profil.png','dragon_profil.png', 'ecureil_profil.png', 'hiboux.png', 'panda_profil.png','tigre_profil.png'] %}
-                    <div class="swiper-slide">
-                        <input type="radio" name="formEditUser[selectedProfileImage]" value="{{ image }}" {% if registrationForm.vars.value.profileImage == image %}checked{% endif %}>
-                        <img class="slide" src="{{ asset('avatar/' ~ image) }}" alt="profil">
-                    </div>
-                {% endfor %}
-            </div>
-          
-        </div>
+       
 
         {{ form_row(registrationForm.agreeTerms) }}
         

@@ -6,16 +6,16 @@
 <div class="box_theme">
     {{ include ('admin/panel_admin_nav.html.twig') }}
     <table class="admin-theme">
-        <thead>
+        <thead class="thead-admin">
             <tr>
-                <td>ID</td>
-                <td>Titre</td>
-                <td>Dificulter</td>
-                <td>Nombre question</td>
-                <td>Créateur</td>
-                <td>Statut</td>
-                <td>Catégorie</td>
-                <td>Action</td>
+                <th>ID</th>
+                <th>Titre</th>
+                <th>Dificulter</th>
+                <th>Nombre question</th>
+                <th>Créateur</th>
+                <th>Statut</th>
+                <th>Catégorie</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -38,16 +38,16 @@
                     <td>
                         <ul class="ul_action">
                             <li class="li_action">
-                                <a class="modify" href="{{path('edit_quiz', {'id': quiz.id})}}">Modifier un categorie</a>
+                                <a class="btn btn-warning" href="{{path('edit_quiz', {'id': quiz.id})}}">Modifier un Quiz</a>
                             </li>
                             <li class="li_action">
-                                <a class="modify" href="{{path('delete_quiz', {'id': quiz.id})}}">Supprimer un categorie</a> 
+                                <a class="btn btn-danger" href="{{path('delete_quiz', {'id': quiz.id})}}">Supprimer un Quiz</a> 
                             </li>
                             <li class="li_action">
                                 {% if quiz.isVerified %}
-                                    <a class="add" href="{{path('unVerified_quiz', {'id': quiz.id})}}">Invalider se quiz</a> 
+                                    <a class="btn btn-danger" href="{{path('unVerified_quiz', {'id': quiz.id})}}">Invalider se quiz</a> 
                                 {% else %}
-                                    <a class="add" href="{{path('verified_quiz', {'id': quiz.id})}}">Valider se quiz</a> 
+                                    <a class="btn btn-success" href="{{path('verified_quiz', {'id': quiz.id})}}">Valider se quiz</a> 
                                 {% endif %}
                                 
                             </li>

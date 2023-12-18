@@ -41,7 +41,18 @@ class AdminController extends AbstractController
         $user->setRoles(['ROLE_MODERATOR']);//change le role a moderateur
 
         $entityManager->flush();
+        $this->addFlash('success', "Cet utilisateur est devenue un Modérateur.");
+        return $this->redirectToRoute('app_userManagement');
+    }
 
+    //changement de role pour un utilisateur
+    #[Route(path: 'admin/panel/userManagementRole/{id}', name: 'app_userManagementRole')]
+    public function removeRoleModerator(User $user, EntityManagerInterface $entityManager): Response
+    {
+        $user->setRoles(['ROLE_USER']);//change le role a user
+
+        $entityManager->flush();
+        $this->addFlash('success', "Cet utilisateur n'est plus un Modérateur.");
         return $this->redirectToRoute('app_userManagement');
     }
 
@@ -52,7 +63,7 @@ class AdminController extends AbstractController
         $user->setIsBanned(true);
 
         $entityManager->flush();
-
+        $this->addFlash('success', "Cet utilisateur a bien été banni.");
         return $this->redirectToRoute('app_userManagement');
     }
 
@@ -62,7 +73,7 @@ class AdminController extends AbstractController
     {
         $user->setIsBanned(false);
         $entityManager->flush();
-
+        $this->addFlash('success', "Cet Utilisateur a bien été débannie.");
         return $this->redirectToRoute('app_userManagement');
     }
 
@@ -85,7 +96,7 @@ class AdminController extends AbstractController
 
         $entityManager->remove($quiz);//suprime un quiz
         $entityManager->flush();
-
+        $this->addFlash('success', "Quiz supprimé avec succès.");
         return $this->redirectToRoute('app_list_quiz');
     }
 
@@ -99,23 +110,23 @@ class AdminController extends AbstractController
         ]);
     }
 
-        //Pour créer un nouvelle catégorie dans un thème définie *************************************************************************************************
-        #[Route('admin/category/new/{idTheme}', name: 'new_category')]
-        #[Route('admin/category/edit/{id}', name: 'edit_category')]
-        public function newEditCategory(Category $category = null,Request $request, ThemeRepository $themeRepository, EntityManagerInterface $entityManager,FileUploader $fileUploader): Response
-        {
-            //si la catégorie n'existe pas 
-            if (!$category) {
-                $category = new Category;// on créer une nouvelle instance de catégorie
-                $idTheme = $request->attributes->get('idTheme');// on récupère l'id theme contenu dans l'url
-                $theme = $themeRepository->findOneBy(['id' => $idTheme]); // on récupère l'entity theme garce a cet id
-                $picture = null; // on set la variable a null si la catégorie n'existe pas
-            }else{
-                //si la catégorie existe
-                $theme = $category->getTheme(); //on récupère le theme contenu dans la catégorie
-                // Récupérez le nom du fichier depuis l'entité
-                $picture = $category->getPicture();//on récupère l'image de la catégorie
-            }
+    //Pour créer un nouvelle catégorie dans un thème définie *************************************************************************************************
+    #[Route('admin/category/new/{idTheme}', name: 'new_category')]
+    #[Route('admin/category/edit/{id}', name: 'edit_category')]
+    public function newEditCategory(Category $category = null,Request $request, ThemeRepository $themeRepository, EntityManagerInterface $entityManager,FileUploader $fileUploader): Response
+    {
+        //si la catégorie n'existe pas 
+        if (!$category) {
+            $category = new Category;// on créer une nouvelle instance de catégorie
+            $idTheme = $request->attributes->get('idTheme');// on récupère l'id theme contenu dans l'url
+            $theme = $themeRepository->findOneBy(['id' => $idTheme]); // on récupère l'entity theme garce a cet id
+            $picture = null; // on set la variable a null si la catégorie n'existe pas
+        }else{
+            //si la catégorie existe
+            $theme = $category->getTheme(); //on récupère le theme contenu dans la catégorie
+            // Récupérez le nom du fichier depuis l'entité
+            $picture = $category->getPicture();//on récupère l'image de la catégorie
+        }
           
         $category->setTheme($theme);//on ajoute le thème a la catégorie
         $formNewCategory= $this->createForm(CategoryType::class, $category);//créer le formulaire
@@ -189,6 +200,7 @@ class AdminController extends AbstractController
             // execute PDO(la requete Insert ou Update)
             $entityManager->flush();
             //redirige vers la list des theme
+            $this->addFlash('success', "Votre Theme a bien été ajouté.");
             return $this->redirectToRoute('list_theme');
             
         }
@@ -217,7 +229,7 @@ class AdminController extends AbstractController
         
         $entityManager->remove($theme);//suprime ce theme
         $entityManager->flush();
-
+        $this->addFlash('warning', 'Votre thême a bien été supprimer');
         return $this->redirectToRoute('list_theme');
     }
 

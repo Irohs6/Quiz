@@ -8,11 +8,11 @@
     <table class="admin-theme">
         <thead>
             <tr>
-                <td>ID</td>
-                <td>Nom</td>
-                <td>Theme</td>
-                <td>Nombre de Quiz</td>
-                <td>Action</td>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Theme</th>
+                <th>Nombre de Quiz</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -26,13 +26,13 @@
                     <td>
                         <ul class="ul_action">
                             <li class="li_action">
-                                <a  href="{{path('new_quiz', {'idCategory': category.id})}}">Créer un Quiz</a>
+                                <a class="btn btn-success" href="{{path('new_quiz', {'idCategory': category.id})}}">Créer un Quiz</a>
                             </li>
                             <li class="li_action">
-                                <a class="modify" href="{{path('edit_category', {'id': category.id})}}">Modifier un categorie</a>
+                                <a class="btn btn-warning" href="{{path('edit_category', {'id': category.id})}}">Modifier un categorie</a>
                             </li>
                             <li class="li_action">
-                                <a class="modify" href="{{path('delete_category', {'id': category.id})}}">Supprimer un categorie</a> 
+                                <a class="btn btn-danger" href="{{path('delete_category', {'id': category.id})}}">Supprimer un categorie</a> 
                             </li>
                         </ul>
                     </td>

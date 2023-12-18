@@ -41,7 +41,7 @@
             <h3 class="best_score">Mes 3 meilleurs scores :</h3>
             {% for bestGame in games %}
 
-                <p><span class="profil-info">{{ nb }} :</span> {{ bestGame.quiz.title }} score: {{ bestGame.score }}</p>
+                <li class="game_quiz"><span class="profil-info">{{ nb }} :</span> {{ bestGame.quiz.title }} score: {{ bestGame.score }}</li>
 
                 {% set nb = nb + 1 %} 
 
@@ -50,7 +50,7 @@
 
         <div class="recent">
             <div>
-                <h3 class="recent_acti">Recent Activity</h3>
+                <h3 class="recent_acti">Les 5 dernières parties</h3>
 
                 <ul class="list_profil">
                     {% for game in gamesUser %}
@@ -61,35 +61,44 @@
             </div>
 
         </div>
-
+        <div class="favorite">
+            <h3 class="create_quiz"> Vos Quiz Favoris</h3>
+            <ul>
+                {% if app.user.favoritesQuizzes %}
+                    {% for favoriteQuiz in app.user.favoritesQuizzes %}
+                        <li class="game_quiz">{{favoriteQuiz}}</li>
+                    {% endfor %}
+                {% else %}
+                    <p>Vous n'avez pas de quiz favoris pour le moment</p>
+                {% endif %}
+            </ul>
+        </div>
         <div class="bought">
 
-            <div>
-                <h3 class="create_quiz">Vos Quiz créer</h3>
-                {# condition si l'utilisateur a créer un quiz ou non  #}
-                    {% if not app.user.quizzes|length == 0  %}
-                    
-                    <ul class="list_profil" >
-
-                        {# boucle pour afficher les quiz de cet utilisateur #}
-                        {% for quiz in app.user.quizzes %} 
-                           
-                                <li class="profil_quiz_info">{{ quiz.title }} <span> nombre de question: {{quiz.questions|length}}</span><a class="btn_edit_quiz" href="{{path('new_question', {'idQuiz': quiz.id})}}">Modifier Quiz</a></li>
-                           
-                        {% endfor %}
-                    </ul>
-
-                {% else %}
-
-                    {# message si aucun quiz créer  #}
-                    <ul id="list-quiz">   
-                        Vous n'avez pas créer de quiz pour le moment
-                    </ul>
-
-                {% endif %}
+            <h3 class="create_quiz">Vos Quiz créer</h3>
+            {# condition si l'utilisateur a créer un quiz ou non  #}
+                {% if not app.user.quizzes|length == 0  %}
+                
                 
 
-            </div>
+                    {# boucle pour afficher les quiz de cet utilisateur #}
+                    {% for quiz in app.user.quizzes %} 
+                        <section class="section_create">
+                            <p class="profil_quiz_info">{{ quiz.title }} <span> nombre de question: {{quiz.questions|length}}</span></p><button class="btn_edit_quiz" >
+                            <a href="{{path('new_question', {'idQuiz': quiz.id})}}">Modifier Quiz</a></button>
+                        </section> 
+                    {% endfor %}
+               
+
+            {% else %}
+
+                {# message si aucun quiz créer  #}
+                <ul id="list-quiz">   
+                    Vous n'avez pas créer de quiz pour le moment
+                </ul>
+
+            {% endif %}
+          
         </div>
     </div>   
      

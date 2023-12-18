@@ -94,10 +94,10 @@ ul{
 }
 /*****************************footer************************************/
 footer{
-    border-top: 2px solid #1C418C;
     width: 100%;
-  
+    margin-top: 1em;
 }
+
 .footer{
     display: flex;
     flex-direction: row;
@@ -106,11 +106,20 @@ footer{
     align-items: center;
 }
 
-.contatc{
+.contact, .partenaire, .reseau-sociaux{
     display: flex;
     flex-direction: column;
 }
 
+.ul_footer {
+    display: flex;
+    gap: 1em;
+    list-style: none;
+    font-size: 1.5em;
+}
+.title_footer{
+    color: #014F86;
+}
 /*****************************HOME**********************************/
 
 
@@ -221,11 +230,9 @@ a{
 }
 
 .quiz-night{
-    background-image: linear-gradient(255deg, #c726eb 0%, #7B4ba0 75%, #14afd6 50%);
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
-    background-clip: text;
-    color: transparent;
+    font-weight: bold;
+    font-size: 1.1em;
+    color: #014F86;
 }
 
 .play{
@@ -275,48 +282,21 @@ a{
     padding: 15px;
 }
 
-
-
-/*****************************Quiz************************************/
-.formQuiz{
-    margin-right: auto;
-    margin-left: auto;
-    display: flex;
-    flex-direction: column;
-    width: 90%;
-    align-items: center;
-    margin-bottom: 30px;
-}
-#quiz-container {
-    padding: 15px;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 50%;
-    color: rgb(11, 11, 11);
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    justify-content: space-evenly;
-    /* Ajouter un fond légèrement blanc avec une opacité de 20% */
-    background-color: rgba(255, 255, 255, 0.2);
-}
 .nav_category{
     margin: auto;
     display: flex;
     width: 90%;
-   padding: 5em;
+    padding: 5em;
     justify-content: space-evenly;
-
-    /* border-top: 2px solid #014F86 ; */
     border-bottom: 2px solid #014F86 ;
 }
+
 .img_category_nav{
     width: 100px;
     height: 100px;
     border-radius: 50%;
 }
+
 .img_category_nav:hover{
     width: 110px;
     height: 110px;
@@ -342,11 +322,13 @@ a{
     color: white;
     text-align: center;
 }
+
 .img_card_category{
     width: 140px;
     height: 150px;
     border-radius: 50%;
 }
+
 .fig_card_category{
     margin: auto;
     display: flex;
@@ -367,6 +349,8 @@ a{
     right: 30px;
   }
 
+
+/*****************************Play Quiz************************************/
 #quiz-container-play{
     position: absolute;
     top: 170px;
@@ -379,18 +363,35 @@ a{
     align-items: center;
     width: 55%;
     color: white;
-    height: 680px;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+    height: 1000px;
     justify-content: center;
+    font-size: 2em;
+    z-index: 99;
 }
 
-.quiz-container{
+.formQuiz{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 800px; 
+}
+#info_question{
+    position: absolute;
+    color: white;
+    background-color: #0B2443;
+    padding: 0.5em;
+    border-radius: 10px;
+    top: 23%;
+    left: auto;
+    border: silver 4px solid;
+    font-size: 1.5em;
+    z-index: 1;
+}
+#quiz-container {
     border-radius: 15px;
     padding: 15px;
-    height: 85%;
-    width: 85%;
+    min-height: 900px;
+    width: 45%;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -398,38 +399,86 @@ a{
     background-color: #0B2443;
     color: white;
     border: 4px solid silver;
+    margin: 2.5em 0;
+}
+
+.quiz-container{
+    border-radius: 15px;
+    padding: 15px;
+    height: 95%;
+    width: 95%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
 }
 
 #questions{
     text-align: justify;
-    font-size: 2em;
     font-weight: 700;
-}
-#recap-container{
-    display: none;
+    padding-bottom: 0.5em;
 }
 
 #answer{
     width: 95%;
-    padding: 10px;
-    font-size: 1.5em;
+    font-size: 2em;
     display: flex;
     flex-direction: column;
-    gap: 0.4em;
+    gap: 0.8em;
 }
+
 .label_answer{
-    width: 80%;
+    width: 90%;
     background: white;
-    /* display: inline-block; */
     color: #0c5283;
     border-radius: 10px;
     padding: 0.3em;
     font-weight: 700;
+    cursor: pointer;
+    text-align: justify;
 }
+.label_answer:hover{
+    filter: opacity(90%);
+}
+
+input[type="radio"] {
+    margin: 10px;
+}
+
+#recap-container{
+    display: none;
+}
+
 #valider{
     border-radius: 10px;
     padding: 7.5px;
     background: white;
+    width: 200px;
+    font-size: 1.5em;
+    color: #0c5283;
+    font-weight: 600;
+    cursor: pointer;
+    border: 3px solid silver;
+    margin: 1.5em 0;
+}
+#valider:hover{ 
+    border: 1px solid silver;
+    font-size: 1.45em;
+}
+#message{
+    width: 50%;
+    font-weight: 700;
+    font-size: 2em;
+    text-align: center;
+    padding: 1em;
+}
+#valider{
+    display: block;
+    padding: 0.6em;
+    border-radius: 10px;
+    background: white;
+    color: blue;
+    font-weight: 700;
 }
 /********************Recap**************************/
 .container_recap{
@@ -641,12 +690,12 @@ a{
     border: #014F86 solid 1px;
 }
 .btn_edit_quiz{
-    margin-left: 20px;
     border: #014F86 solid 3px;
     padding: 0.2em;
     border-radius: 0.8em;
     color: #0B2443;
     font-weight: bold;
+    height: 2.8em;
 }
 .btn_edit_quiz:hover{ 
     border: #014F86 solid 1px;
@@ -683,7 +732,7 @@ a{
 }
     
 .deal {  
-    width:28%;
+    width:33%;
 }
 .best_score{
     font-weight:600;
@@ -691,16 +740,22 @@ a{
     background-color:#014F86;
     padding:10px 5px;
 }
-     
+.section_create{
+    display: flex;
+    padding: 0 0.6em;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.favorite{
+    width: 32%;
+} 
 .recent{
-    width:25%;
-    max-height:300px;
-    overflow:auto;
+    width:33%;
+    
 }
 .bought{
-    width:45%;
-    max-height:300px;
-    overflow:auto;
+    width: 80%;
+    margin: auto;
 }
 .recent_acti, .create_quiz {
     color:#fff;
@@ -712,6 +767,8 @@ a{
     display:block;
     padding:10px 0;
     padding-left:5px;
+    font-size: 1.2em;
+    font-weight: 500;
 }
 .game_score {
     float:right; 
@@ -723,9 +780,7 @@ a{
     color: #0B2443;
     font-weight: 500;
 }
-li:nth-child(even) {
-    background-color:#ebebeb; 
-}
+
       
     
 /****************************************************/
@@ -824,6 +879,32 @@ li:nth-child(even) {
     margin: auto; 
 }
 
+/* .table-score{
+    width: 60%;
+    height: 60%;
+    position: absolute;
+    top: 10%;
+    left: 25%;
+    background-color: rgba(255, 255, 255);
+    border: 2px solid black;
+    padding: 15px;
+    border-radius: 10px;
+} */
+thead th,thead td{
+    color: #DF9409;
+}
+th, td{
+    border: 1px solid black;
+    border-collapse: collapse;
+    width: 100%;
+    padding-left: 5px;
+}
+th, td {
+    color: white;
+    width: 3%;
+    background-color: #0b2443b8;
+    text-align: center;
+}
 .box_theme{
     margin: auto;
     width: 95%;

@@ -8,10 +8,10 @@
     <table class="admin-theme">
         <thead>
             <tr>
-                <td>ID</td>
-                <td>Nom</td>
-                <td>Nombre de Categorie</td>
-                <td>Action</td>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Nombre de Categorie</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -24,13 +24,13 @@
                     <td>
                         <ul class="ul_action">
                             <li class="li_action">
-                                <a href="{{path('new_category',{'idTheme': theme.id})}}">Ajouter une nouvelle catégorie</a>
+                                <a class="btn btn-success" href="{{path('new_category',{'idTheme': theme.id})}}">Ajouter une nouvelle catégorie</a>
                             </li>
                             <li class="li_action">
-                                <a class="modify" href="{{path('edit_theme', {'id': theme.id})}}">Modifier un theme</a>
+                                <a class="btn btn-warning" href="{{path('edit_theme', {'id': theme.id})}}">Modifier un theme</a>
                             </li>
                             <li class="li_action">
-                                <a class="modify" href="{{path('delete_theme', {'id': theme.id})}}">Supprimer un theme</a> 
+                                <a class="btn btn-danger" href="{{path('delete_theme', {'id': theme.id})}}">Supprimer un theme</a> 
                             </li>
                         </ul>
                     </td>

@@ -165,11 +165,11 @@ class QuizController extends AbstractController
             }else{
             
                 $nbJour = $dateModify->diff($now)->format("%d");
-                $this->addFlash('error', 'Vous pourez rejouer le quiz dans '.$nbJour.' jours');
+                $this->addFlash('warning', 'Vous pourez rejouer le quiz dans '.$nbJour.' jours');
                 return $this->redirectToRoute('app_home_quiz');
             }
         }else{
-            $this->addFlash('error', "Ce quiz n'est pas encore disponible");
+            $this->addFlash('warning', "Ce quiz n'est pas encore disponible");
             return $this->redirectToRoute('app_home_quiz');
         }
         
@@ -205,7 +205,8 @@ class QuizController extends AbstractController
             'quizsRecap' => $quizRecaps
         ]);
     }
-    //Pour créer ou modifier une catégorie
+
+    //Pour créer ou modifier un quiz
     #[Route('/quiz/{idCategory}/new/', name: 'new_quiz')]
     public function newQuiz(Quiz $quiz = null, Request $request, EntityManagerInterface $entityManager,CategoryRepository $categoryRepository): Response
     {
@@ -225,6 +226,7 @@ class QuizController extends AbstractController
         if ($formNewQuiz->isSubmitted() && $formNewQuiz->isValid()) {
             // Récupérer les données du formulaire
             $data = $formNewQuiz->getData();
+
             foreach ($quiz->getQuestions() as $question ) {
                 $question->setCategory($category); // Associer la catégorie à la nouvelle question
                
@@ -234,7 +236,7 @@ class QuizController extends AbstractController
             $entityManager->persist($quiz);
             $entityManager->flush();
     
-            
+            $this->addFlash('success', "Votre Quiz a bien été créer vous recevrez une confirmation une fois qu'il sera validé.");
             return $this->redirectToRoute('app_list_quiz'); // redirige vers le détail d'un quiz
         }
     
@@ -270,15 +272,14 @@ class QuizController extends AbstractController
             $entityManager->persist($quiz);
             $entityManager->flush();
 
+            $this->addFlash('success', 'Votre Quiz a bien été modifier.');
             // Redirection vers une page de confirmation ou vers la gestion du quiz
             return $this->redirectToRoute('show_quiz',['id'=> $quiz->getId()]);
         }
 
         return $this->render('quiz/edit_quiz.html.twig', [
-           
             'quiz' => $quiz,
             'edit' => $quiz->getId(),
-            
             'quizId' => $quiz->getId(),
             'formEditQuiz' => $formEditQuiz->createView(),
         ]);
@@ -289,7 +290,7 @@ class QuizController extends AbstractController
     public function showQuiz(Quiz $quiz, QuestionRepository $questionRepository): Response
     {
         $questionNotInQuiz = $questionRepository->questionsNotInQuiz($quiz->getId());//pour afficher la liste des question qui ne sont pas dans ce quiz
-        return $this->render('show_quiz.html.twig', [
+        return $this->render('moderator/show_quiz.html.twig', [
             'questionNotInQuiz' => $questionNotInQuiz,
             'quiz' => $quiz,
         ]);

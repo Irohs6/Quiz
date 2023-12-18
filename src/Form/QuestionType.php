@@ -27,6 +27,7 @@ class QuestionType extends AbstractType
             ])
             ->add('link', UrlType::class,[
                 'label' => 'Lien ver la documentation officielle',
+                'required' => false,
                 'attr' =>[ 
                     'class' => 'form-control',
                 ]

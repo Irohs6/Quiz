@@ -17,9 +17,11 @@ window.addEventListener("load", (event) => {
     let min = 0;  // déclaration d'une variable min a 0 qui sera uttilisé pour l'affichage des question au hasard
     let max = quizData.questions.length; // variable max qui est set avec le nombre total de question du quiz
     let currentQuestionIndex = Math.floor(Math.random() * (max - min)) + min; //Créer un index de question aléatoire pour la première question
-    let count = 0; // varaible déclarer a 0 utilisé pour compter le nombre de question
+    let count = 1; // varaible déclarer a 0 utilisé pour compter le nombre de question
     let askedQuestionsOrder = []; // Tableau pour stocker l'ordre des questions posées
-
+    let numberQuestion = document.getElementById('number_question');
+    let sectionInfoQuestion = document.getElementById('info_question')
+    numberQuestion.innerHTML = count 
    // Gestion du clic sur le bouton "Play"
     play.addEventListener('click', function () {
 
@@ -44,7 +46,7 @@ window.addEventListener("load", (event) => {
 
     // Fonction pour afficher une question
     function displayQuestion() {
-
+        
         let newIndex = getRandomUniqueIndex(0, quizData.questions.length);// stock le nouvel index de question unique
         currentQuestionIndex = newIndex; // et rempalce celui de currentQuestion pour la question suivante
         askedQuestions.push(newIndex); // Stock les index de question qui ont déja été afficher pour garantir qu'une question ne sera posé qu'une seul fois
@@ -125,7 +127,7 @@ window.addEventListener("load", (event) => {
         });
          // Si 10 questions ont été posées
        
-            if (count === 9 ) {
+            if (count === 10 ) {
                 valider.style.display = 'none' //cache le bouton valider après la validation de la dernière question
                 document.getElementById('quiz-container').style.display = 'none';//cache le contenu du quiz-container contenant les question et les réponse
             }
@@ -135,18 +137,19 @@ window.addEventListener("load", (event) => {
         selectedAnswers[currentQuestion.id].push(...checkedAnswers);
         console.log('curent',selectedAnswers);
         
-         // Affichage de la prochaine question tant que count est inférieur a 9
-        if (count < 9) {
+         // Affichage de la prochaine question tant que count est inférieur a 10
+        if (count < 10) {
             
             displayQuestion();
         } else {
             // Ajoute le recap dans le html pour le récupérer dans le controlleur le stocké en session a l'afficher sur une autre pages
             displayRecap()
+            sectionInfoQuestion.style.display = 'none'
             message.innerHTML = 'Bravo vous avez Terminer ce quiz appuyer sur le bouton pour découvrir votre résultat'; //Affiche un message une fois le quiz terminer
         }
         
         count++
-       
+        numberQuestion.innerHTML = count 
     });
 
     //function qui créer un tableau de recap d'un quiz
