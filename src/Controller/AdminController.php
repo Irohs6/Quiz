@@ -14,6 +14,7 @@ use App\Repository\UserRepository;
 use App\Repository\ThemeRepository;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -35,7 +36,7 @@ class AdminController extends AbstractController
     }
 
     //changement de role pour un utilisateur
-    #[Route(path: 'admin/panel/userManagementRole/{id}', name: 'app_userManagementRole')]
+    #[Route(path: 'admin/panel/addRoleModerator/{id}', name: 'app_addRoleModerator')]
     public function addRoleModerator(User $user, EntityManagerInterface $entityManager): Response
     {
         $user->setRoles(['ROLE_MODERATOR']);//change le role a moderateur
@@ -46,7 +47,7 @@ class AdminController extends AbstractController
     }
 
     //changement de role pour un utilisateur
-    #[Route(path: 'admin/panel/userManagementRole/{id}', name: 'app_userManagementRole')]
+    #[Route(path: 'admin/panel/removeRoleModerator/{id}', name: 'app_removeRoleModerator')]
     public function removeRoleModerator(User $user, EntityManagerInterface $entityManager): Response
     {
         $user->setRoles(['ROLE_USER']);//change le role a user
@@ -121,11 +122,13 @@ class AdminController extends AbstractController
             $idTheme = $request->attributes->get('idTheme');// on récupère l'id theme contenu dans l'url
             $theme = $themeRepository->findOneBy(['id' => $idTheme]); // on récupère l'entity theme garce a cet id
             $picture = null; // on set la variable a null si la catégorie n'existe pas
+            $message = "Cet Categorie a été ajouter avec succès.";
         }else{
             //si la catégorie existe
             $theme = $category->getTheme(); //on récupère le theme contenu dans la catégorie
             // Récupérez le nom du fichier depuis l'entité
             $picture = $category->getPicture();//on récupère l'image de la catégorie
+            $message = "Cet Categorie a bien été modifier";
         }
           
         $category->setTheme($theme);//on ajoute le thème a la catégorie
@@ -156,6 +159,7 @@ class AdminController extends AbstractController
             // execute PDO(la requete Insert ou Update)
             $entityManager->flush();
             //redirige ajout de question et réponse
+            $this->addFlash('success', $message);
             return $this->redirectToRoute('list_categories');
         }
 
@@ -171,9 +175,19 @@ class AdminController extends AbstractController
     public function deleteCategory(Category $category, EntityManagerInterface $entityManager): Response
     {
         
+        $image = $category->getPicture();
+        
+        if (isset($image) ){
+          
+            $projectDir = $this->getParameter('kernel.project_dir');
+            
+            unlink($projectDir.'/public/uploads/img/category/'.$image); 
+        } else {
+            $image = null;
+        }
         $entityManager->remove($category);//suprime cet category les quizs et les questions associer
         $entityManager->flush();
-
+        $this->addFlash('success', 'Cet Categorie a été supprimer avec succes');
         return $this->redirectToRoute('list_categories');
     }
 
@@ -185,6 +199,9 @@ class AdminController extends AbstractController
         //si theme n'existe pas 
         if (!$theme) {
             $theme = new Theme;//on créer une nouvelle instance de theme
+            $message = 'Thème ajouter avec sucès';
+        }else{
+            $message = 'Thème modifier avec sucès';
         }
 
         $formNewTheme = $this->createForm(ThemeType::class, $theme);//crer le formulaire
@@ -200,7 +217,7 @@ class AdminController extends AbstractController
             // execute PDO(la requete Insert ou Update)
             $entityManager->flush();
             //redirige vers la list des theme
-            $this->addFlash('success', "Votre Theme a bien été ajouté.");
+            $this->addFlash('success', $message);
             return $this->redirectToRoute('list_theme');
             
         }

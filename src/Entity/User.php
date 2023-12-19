@@ -51,13 +51,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'userId', targetEntity: Game::class)]
     private Collection $games;
 
-    #[ORM\OneToMany(mappedBy: 'userId', targetEntity: Quiz::class)]
+    #[ORM\OneToMany(mappedBy: 'userId', targetEntity: Quiz::class, cascade: ['persist', 'remove'])]
     private Collection $quizzes;
 
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
 
-    #[ORM\ManyToMany(targetEntity: Quiz::class, mappedBy: 'usersFavorites')]
+    #[ORM\ManyToMany(targetEntity: Quiz::class, mappedBy: 'usersFavorites', cascade: ['persist', 'remove'])]
     private Collection $favoritesQuizzes;
 
     public function __construct()

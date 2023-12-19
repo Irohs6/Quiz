@@ -23,10 +23,10 @@ class QuestionController extends AbstractController
         // si question n'existe pas 
         if(!$question){
             $question = new Question; // créer une nouvelle intance de question
-           
             $quizId = $request->attributes->get('idQuiz');//on récupère l'id de quiz dans l'url
             $quiz = $quizRepository->findOneBy(['id' => $quizId]);// on récupére le quiz grace a son id
             $category = $quiz->getCategory();
+            $message = 'Votre question a bien été ajouté'; 
             
         }else{
             $quiz = $question->getQuiz();// si quiz existe on récupère le Quiz appartenant a la question

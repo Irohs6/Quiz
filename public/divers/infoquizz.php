@@ -1,118 +1,71 @@
-{% extends 'base.html.twig' %}
+CREATE TABLE Make_user(
+   id_user COUNTER,
+   nom VARCHAR(50) NOT NULL,
+   prenom VARCHAR(50),
+   email VARCHAR(50) NOT NULL,
+   password VARCHAR(64) NOT NULL,
+   role VARCHAR(50) NOT NULL,
+   PRIMARY KEY(id_user)
+);
 
-{% block title %}Hello QuizController!{% endblock %}
+CREATE TABLE Category(
+   id_category INT,
+   libele VARCHAR(100) NOT NULL,
+   PRIMARY KEY(id_category)
+);
 
-{% block body %}
-{% set message = '' %} {# Initialisation de la variable message à l'extérieur de la boucle #}
-{% set playLink = '' %} {# Initialisation de la variable message à l'extérieur de la boucle #}
+CREATE TABLE Formation(
+   id_formation COUNTER,
+   intitule VARCHAR(100) NOT NULL,
+   PRIMARY KEY(id_formation)
+);
 
+CREATE TABLE Stagiaire(
+   id_stagiaire INT,
+   nom VARCHAR(50) NOT NULL,
+   prenom VARCHAR(200) NOT NULL,
+   dateNaissance DATE NOT NULL,
+   genre VARCHAR(1) NOT NULL,
+   ville VARCHAR(50) NOT NULL,
+   email VARCHAR(50) NOT NULL,
+   tel VARCHAR(10) NOT NULL,
+   PRIMARY KEY(id_stagiaire)
+);
 
+CREATE TABLE Session(
+   id_session INT,
+   nbPlaceTotal INT NOT NULL,
+   dateDebut DATETIME NOT NULL,
+   dateFin DATETIME NOT NULL,
+   intitule VARCHAR(100) NOT NULL,
+   id_user INT NOT NULL,
+   id_formation INT NOT NULL,
+   PRIMARY KEY(id_session),
+   FOREIGN KEY(id_user) REFERENCES Make_user(id_user),
+   FOREIGN KEY(id_formation) REFERENCES Formation(id_formation)
+);
 
+CREATE TABLE Modules(
+   id_modules COUNTER,
+   libele VARCHAR(250) NOT NULL,
+   id_category INT NOT NULL,
+   PRIMARY KEY(id_modules),
+   FOREIGN KEY(id_category) REFERENCES Category(id_category)
+);
 
-    <section class="section-slide">
-        <div class="content">
-           
-            {% for category in allCategories %}
-                <div class="info">
-                    <h2>{{ category.label }}</h2>
-                </div>  
+CREATE TABLE Programme(
+   id_session INT,
+   id_modules INT,
+   nbJours INT NOT NULL,
+   PRIMARY KEY(id_session, id_modules),
+   FOREIGN KEY(id_session) REFERENCES Session(id_session),
+   FOREIGN KEY(id_modules) REFERENCES Modules(id_modules)
+);
 
-                <div class="swiper">
-
-                
-                    <div class="swiper-wrapper">
-                        {% for quiz in category.quizzes %}
-
-                        
-                            {% if app.user %}  {# si le user est connecter#}
-
-                                
-                                {% set lastGameDate = null %}
-                                {% set score = null %}
-
-                                {% for game in quiz.games %} {# boucle sur les parties jouer #}
-                                    
-                                    {% if game.userId.id == app.user.id %} {#condition si le joueur connecter a bien une partit enregistrer#}
-
-                                        {% if loop.first %}
-
-                                            {% set lastGameDate = game.dateGame %} {# on stock la date de la partie dans une variable#}
-                                            {% if app.user.games %}
-                                                {% set score = gameScore.score %} {# on stoke le score dans la variable score #}
-                                            {% else %}
-                                                {% set score = "Vous n'avez pas encore enregistré de score sur se quiz" %} {# on stoke le score dans la variable score #}
-                                            {% endif %}
-                                        {% elseif game.dateGame > lastGameDate %} {# si la date de la partie est supérieur a la dernière partie jouer#}
-
-                                            {% set lastGameDate = game.dateGame %}{# on enregistre la nouvelle date #}
-                                            {% if app.user.games %}
-                                                {% set score = gameScore.score %} {# on stoke le score dans la variable score #}
-                                            {% else %}
-                                                {% set score = "Vous n'avez pas encore enregistré de score sur se quiz" %} {# on stoke le score dans la variable score #}
-                                            {% endif %}
-                                        {% endif %}
-
-                                    {% endif %}{# fin {% if game.userId.id == app.user.id %}  #}
-                            
-                                {% endfor %} {# {% for game in quiz.games %} #}
-
-                                {% if lastGameDate is not null %} {# si la variable a bien été set et donc qu'une partit existe #}
-                            
-                                    {% if score >= 80 %} {# condition si score est supérieur a 80% stock se message #}
-                                        {% set message = "Vous avez validé ce quiz en obtenant " ~ score ~ "%" ~ " de bonne réponse . Vous pourrez quand même le rejouer et tenter de faire mieux si possible." %}
-                                    {% else %} {# sinon on stock se message #}
-                                        {% set message = "Vous n'avez pas validé ce quiz en obtenant " ~ score ~ "% de bonne réponse." %}
-                                    {% endif %} {# fin {% if score >= 80 %} #}
-
-                                    {% set diffDays = date('now').diff(lastGameDate) %} {# on fait la différence de la date de la partie + 7 j par rapport a la date du jours #}
-                                        
-                                    {% if diffDays.days > 7 %} {# si le résultat est inférieur ou égal a 0  il peux rejouer le quiz et affiche le bon message #}
-                                        <p>{{ message }}</p>
-                                        {# lien pour jouer le quiz#}
-                                        <a class="play" href="{{ path('app_play', {'id': quiz.id}) }}">Jouer</a>
-
-                                    {% else %} {# sinon il doit attendre le nombre de jour restant#}
-                                        <p>{{ message }}</p>
-                                        {% set nbDay = lastGameDate|date_modify("+7 day").diff(date('now')) %}
-                                        {# message avec nombre de jour restant avant de pouvoir rejouer#}
-                                        <p>Vous pourrez rejouer ce quiz dans {{ nbDay.days }} jour(s)</p>
-
-                                    {% endif %} {# fin {% if diffDays.days > 7 %}#}
-
-                                {% else %} {# si aucune partie enregistrer pour se quiz il peux le jouer #}
-                                    {# lien vers la page pour jouer le quiz#}
-                                    <a class="play" href="{{ path('app_play', {'id': quiz.id}) }}">Jouer</a>
-
-                                {% endif %} {# fin {% if lastGameDate is not null %} #}
-
-                                        {# </article> #}
-
-                            {% endif %} {# fin {% if app.user %}  #}
-                    
-                 
-
-
-                            <div class="swiper-slide" style="background: linear-gradient(to top, #0f2027, #203a43, #2c5364);  background-repeat: no-repeat; background-position: 50% 50%; background-size: cover;">
-                                {% if quiz in app.user.favoritesQuizzes %}
-                                    <h2>{{ quiz.title }}  <a href="{{ path('app_remove_favorite', {'id': quiz.id}) }}"><i class="fa-solid fa-star fa-xl" style="color: #dbc906;"></i></a></h2>
-                                {% else %}
-                                    <h2>{{ quiz.title }} <a href="{{ path('app_add_favorite', {'id': quiz.id}) }}"><i class="fa-regular fa-star fa-xl" style="color: #dbc906;"></i></a></h2> 
-                                {% endif %}
-                                
-                                
-                                  
-                                    <p>{{message}}</p> 
-                                 
-                            </div>
-                        
-                            {% endfor %}
-                        </div>
-                    </div>
-                    
-                {% endfor %}
-        </div>
-       
-    </section>
-<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-                <script src="{{ asset('js/swipper.js') }}"></script>
-{% endblock %}
+CREATE TABLE Formation_stagiaire(
+   id_session INT,
+   id_stagiaire INT,
+   PRIMARY KEY(id_session, id_stagiaire),
+   FOREIGN KEY(id_session) REFERENCES Session(id_session),
+   FOREIGN KEY(id_stagiaire) REFERENCES Stagiaire(id_stagiaire)
+);

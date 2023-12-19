@@ -46,7 +46,17 @@
                         <td>
                             <ul class="ul_action">
                                 <li class="li_action">
-                                    <a class="btn btn-success" href="{{path('app_userManagementRole', {'id': user.id})}}"> Attribuer Role Moderator</a>
+                                   
+                                    
+                                    
+                                        {% if 'ROLE_MODERATOR' not in user.roles %} 
+                                            <a class="btn btn-success" href="{{path('app_addRoleModerator', {'id': user.id})}}"> Attribuer Role Modérateur</a>
+                                        {% else %} 
+                                            <a class="btn btn-success" href="{{path('app_removeRoleModerator', {'id': user.id})}}"> Enlever le role Modérateur</a>
+                                        {% endif %}
+
+                                    
+                            
                                 </li>
                                 {% if not user.isBanned %}
                                     <li class="li_action">

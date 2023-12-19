@@ -26,7 +26,11 @@
                     <td>{{ quiz }}</td>
                     <td>{{ quiz.level }}</td>
                     <td>{{ quiz.questions|length }}</td>
-                    <td>{{ quiz.userId.username }}</td>
+                    {% if quiz.userId %}
+                        <td>{{ quiz.userId.username }}</td>
+                    {% else %}
+                        <td>Utilisateur Suprimé</td>
+                    {% endif %}
                     <td>
                         {% if quiz.isVerified %}
                             <i class="fa-solid fa-check fa-2xl" style="color: #0dd10a;"></i>

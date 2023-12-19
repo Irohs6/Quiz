@@ -1,0 +1,11 @@
+<h1>Bonjours {{ quiz.userId.username }} </h1>
+
+<p>
+    Le quiz {{ quiz.title }} que vous avez créer a été valider et est maintenant disponible.
+    Accèder au détail de votre Quiz grace a ce lien: 
+    <a href="https://127.0.0.1:8000{{ path('show_quiz', {'id': quiz.id})}}">ici</a>
+</p>
+
+<p>
+    Merci!
+</p>

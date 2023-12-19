@@ -25,6 +25,7 @@
                 </div>
                 {# lien vers le formulaire de modification de profil(username, email, image) #}
                 <a class="btn_edit_profil" href="{{path('edit_profile', {'id': app.user.id})}}">Modifier profil</a>
+                <a class="btn_edit_profil" href="{{path('delete_profile', {'id': app.user.id})}}">Suprimer profil</a>
             </section>
         <div class="points">
             {% for game in app.user.games %}
@@ -84,8 +85,14 @@
                     {# boucle pour afficher les quiz de cet utilisateur #}
                     {% for quiz in app.user.quizzes %} 
                         <section class="section_create">
-                            <p class="profil_quiz_info">{{ quiz.title }} <span> nombre de question: {{quiz.questions|length}}</span></p><button class="btn_edit_quiz" >
-                            <a href="{{path('new_question', {'idQuiz': quiz.id})}}">Modifier Quiz</a></button>
+
+                            <a  href="{{path('show_quiz', {'id': quiz.id})}}">
+                                <p class="profil_quiz_info">{{ quiz.title }} <span> nombre de question: {{quiz.questions|length}}</span></p>
+                            </a>
+                            <button class="btn_edit_quiz" >
+                                <a  href="{{path('edit_quiz', {'id': quiz.id})}}">Modifier un Quiz</a>
+                            </button>
+
                         </section> 
                     {% endfor %}
                

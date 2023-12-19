@@ -8,11 +8,16 @@ use App\Entity\Theme;
 use App\Entity\Category;
 use App\Repository\QuizRepository;
 use App\Repository\UserRepository;
+use Symfony\Component\Mime\Address;
 use App\Repository\CategoryRepository;
 use App\Repository\QuestionRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ModeratorController extends AbstractController
@@ -30,20 +35,39 @@ class ModeratorController extends AbstractController
     {
         $quizes = $quizRepository->findAll();//récupère toute les données quiz enregistré
         $categories = $categoryRepository->findAll();//récupère toute les données de catégorie enregistré
-       
+
         return $this->render('moderator/list_quiz.html.twig', [
             'quizes' => $quizes,
             'categories' => $categories,
         ]);
     }
 
-    #[Route('/moderator/verified/quiz/{id}', name: 'verified_quiz')]
-    public function verifiedQuiz(Quiz $quiz, EntityManagerInterface $entityManager): Response
-    {
-       $quiz->setIsVerified(true);
-       $entityManager->flush();
 
-       return $this->redirectToRoute('list_quizzes');
+
+    #[Route('/moderator/verified/quiz/{id}', name: 'verified_quiz')]
+    public function verifiedQuiz(Quiz $quiz, EntityManagerInterface $entityManager, MailerInterface $mailer): Response
+    {
+        $quiz->setIsVerified(true);
+        $entityManager->flush();
+        $user = $quiz->getUserId();
+       
+        if ($user) {
+       
+            $email = (new TemplatedEmail())
+                ->from('admin@quiz-quest.com')
+                ->to($user->getEmail())
+                ->subject('Vérification de votre Quiz')
+                ->htmlTemplate('quiz/confirmation_quiz.html.twig')
+                ->context([
+                    'quiz' => $quiz,
+                ]);
+
+            $mailer->send($email);
+        }
+        
+        $this->addFlash('success', 'Ce Quiz a bien été vérifier');
+        return $this->redirectToRoute('list_quizzes');
+
        
     }
 
@@ -52,6 +76,8 @@ class ModeratorController extends AbstractController
     {
        $quiz->setIsVerified(false);
        $entityManager->flush();
+
+       $this->addFlash('success', "Ce quiz n'est plus vérifier.");
 
        return $this->redirectToRoute('list_quizzes');
        

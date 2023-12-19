@@ -48,7 +48,7 @@ class QuizController extends AbstractController
     }
    
     //pages pour jouer un quiz
-    #[Route('/quiz/play/{id}', name: 'app_play')]
+    #[Route('user/quiz/play/{id}', name: 'app_play')]
     public function playQuiz(Quiz $quiz, Request $request, EntityManagerInterface $entityManager,GameRepository $gameRepository): Response
     {
 
@@ -181,7 +181,7 @@ class QuizController extends AbstractController
         ]);
     }
 
-    #[Route('/quiz/recap/', name: 'app_recap')]
+    #[Route('user/quiz/recap/', name: 'app_recap')]
     public function recapQuiz()
     {
         $session = new Session();
@@ -190,16 +190,21 @@ class QuizController extends AbstractController
         $score = 0; // Initialiser la variable $score
         $quizRecaps = []; // Initialiser le tableau $quizRecaps
         
-        foreach ($recapData as $data) {
-            if (isset($data['score'])) {
-                $score = $data['score'];
-            } else {
-                foreach ($data as $quizRecap) {
-                    $quizRecaps[] = $quizRecap; // Ajouter les éléments à $quizRecaps
+        if ($recapData) {
+           
+            foreach ($recapData as $data) {
+                if (isset($data['score'])) {
+                    $score = $data['score'];
+                } else {
+                    foreach ($data as $quizRecap) {
+                        $quizRecaps[] = $quizRecap; // Ajouter les éléments à $quizRecaps
+                    }
                 }
             }
+        } else {
+            $this->addFlash('warning', "Vous n'avez jouer aucune partit sur cet session vous n'avez donc aucun recapitulatif a affiché.");
+            return $this->redirectToRoute('app_home_quiz');
         }
-        
         return $this->render('quiz/recap_game_quiz.html.twig', [
             'score' => $score,
             'quizsRecap' => $quizRecaps
@@ -207,10 +212,10 @@ class QuizController extends AbstractController
     }
 
     //Pour créer ou modifier un quiz
-    #[Route('/quiz/{idCategory}/new/', name: 'new_quiz')]
+    #[Route('moderator/quiz/{idCategory}/new/', name: 'new_quiz')]
     public function newQuiz(Quiz $quiz = null, Request $request, EntityManagerInterface $entityManager,CategoryRepository $categoryRepository): Response
     {
-        
+
         $quiz = new Quiz;
         $idCategory = $request->attributes->get('idCategory');
         $category = $categoryRepository->findOneBy(['id' => $idCategory]);
@@ -236,7 +241,7 @@ class QuizController extends AbstractController
             $entityManager->persist($quiz);
             $entityManager->flush();
     
-            $this->addFlash('success', "Votre Quiz a bien été créer vous recevrez une confirmation une fois qu'il sera validé.");
+            $this->addFlash('success', "Votre Quiz a bien été créer vous recevrez une confirmation par email une fois qu'il sera validé.");
             return $this->redirectToRoute('app_list_quiz'); // redirige vers le détail d'un quiz
         }
     
@@ -249,32 +254,42 @@ class QuizController extends AbstractController
         ]);
     }
 
-    #[Route('/quiz/{id}/edit/', name: 'edit_quiz')]
+    #[Route('user/quiz/{id}/edit/', name: 'edit_quiz')]
     public function editQuiz(Quiz $quiz, Request $request, EntityManagerInterface $entityManager): Response
     {
-        // Récupérer les questions et réponses associées au quiz existant
-        $questions = $quiz->getQuestions();
-        $category = $quiz->getCategory();
+        
+        if ( $this->getUser() == $quiz->getUserId() || $this->isGranted('ROLE_MODERATOR')  ) {
+            
+            // Récupérer les questions et réponses associées au quiz existant
+            $questions = $quiz->getQuestions();
+            $category = $quiz->getCategory();
 
-        // Créer le formulaire en utilisant le quiz et ses données associées
-        $formEditQuiz = $this->createForm(QuizType::class, $quiz);
+            // Créer le formulaire en utilisant le quiz et ses données associées
+            $formEditQuiz = $this->createForm(QuizType::class, $quiz);
 
-        $formEditQuiz->handleRequest($request);
+            $formEditQuiz->handleRequest($request);
 
-        if ($formEditQuiz->isSubmitted() && $formEditQuiz->isValid()) {
-            $data = $formEditQuiz->getData();
-            // Mettre à jour les questions et réponses existantes si nécessaire
-            foreach ($questions as $question) {
-                $question->setCategory($category); // Associer la catégorie à la nouvelle questio
-                $question->setQuiz($quiz);
+            if ($formEditQuiz->isSubmitted() && $formEditQuiz->isValid()) {
+                $data = $formEditQuiz->getData();
+                // Mettre à jour les questions et réponses existantes si nécessaire
+                foreach ($questions as $question) {
+                    $question->setCategory($category); // Associer la catégorie à la nouvelle questio
+                    $question->setQuiz($quiz);
+                }
+
+                $entityManager->persist($quiz);
+                $entityManager->flush();
+
+                $this->addFlash('success', 'Votre Quiz a bien été modifier.');
+                // Redirection vers une page de confirmation ou vers la gestion du quiz
+                return $this->redirectToRoute('show_quiz',['id'=> $quiz->getId()]);
             }
 
-            $entityManager->persist($quiz);
-            $entityManager->flush();
-
-            $this->addFlash('success', 'Votre Quiz a bien été modifier.');
+        } else {
+            
+            $this->addFlash('warning', "Vous n'avez pas les autorisation pour cet action.");
             // Redirection vers une page de confirmation ou vers la gestion du quiz
-            return $this->redirectToRoute('show_quiz',['id'=> $quiz->getId()]);
+            return $this->redirectToRoute('app_home_quiz');
         }
 
         return $this->render('quiz/edit_quiz.html.twig', [
@@ -286,10 +301,17 @@ class QuizController extends AbstractController
     }
 
     //permet de voir le détail d'un quiz ou un modérateur pourra enlever ou ajouter des questions modifier une question et ses réponses
-    #[Route('/quiz/{id}/show', name: 'show_quiz')]
+    #[Route('user/quiz/{id}/show', name: 'show_quiz')]
     public function showQuiz(Quiz $quiz, QuestionRepository $questionRepository): Response
     {
-        $questionNotInQuiz = $questionRepository->questionsNotInQuiz($quiz->getId());//pour afficher la liste des question qui ne sont pas dans ce quiz
+        $user = $this->getUser();
+        if ($user == $quiz->getUserId() ||$this->isGranted('ROLE_MODERATOR') || !$user ) {
+
+            $questionNotInQuiz = $questionRepository->questionsNotInQuiz($quiz->getId());//pour afficher la liste des question qui ne sont pas dans ce quiz
+        }else{
+            $this->addFlash('warning', "Vous n'avez pas les autorisation pour cet action.");
+            return $this->redirectToRoute('app_home');
+        }
         return $this->render('moderator/show_quiz.html.twig', [
             'questionNotInQuiz' => $questionNotInQuiz,
             'quiz' => $quiz,

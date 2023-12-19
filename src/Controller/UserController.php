@@ -11,15 +11,24 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class UserController extends AbstractController
 {
     //route pour afficher le profil d'un uttilisateur
     #[Route('/user/profile/{id}/', name: 'user_profile')]
-    public function showProfile(User $user, GameRepository $gameRepository): Response
+    public function showProfile(User $user = null, GameRepository $gameRepository): Response
     {   
-        $games = $gameRepository->findBy(['userId'=> $user->getId()],['score'=>'DESC'],3);
-        $gamesUser = $gameRepository->findBy(['userId'=> $user->getId()],['dateGame' => 'DESC'],5);
+        if ($user == $this->getUser() && $user){
+
+            $games = $gameRepository->findBy(['userId'=> $user->getId()],['score'=>'DESC'],3);
+            $gamesUser = $gameRepository->findBy(['userId'=> $user->getId()],['dateGame' => 'DESC'],5);
+
+        }else{
+            $this->addFlash('warning', "Vous n'avez pas le droit de modifier la page d'un autre utilisateur");
+            //sinon on le redirige vers sa propre page de modification de profil
+            return $this->redirectToRoute('user_profile',['id' => $this->getUser()->getId()]);
+        }   
         return $this->render('user/show_user_profile.html.twig', [
             'games' => $games,
             'gamesUser' => $gamesUser
@@ -28,30 +37,29 @@ class UserController extends AbstractController
 
     //Route pour modifier un profil
     #[Route('/user/profile/edit/{id}/', name: 'edit_profile')]
-    public function editUser(User $user,Request $request,EntityManagerInterface $entityManager): Response
+    public function editUser(User $user = null,Request $request,EntityManagerInterface $entityManager): Response
     {
         $formEditUser= $this->createForm(UserType::class, $user);//crer le formulaire
         
         $formEditUser->handleRequest($request);
 
         //si user est égal au l'uttilisateur connecter
-        if ($user == $this->getUser()) {
+        if ($user == $this->getUser() && $user) {
             //si le formulaire de Quiz est remplie et valide
             if ($formEditUser->isSubmitted() && $formEditUser->isValid()) {
-                //récupère l'image selectionner par le user
-                $imageName =  $request->request->all('formEditUser')['selectedProfileImage']; 
-                //ajoute l'image au user
-                $user->setProfileImage($imageName);
                 //récupère les donné du formulaire  
                 $formEditUser->getData();
                 // prepare PDO(prepare la requete Insert ou Update)
                 $entityManager->persist($user);
                 // execute PDO(la requete Insert ou Update)
                 $entityManager->flush();
-                //redirige ajout de question et réponse
+
+                $this->addFlash('success', 'Votre profil a bien été modifier');
+                //redirige vers sa page de profil
                 return $this->redirectToRoute('user_profile',['id' => $user->getId()]);
             }
         }else{
+            $this->addFlash('warning', "Vous n'avez pas le droit de modifier la page d'un autre utilisateur");
             //sinon on le redirige vers sa propre page de modification de profil
             return $this->redirectToRoute('edit_profile',['id' => $this->getUser()->getId()]);
         }
@@ -62,21 +70,33 @@ class UserController extends AbstractController
 
         ]);
     }
-
-    //route pour afficher un tableau contenant les scores d'un utilisateur
-    #[Route('/table_score/{id}/', name: 'table_score')]
-    public function showScore(User $user, GameRepository $gameRepository)
+    //Route pour modifier un profil
+    #[Route('/user/profile/delete/{id}/', name: 'delete_profile')]
+    public function deleteUser(User $user = null,Request $request,EntityManagerInterface $entityManager, TokenStorageInterface $tokenStorage)
     {
-        $games = $gameRepository->findBy(['userId'=> $user->getId()]);
-          
+        $userConnected = $this->getUser();
+        if ($user == $userConnected) {
+            $quizzes = $user->getQuizzes();
+            foreach ($quizzes as $quiz) {
+                $user->removeQuiz($quiz);
+            }
 
-        return $this->render('user/template_show_tablescore.html.twig', [
-           'gamesUser' => $games
-        ]);
+            $tokenStorage->setToken(null);
+            $entityManager->remove($user);//suprime le compte utilisateur
+            $entityManager->flush();
+    
+
+            $this->addFlash('success', 'Votre profil a bien été supprimé');
+            return $this->redirectToRoute('app_home_quiz');
+        } else {
+            $this->addFlash('warning', "Vous ne pouvez pas supprimer le profil d'un autre utilisateur ");
+        }
 
     }
 
-    #[Route('add/quiz/favorite/{id}', name: 'app_add_favorite')]
+    
+
+    #[Route('user/add/quiz/favorite/{id}', name: 'app_add_favorite')]
     public function addFavoriteQuiz(Quiz $quiz, EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
@@ -87,11 +107,11 @@ class UserController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
         }
-    
+        $this->addFlash('success', 'Ce Quiz a été ajouter a vos favoris');
         return $this->redirectToRoute('app_home_quiz');
     }
 
-    #[Route('remove/quiz/favorite/{id}', name: 'app_remove_favorite')]
+    #[Route('user/remove/quiz/favorite/{id}', name: 'app_remove_favorite')]
     public function removeFavoriteQuiz(Quiz $quiz, EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
@@ -104,6 +124,8 @@ class UserController extends AbstractController
         // Persister les modifications
         $entityManager->persist($user);
         $entityManager->flush();
+
+        $this->addFlash('success', 'Ce Quiz ne fait plus partie de vos favoris');
 
         return $this->redirectToRoute('app_home_quiz');
     }

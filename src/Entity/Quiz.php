@@ -41,6 +41,7 @@ class Quiz
     private Collection $games;
 
     #[ORM\ManyToOne(inversedBy: 'quizzes')]
+    #[ORM\JoinColumn(nullable: true)]
     private ?User $userId = null;
 
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'favoritesQuizzes')]
