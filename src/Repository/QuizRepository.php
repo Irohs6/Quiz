@@ -53,16 +53,11 @@ class QuizRepository extends ServiceEntityRepository
             ->leftJoin('q.level', 'l')
             ->select('q.id', 'q.title', 'c.label AS category_label', 'l.label AS level_label')
             ->where('q.title LIKE :title')
-            // ->orWhere('c.label LIKE :label')
-            // ->orWhere('l.label LIKE :lab')
-           
             ->setParameters(
                 [
                     'title' => '%'.$srch.'%',
-                    // 'label' => '%'.$srch.'%',
-                    // 'lab' =>'%'.$srch.'%'
+                  
                 ])
-            // ->groupBy('q.title')
             ->getQuery()
             ->getResult();
     }

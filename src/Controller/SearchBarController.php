@@ -19,7 +19,7 @@ class SearchBarController extends AbstractController
         $srch = $request->attributes->get('srch');
         $result = $quizRepository->findByMultiple($srch);
         
-        $serializedData = $serializer->serialize($result, 'json', ['groups' => ['title', 'id', 'category', 'level']]);
-        return new JsonResponse($serializedData, Response::HTTP_OK, [], true);
+       
+        return $this->json($result, 200, [], ['groups' => ['title', 'id', 'category', 'level']]);
     }
 }
