@@ -34,7 +34,9 @@ class QuizController extends AbstractController
         if (!$this->getUser()) {
             $gamesPlay = "";
             $gameScore = "";
+            
         }else{
+            
             $gamesPlay = $gameRepository->findBy(['userId'=>$this->getUser()->getId()]);// récupère tous les Game d'un user
             $gameScore = $gameRepository->findOneBy(['userId'=>$this->getUser()->getId()],['score'=> 'DESC' ]); // récupère seullement la Game avec le meilleur score 
         }

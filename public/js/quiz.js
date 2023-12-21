@@ -1,6 +1,7 @@
 // Scripts jQuery / JavaScript généraux
 $(document).ready(function() { // Attend que le document (base.html.twig) soit complètement chargé
     let button = $('#quiz_Valider')
+
     let existingQuestions = $('.borders'); // pour récupérer toute les question existante pour la création du sommaire
 
     let nbQuestion = existingQuestions.length + 1 // variable déclarer pour le numéro des question prend la valeur de existingQuestion.length dans le cas ou des question serais déja existante.
@@ -47,17 +48,16 @@ $(document).ready(function() { // Attend que le document (base.html.twig) soit c
         // Mettre en pause pour assurer que l'élément est créé
         setTimeout(function() {
             $('#quiz_questions_'+divID).addClass('borders');
-            console.log( $('#quiz_questions_'+divID));
-            console.log('divID', divID);
+           
         }, 1000); // Délai d'une seconde 
         
-        addDeleteLink($(newElem).find('div.borders'));
+        // addDeleteLink($(newElem).find('div.borders'));
         newElem.appendTo(list); 
 
     });
 
     
-    console.log('counter', existingQuestions);
+
     function createExistingQuestionsSummary() {
         let questionCounter = 1; // Pour le n° de la question 
         //si des question existe
@@ -82,17 +82,15 @@ $(document).ready(function() { // Attend que le document (base.html.twig) soit c
     existingQuestions.each(function(question) {
         let questionIndex = question;
         $('[name^="quiz[questions]['+ questionIndex + '][answers]"][type="radio"][value="0"]').prop('readonly', true);
-        console.log('questionIndex', questionIndex);
+       
         let answersContainer = $('#quiz_questions_'+ questionIndex +'_answers')
-        console.log('answersContainer', answersContainer);
-        let counterAnswer = answersContainer.children().length
-        console.log(counterAnswer);
+        
+        // let counterAnswer = answersContainer.children().length
+        
         //name = "quiz[questions][0][answers][0][isRight]"
         radioAnswer =  $('[name^="quiz[questions]['+ questionIndex + '][answers]"][type="radio"]')
         radioAnswer.each(function(answerIndex) {
             let radioAnswer = $(this);
-            console.log('radio', radioAnswer);
-
             radioAnswer.on('change', function() {
                 // Vérifie si la réponse sélectionnée est une bonne réponse
                 if ($(this).val() === '1') {
@@ -136,25 +134,25 @@ $(document).ready(function() { // Attend que le document (base.html.twig) soit c
 
 
 
-    // anonymize-collection-widget.js : fonction permettant de supprimer un bloc "question" existant au sein d'une session
-    $('.remove-collection-widget').find('div.borders').each(function() {
-        addDeleteLink($(this))
-    })
+    // // anonymize-collection-widget.js : fonction permettant de supprimer un bloc "question" existant au sein d'une session
+    // $('.remove-collection-widget').find('div.borders').each(function() {
+    //     addDeleteLink($(this))
+    // })
 
-    // Fonction pour ajouter un bouton de suppression pour un élément de réponse
-    function addDeleteLink($moduleForm) {
-        let $removeFormButton = $('<div class="block"><button type="button" class="button">Supprimer cette question</button></div>');
-        $moduleForm.append($removeFormButton);
+    // // Fonction pour ajouter un bouton de suppression pour un élément de réponse
+    // function addDeleteLink($moduleForm) {
+    //     let $removeFormButton = $('<div class="block"><button type="button" class="button">Supprimer cette question</button></div>');
+    //     $moduleForm.append($removeFormButton);
 
-        // Événement de suppression lié au bouton
-        $removeFormButton.on('click', function(e) {
-            $moduleForm.remove(); // Supprime l'élément de réponse
-        });
-    }
+    //     // Événement de suppression lié au bouton
+    //     $removeFormButton.on('click', function(e) {
+    //         $moduleForm.remove(); // Supprime l'élément de réponse
+    //     });
+    // }
 
   
   // Déclaration de la variable en dehors de la fonction
-    let count = 0;
+    let count = 1;
 
    
     function addAnswerButton($element) {
@@ -172,10 +170,10 @@ $(document).ready(function() { // Attend que le document (base.html.twig) soit c
         addAnswerButton.on('click', function() {
             // Récupération de l'élément question associé au bouton cliqué
             let $question = $(this).prev('div[id^="quiz_questions_"]'); // sélectionne tous le container de div#quiz_questions_, qui sont créer a chaque apuis sur le bouton Ajouter réponse. 
-            console.log('$question', $question);
+            
             let questionIndex = $question.attr('id').split('_')[2]; // récupère l'index de la question pour l'uttiliser dans un replace 
             
-           
+           console.log('questionIndex', questionIndex);
             // Récupération du container des réponses associé à la question
             let $answersContainer = $question.find('[id$="_answers"]');
             
@@ -190,8 +188,8 @@ $(document).ready(function() { // Attend que le document (base.html.twig) soit c
             if (typeof prototype !== 'undefined') {
                 
                 // Modification du prototype pour enlever le label
-                prototype = prototype.replace('<label class="required">'+questionIndex+'label__</label>', '');
-            
+                prototype = prototype.replace('<label class="col-form-label required">'+questionIndex+'label__</label>', '');
+                prototype = prototype.replace('<legend class="col-form-label required">'+questionIndex+'label__</legend>', '');
                 // Vérification du nombre maximum de réponses (limite à 4 réponses)
                 if (counterAnswer < 4) {
 
@@ -208,7 +206,7 @@ $(document).ready(function() { // Attend que le document (base.html.twig) soit c
                     // Ajout de la nouvelle réponse au conteneur
                     $answersContainer.append(newForm);
 
-                    $('[name^="quiz[questions]['+ questionIndex + '][answers]"][type="radio"][value="0"]').prop('readonly', true);
+                    // $('[name^="quiz[questions]['+ questionIndex + '][answers]"][type="radio"][value="0"]').prop('readonly', true);
                     checkMinimumAnswers();
                     // Sélection des boutons radio pour une question spécifique
                     // let $radioAnswers = $('[name^="quiz[questions]['+ questionIndex + '][answers]"][type="radio"]');
@@ -219,7 +217,6 @@ $(document).ready(function() { // Attend que le document (base.html.twig) soit c
             //ajouter au clic sur le bouton le nombre de réponse shouaiter pour les créer tous d'un coup*********************************************************************
 
                     $radioAnswer = $('[name^="quiz[questions]['+ questionIndex + '][answers]"][type="radio"]')
-                    console.log('radio', $radioAnswer);
                     // name="quiz[questions][0][answers][3][isRight]" 
                     $radioAnswer.on('change', function() {
                         // Vérifie si la réponse sélectionnée est une bonne réponse

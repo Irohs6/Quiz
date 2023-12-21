@@ -19,143 +19,197 @@
                 </p>
         </article>
     </section>
+
     <section class="paralax">
         
     </section>
     
         {% for theme in allTheme %} {# boucle pour afficher tous les theme disponible#}
 
-     
-                <nav id="nav_category" class="nav_category">
-                     {% for category_nav in theme.categories %}  
-                   {# boucle pour obtenir tous les category d'un theme #}
+            <nav id="nav_category" class="nav_category">
+                    {% for category_nav in theme.categories %}  
+                {# boucle pour obtenir tous les category d'un theme #}
+                        {% set hasVerifiedQuiz = false %} {# Initialise une variable pour vérifier si la catégorie a des quiz vérifiés #}
+
+                        {% for quiz in category_nav.quizzes %}
+                            {% if quiz.isVerified %}
+                                {% set hasVerifiedQuiz = true %}
+                                
+                            {% endif %}
+                        {% endfor %}
+                    {% if hasVerifiedQuiz %}
                         <figure class="fig_category_nav"> {# création d'une seconde nav qui servira de lien vers les slide de chaque catégory#}
                             <a class="link_nav_category" href="#{{category_nav.id}}"><img class="img_category_nav" src="{{ asset('uploads/img/category/' ~ category_nav.picture) }}" alt="{{category_nav.label}}">
                             <figcaption class="fig_caption_category">{{ category_nav.label}}</figcaption></a>
                         </figure>
-                    {% endfor %}
-                </nav>
+                    {% endif %}
+                {% endfor %} {# {% for category_nav in theme.categories %} #}
+            </nav>
+
             <section class="section-slide"> {# slide faite avec swiper.js#}
                 <div class="content">
                   
                     {% for category in allCategories %}{# boucle sur les categorie#}
-                <div class="box_quiz">   
-                    <h2 id="{{category.id}}" class="title-category">{{ category.label }}</h2> {# affiche les label de chaque catégorie + rajoute un dans l'id du he l'id de la catégorie pour créer une ancre#}
 
-                    <div class="info">
-                        <div class="show_info">
+                    {% set hasVerifiedQuiz = false %} {# Initialise une variable pour vérifier si la catégorie a des quiz vérifiés #}
+
+                        {% for quiz in category.quizzes %}
+                            {% if quiz.isVerified %}
+                                {% set hasVerifiedQuiz = true %}
                                 
-                            
-                        </div>
-                            <div class="swiper">
-        
-                            
-                                <div class="swiper-wrapper">
-                                    {% for quiz in category.quizzes %}
-        
-                                        <div class="swiper-slide" style="background: linear-gradient(to top, #0f2027, #203a43, #2c5364);  background-repeat: no-repeat; background-position: 50% 50%; background-size: cover;">
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if hasVerifiedQuiz %}
+
+                            <div class="box_quiz">   
+                                <h2 id="{{category.id}}" class="title-category">{{ category.label }}</h2> {# affiche les label de chaque catégorie + rajoute un dans l'id du he l'id de la catégorie pour créer une ancre#}
+
+                                <div class="info">
+                                    <div class="show_info">
+                                            
+                                        
+                                    </div>
+
+                                    <div class="swiper">
                 
-                                            {% if app.user %}  {# si le user est connecter#}
-                                                <figure class="fig_card_category">
-                                                    <img class="img_card_category" src="{{ asset('uploads/img/category/' ~ category.picture) }}" alt="{{category.label}}">
-                                                    <figcaption class="fig_caption_category_card">{{ category.label|upper}}</figcaption>
-                                                </figure>
+                                        <div class="swiper-wrapper">
 
-                                        
-                                                {% if quiz in app.user.favoritesQuizzes %}
-                                                    <h2 class="title-quiz" >{{ quiz.title|upper }}  <a href="{{ path('app_remove_favorite', {'id': quiz.id}) }}"><i class="fa-solid fa-star fa-xl" style="color: #dbc906;"></i></a></h2>
-                                                {% else %}
-                                                    <h2 class="title-quiz" >{{ quiz.title|upper }} <a href="{{ path('app_add_favorite', {'id': quiz.id}) }}"><i class="fa-regular fa-star fa-xl" style="color: #dbc906;"></i></a></h2> 
-                                                {% endif %}
-        
-                                                {% set lastGameDate = null %}
-                                                {% set score = null %}
-        
-                                                <div class="info-play">
-                                                    {% for game in quiz.games %} {# boucle sur les parties jouer #}
-                                                        
-                                                        {% if game.userId.id == app.user.id %} {#condition si le joueur connecter a bien une partit enregistrer#}
-        
-                                                            {% if loop.first %}
-        
-                                                                {% set lastGameDate = game.dateGame %} {# on stock la date de la partie dans une variable#}
-                                                                {% if app.user.games %}
-                                                                    {% set score = gameScore.score %} {# on stoke le score dans la variable score #}
-                                                                {% else %}
-                                                                    {% set score = "Vous n'avez pas encore enregistré de score sur se quiz" %} {# on stoke le score dans la variable score #}
-                                                                {% endif %}
-                                                            {% elseif game.dateGame > lastGameDate %} {# si la date de la partie est supérieur a la dernière partie jouer#}
-        
-                                                                {% set lastGameDate = game.dateGame %}{# on enregistre la nouvelle date #}
-                                                                {% if app.user.games %}
-                                                                    {% set score = gameScore.score %} {# on stoke le score dans la variable score #}
-                                                                {% else %}
-                                                                    {% set score = "Vous n'avez pas encore enregistré de score sur se quiz" %} {# on stoke le score dans la variable score #}
-                                                                {% endif %}
+                                            {% for quiz in category.quizzes %}
+                                                {% if quiz.isVerified %}
+                                                    
+                                                    <div class="swiper-slide">
+                            
+                                                        {% if app.user %}  {# si le user est connecter#}
+
+                                                            <figure class="fig_card_category">
+
+                                                                
+                                                                <img class="img_card_category" src="{{ asset('uploads/img/category/' ~ category.picture) }}" alt="{{category.label}}">
+                                                                
+                                                                <figcaption class="fig_caption_category_card">{{ category.label|upper}}</figcaption>
+
+                                                            </figure>
+
+                                                    
+                                                            {% if quiz in app.user.favoritesQuizzes %}{# si le user a le quiz en favoris affiche une icone étoile pleine #}
+                                                                
+                                                                <h2 class="title-quiz" >{{ quiz.title|upper }}  <a href="{{ path('app_remove_favorite', {'id': quiz.id}) }}">{# enleve le quiz des favoris #}<i class="fa-solid fa-star fa-xl" style="color: #dbc906;"></i></a></h2>
+
+                                                            {% else %} {# si il n'a pas le quiz en favoris affiche une icone etoile vide#}
+                                                                
+                                                                <h2 class="title-quiz" >{{ quiz.title|upper }} <a href="{{ path('app_add_favorite', {'id': quiz.id}) }}">{# ajoute le quiz en favoris favoris #}<i class="fa-regular fa-star fa-xl" style="color: #dbc906;"></i></a></h2> 
+
                                                             {% endif %}
-        
-                                                        {% endif %}{# fin {% if game.userId.id == app.user.id %}  #}
-                                                
-                                                    {% endfor %} {# {% for game in quiz.games %} #}
-        
-                                                    {% if lastGameDate is not null %} {# si la variable a bien été set et donc qu'une partit existe #}
-                                                
-                                                        {% if score >= 80 %} {# condition si score est supérieur a 80% stock se message #}
-                                                            {% set message = "Vous avez validé le quiz <span class='quiz-night'>" ~ quiz.title ~ "</span> en obtenant " ~ score ~ "%" ~ " de bonne réponse .<br> Vous pourrez quand même le rejouer et tenter de faire mieux si possible." %}
-                                                        {% else %} {# sinon on stock se message #}
-                                                            {% set message = "Vous n'avez pas validé le quiz <span class='quiz-night'>" ~ quiz.title ~ "</span> en obtenant " ~ score ~ "% de bonne réponse." %}
-                                                        {% endif %} {# fin {% if score >= 80 %} #}
-        
-                                                        {% set diffDays = date('now').diff(lastGameDate) %} {# on fait la différence de la date de la partie + 7 j par rapport a la date du jours #}
-                                                            
-                                                        {% if diffDays.days > 7 %} {# si le résultat est inférieur ou égal a 0  il peux rejouer le quiz et affiche le bon message #}
-                                                            <a class="add_quiz" href="{{path('new_quiz', {'idCategory': category.id})}}">Créer un Quiz</a>
-                                                            <p>{{ message|raw }}</p>
-                                                            {# lien pour jouer le quiz#}
-                                                            <a class="play" href="{{ path('app_play', {'id': quiz.id}) }}">Jouer</a>
+                    
+                                                            {% set lastGameDate = null %}
+                                                            {% set score = "Vous n'avez pas encore enregistré de score sur ce quiz" %}
+                    
+                                                            <div class="info-play">
 
-                                                        {% else %} {# sinon il doit attendre le nombre de jour restant#}
-                                                            <a class="add_quiz" href="{{path('new_quiz', {'idCategory': category.id})}}">Créer un Quiz</a>
-                                                            <p>{{ message|raw }}</p>
-                                                            {% set nbDay = lastGameDate|date_modify("+7 day").diff(date('now')) %}
-                                                            {# message avec nombre de jour restant avant de pouvoir rejouer#}
-                                                            <p>Vous pourrez rejouer ce quiz dans {{ nbDay.days }} jour(s)'</p>
-        
-                                                        {% endif %} {# fin {% if diffDays.days > 7 %}#}
-        
-                                                    {% else %} {# si aucune partie enregistrer pour se quiz il peux le jouer #}
-                                                        {# lien vers la page pour jouer le quiz#}
-                                                        <a class="add_quiz" href="{{path('new_quiz', {'idCategory': category.id})}}">Créer un Quiz</a>
-                                                        {% set message = "Vous n'avez pas encore enregistré de partie sur le quiz : <span class='quiz-night'>" ~ quiz.title ~ ".</span>" %}
-                                                        <p>{{ message|raw }}</p>
-                                                        <a class="play" href="{{ path('app_play', {'id': quiz.id}) }}">Jouer</a>
-        
-                                                    {% endif %} {# fin {% if lastGameDate is not null %} #}
-        
-                                                </div>         
-        
-                                            {% else %} {# fin {% if app.user %}  #}
-                                                <figure class="fig_card_category">
-                                                    <img class="img_card_category" src="{{ asset('uploads/img/category/' ~ category.picture) }}" alt="{{category.label}}">
-                                                    <figcaption class="fig_caption_category_card">{{ category.label}}</figcaption>
-                                                </figure>
-                                               
-                                                <h2>{{ quiz.title }}</h2>
-                                            {% endif %}
-                                        </div>
-                                        
-                                    {% endfor %}
-                                </div>
-                            </div>
-                        </div> 
-                    </div>    
-                    {% endfor %}
-                </div>
+                                                                {% for game in quiz.games %} {# boucle sur toute les partie jouer d'un quiz#}
+
+                                                                    {% if game.userId.id == app.user.id %} {# condition qui verifie si le user connecter a une partie enregistré dans se quiz#}
+                                                                        
+                                                                        {% if loop.first %} {# si c'est la premiére itération #}
+
+                                                                            {% set score = game.score %} {# on set dans la varible score #} 
+
+                                                                        {% elseif game.score > score %} 
+                                                                        {# si ce n'est pas la première itération on compare le scoree enregistré dans la variable avec les autre score si il y en a et si le score suivant est supérieur alors on écrase le score dans la variable avec le nouveaux#}
+
+                                                                            {% set score = game.score %}
+
+                                                                        {% endif %}
+                                                                        
+                                                                        {% if loop.first %} {# si c'est la premiére itération #}
+
+                                                                            {% set lastGameDate = game.dateGame %} {# on stock la date dans la variable#}
+
+                                                                        {% elseif game.dateGame > lastGameDate %} 
+                                                                        {# si ce n'est pas la première itération on compare la date enregistré dans la variable avec les autre date si il y en a et si la date suivante est supérieur alors on écrase la date dans la variable avec la nouvelle#}
+
+                                                                            {% set lastGameDate = game.dateGame %}
+
+                                                                        {% endif %}
+
+                                                                    {% endif %}
+
+                                                                {% endfor %}
+                                    
+                                                                {% if lastGameDate is not null %} {# si la variable a bien été set et donc qu'une partit existe #}
+                                                            
+                                                                    {% if score >= 80 %} {# condition si score est supérieur a 80% stock se message #}
+                                                                        {% set message = "Vous avez validé le quiz <span class='quiz-night'>" ~ quiz.title ~ "</span> en obtenant " ~ score ~ "%" ~ " de bonne réponse .<br> Vous pourrez quand même le rejouer et tenter de faire mieux si possible." %}
+                                                                    {% else %} {# sinon on stock se message #}
+                                                                        {% set message = "Vous n'avez pas validé le quiz <span class='quiz-night'>" ~ quiz.title ~ "</span> en obtenant " ~ score ~ "% de bonne réponse." %}
+                                                                    {% endif %} {# fin {% if score >= 80 %} #}
+                    
+                                                                    {% set diffDays = date('now').diff(lastGameDate) %} {# on fait la différence de la date de la partie + 7 j par rapport a la date du jours #}
+                                                                        
+                                                                    {% if diffDays.days > 7 %} {# si le résultat est inférieur ou égal a 0  il peux rejouer le quiz et affiche le bon message #}
+                                                                        <a class="add_quiz" href="{{path('new_quiz', {'idCategory': category.id})}}">Créer un Quiz</a>
+                                                                        <p>{{ message|raw }}</p>
+                                                                        {# lien pour jouer le quiz#}
+                                                                        <a class="play" href="{{ path('app_play', {'id': quiz.id}) }}">Jouer</a>
+
+                                                                    {% else %} {# sinon il doit attendre le nombre de jour restant#}
+                                                                        <a class="add_quiz" href="{{path('new_quiz', {'idCategory': category.id})}}">Créer un Quiz</a>
+                                                                        <p>{{ message|raw }}</p>
+                                                                        {% set nbDay = lastGameDate|date_modify("+7 day").diff(date('now')) %}
+                                                                        {# message avec nombre de jour restant avant de pouvoir rejouer#}
+                                                                        <p>Vous pourrez rejouer ce quiz dans {{ nbDay.days }} jour(s)'</p>
+                    
+                                                                    {% endif %} {# fin {% if diffDays.days > 7 %}#}
+                    
+                                                                {% else %} {# si aucune partie enregistrer pour se quiz il peux le jouer #}
+                                                                    {# lien vers la page pour jouer le quiz#}
+                                                                    <a class="add_quiz" href="{{path('new_quiz', {'idCategory': category.id})}}">Créer un Quiz</a>
+                                                                    {% set message = "Vous n'avez pas encore enregistré de partie sur le quiz : <span class='quiz-night'>" ~ quiz.title ~ ".</span>" %}
+                                                                    <p>{{ message|raw }}</p>
+                                                                    <a class="play" href="{{ path('app_play', {'id': quiz.id}) }}">Jouer</a>
+                    
+                                                                {% endif %} {# fin {% if lastGameDate is not null %} #}
+                    
+                                                            </div> {# fin <div class="info-play"></div>#}        
+                    
+                                                        {% else %} {# fin {% if app.user %} si c'est un visiteur  #}
+
+                                                            <figure class="fig_card_category">
+
+                                                                <img class="img_card_category" src="{{ asset('uploads/img/category/' ~ category.picture) }}" alt="{{category.label}}">
+                                                                <figcaption class="fig_caption_category_card">{{ category.label}}</figcaption>
+
+                                                            </figure>
+                                                        
+                                                            <h2>{{ quiz.title }}</h2>
+
+                                                        {% endif %}
+
+                                                    </div>{#fin <div class="swiper-slide"></div>#}
+
+                                                {% endif %}
+                                            {% endfor %}{# fin  {% for quiz in category.quizzes %}#}
+
+                                        </div>{# fin <div class="swiper-wrapper"></div>#}
+
+                                    </div>{# fin  <div class="swiper"></div>#}
+
+                                </div> {#fin <div class="info"></div>#}
+
+                            </div> {# fin <div class="box_quiz">   #} 
+                        {% endif %}
+
+                    {% endfor %}{# fin {% for category in allCategories %} #}
+
+                </div>{# fin div class content#}
+
                <a id="scroll_to_top" href="#nav_category"><i class="fa-solid fa-arrow-turn-up fa-xl"></i></a>
-            </section>
+
+            </section>{# fin section class slide#}
 
             
-            {% endfor %}{# {% for theme in allTheme %} #}
+        {% endfor %}{# {% for theme in allTheme %} #}
             
             <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
             <script src="{{ asset('js/swipper.js') }}"></script>
