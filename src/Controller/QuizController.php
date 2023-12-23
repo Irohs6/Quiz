@@ -214,39 +214,45 @@ class QuizController extends AbstractController
     }
 
     //Pour créer ou modifier un quiz
-    #[Route('moderator/quiz/{idCategory}/new/', name: 'new_quiz')]
+    #[Route('user/quiz/{idCategory}/new/', name: 'new_quiz')]
     public function newQuiz(Quiz $quiz = null, Request $request, EntityManagerInterface $entityManager,CategoryRepository $categoryRepository): Response
     {
 
-        $quiz = new Quiz;
-        $idCategory = $request->attributes->get('idCategory');
-        $category = $categoryRepository->findOneBy(['id' => $idCategory]);
-        $user = $this->getUser();
-        $quiz->setUserId($user); 
+        if ( $this->getUser()  || $this->isGranted('ROLE_MODERATOR')  ) {
+            $quiz = new Quiz;
+            $idCategory = $request->attributes->get('idCategory');
+            $category = $categoryRepository->findOneBy(['id' => $idCategory]);
+            $user = $this->getUser();
+            $quiz->setUserId($user); 
 
-        $quiz->setCategory($category); //ajoute quiz a sa catégorie 
-        $quiz->setIsVerified(false); // met a false par default
-        $formNewQuiz= $this->createForm(QuizType::class, $quiz);//crer le formulaire
+            $quiz->setCategory($category); //ajoute quiz a sa catégorie 
+            $quiz->setIsVerified(false); // met a false par default
+            $formNewQuiz= $this->createForm(QuizType::class, $quiz);//crer le formulaire
 
-        $formNewQuiz->handleRequest($request);
-        
-        if ($formNewQuiz->isSubmitted() && $formNewQuiz->isValid()) {
-            // Récupérer les données du formulaire
-            $data = $formNewQuiz->getData();
-
-            foreach ($quiz->getQuestions() as $question ) {
-                $question->setCategory($category); // Associer la catégorie à la nouvelle question
-               
-            }
+            $formNewQuiz->handleRequest($request);
             
-            // Persistez le quiz mis à jour
-            $entityManager->persist($quiz);
-            $entityManager->flush();
-    
-            $this->addFlash('success', "Votre Quiz a bien été créer vous recevrez une confirmation par email une fois qu'il sera validé.");
-            return $this->redirectToRoute('app_list_quiz'); // redirige vers le détail d'un quiz
+            if ($formNewQuiz->isSubmitted() && $formNewQuiz->isValid()) {
+                // Récupérer les données du formulaire
+                $data = $formNewQuiz->getData();
+
+                foreach ($quiz->getQuestions() as $question ) {
+                    $question->setCategory($category); // Associer la catégorie à la nouvelle question
+                
+                }
+                
+                // Persistez le quiz mis à jour
+                $entityManager->persist($quiz);
+                $entityManager->flush();
+        
+                $this->addFlash('success', "Votre Quiz a bien été créer vous recevrez une confirmation par email une fois qu'il sera validé.");
+                return $this->redirectToRoute('app_list_quiz'); // redirige vers le détail d'un quiz
+            }
+        } else {
+            
+            $this->addFlash('warning', "Vous n'avez pas les autorisation pour cet action.");
+            // Redirection vers une page de confirmation ou vers la gestion du quiz
+            return $this->redirectToRoute('app_home_quiz');
         }
-    
         return $this->render('quiz/newQuiz.html.twig', [
             'category' => $category,
             'quiz' => $quiz,
