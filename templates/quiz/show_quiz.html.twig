@@ -4,32 +4,33 @@
 
 {% block body %}   
 
-   <h1>{{ quiz.title }}</h1>
 
     <div id="quiz-detail-container">
+        <h1 class="title">{{ quiz.title }}</h1>
+        
         <article id="quiz-detail"> 
-            <ul class="quiz-detail">
-                <h2>{{ quiz.category.label }}</h2>
+            <ol class="quiz-detail">
+                <h2 class="title">{{ quiz.category.label }}</h2>
                 {% for question in quiz.questions %}
+                    <article class="box_question_reponse">
+                        <li>{{ question.sentence }}</li>
+                            <ul class="quiz-detail-reponse">
+                                {% for reponse in question.answers %}
+                            
+                                    {% if question.id == reponse.question.id %}
+                                        <li>{{ reponse.sentence }}</li>
+                                    {% endif %}
+                                    
+                                {% endfor %}
+                            </ul>
+                        <a href="{{ path('app_unset_quiz',{'id' : question.id ,'idQuiz': quiz.id})}}">Enlever</a>
+                    
 
-                    <li>{{ question.sentence }}</li>
-                        {% for reponse in question.answers %}
-                        
-                        <ul class="quiz-detail-reponse">
-                            {% if question.id == reponse.question.id %}
-                                <li>{{ reponse.sentence }}</li>
-                            {% endif %}
-                                
-                        </ul>
-                        {% endfor %}
-                    <a href="{{ path('app_unset_quiz',{'id' : question.id ,'idQuiz': quiz.id})}}">Enlever</a>
-                   
-
-                    <a href="{{path('edit_question', {'id': question.id})}}">Modifier</a>
-
+                        <a href="{{path('edit_question', {'id': question.id})}}">Modifier</a>
+                    </article>
                 {% endfor %}
                     
-            </ul>
+            </ol>
         </article>
         <h3>Liste des questions non utilisées</h3>     
         <ul>

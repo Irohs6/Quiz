@@ -13,6 +13,7 @@ use App\Repository\LevelRepository;
 use App\Repository\ThemeRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\QuestionRepository;
+use App\Repository\QuizRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,26 +27,38 @@ class QuizController extends AbstractController
 
     //futur home de quiz en cour de création
     #[Route('home/quiz', name: 'app_home_quiz')]
-    public function home_quiz(ThemeRepository $themeRepository, CategoryRepository $categoryRepository, LevelRepository $levelRepository, GameRepository $gameRepository): Response
+    public function home_quiz(ThemeRepository $themeRepository, CategoryRepository $categoryRepository, LevelRepository $levelRepository, GameRepository $gameRepository,QuizRepository $quizRepository): Response
     {
         $allTheme = $themeRepository->findAll();//recupère toute les donné de la table theme
         $allCategories = $categoryRepository->findAll();//recupère toute les donné de la table category
         $allLevel = $levelRepository->findAll();//recupère toute les donné de la table level
+        $allGames = $gameRepository->findAllBestGame();//recupère toute les donné de la table game
+         // Récupérer tous les quizzes
+        $allQuizzes = $quizRepository->findAll();
+
+        $gamesForQuizzes = [];
+
+        // Pour chaque quiz, récupérer les trois meilleurs jeux
+        foreach ($allQuizzes as $quiz) {
+            $gamesForQuizzes[$quiz->getId()] = $gameRepository->findBestGameByQuiz($quiz);
+        }
+
         if (!$this->getUser()) {
-            $gamesPlay = "";
-            $gameScore = "";
+            $gamesPlay = [];
+            
             
         }else{
             
-            $gamesPlay = $gameRepository->findBy(['userId'=>$this->getUser()->getId()]);// récupère tous les Game d'un user
-            $gameScore = $gameRepository->findOneBy(['userId'=>$this->getUser()->getId()],['score'=> 'DESC' ]); // récupère seullement la Game avec le meilleur score 
+            $gamesPlay = $gamesPlay = $gameRepository->findLatestGamesByQuiz($this->getUser()->getId());
+           
         }
         return $this->render('quiz/home_quiz.html.twig', [
             'allTheme' => $allTheme,
             'allCategories' => $allCategories,
             'allLevel'=> $allLevel,
             'gamesPlay' => $gamesPlay,
-            'gameScore' => $gameScore
+            'gamesForQuizzes' => $gamesForQuizzes,
+            'allGames' => $allGames
         ]);
     }
    
@@ -320,7 +333,7 @@ class QuizController extends AbstractController
             $this->addFlash('warning', "Vous n'avez pas les autorisation pour cet action.");
             return $this->redirectToRoute('app_home');
         }
-        return $this->render('moderator/show_quiz.html.twig', [
+        return $this->render('quiz/show_quiz.html.twig', [
             'questionNotInQuiz' => $questionNotInQuiz,
             'quiz' => $quiz,
         ]);

@@ -5,12 +5,12 @@
 {% block body %}
 {% set index = 1 %}
 <section class="container_recap">
-    <h2 class="title">Recapitulatif de votre partie</h2>
-    <article>
-        <p class="detail_recap">Ici vous trouverez votre score obtenu, le détail de vos réponses <span class="success">juste</span>  et <span class="error">fausse</span> , ainsi qu'un lien vers la documentation officielle pour comprendre vos erreur et vous améliorer </p>
+    <article class="box_recap">
+        <h2 class="title">Recapitulatif de votre partie</h2>
+        <p class="detail_recap">Découvrez votre score, les réponses <span class="success">justes</span> et <span class="error">fausses</span>, accompagnés d'un lien vers la documentation officielle pour booster votre compréhension et progresser dès maintenant ! </p>
+        <p class="p_score">Score Obtenue: <strong >{{ score }}%</strong> de bonnes réponses</p>
     </article>
 
-    <strong ><p class="p_score">Score Obtenue: <span class="score_recap">{{ score }}%</span> de bonnes réponses</p></strong>
     {% for recap in quizsRecap %}
         
       

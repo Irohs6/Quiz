@@ -13,14 +13,15 @@
         </div> 
             <section class="edit_profil">
                 <section class="section_profil">  
-                        <h2 class="profil-info">{{ app.user.username|upper }}</h2>
+                    <h2 class="email">Pseudo</h2>
+                    <p class="profil-info"><strong>{{ app.user.username|upper }}</strong></p>
                     {# nombre de quiz creer pour cet utilisateur + bouton voir liste de tous ses quiz #}
                 </section> {# fin section <section id="section_profil"> #}
 
                 <div class="personal">
                     <section class="box_mail">
                         <h2 class="email">Email:</h2>
-                        <p class='email'>{{ app.user.email }}</p>
+                        <p class='email'><strong>{{ app.user.email }}</strong></p>
                     </section>
                 </div>
                 {# lien vers le formulaire de modification de profil(username, email, image) #}
@@ -29,9 +30,9 @@
             </section>
         <div class="points">
             {% for game in app.user.games %}
-                {# calcul pour le score total  #}
-                {% set scoretotal = scoretotal + game.score %}
-
+            {% set scoretotal = scoretotal + game.score %}   
+                    {# calcul pour le score total  #}
+                    {% set scoretotal = scoretotal + game.score %}  
             {% endfor %}
                 {# affichage du score total  #}
             <h4 class="score">{{ scoretotal }}</h4>
@@ -40,13 +41,15 @@
 
         <div class="deal">
             <h3 class="best_score">Mes 3 meilleurs scores :</h3>
-            {% for bestGame in games %}
-
-                <li class="game_quiz"><span class="profil-info">{{ nb }} :</span> {{ bestGame.quiz.title }} score: {{ bestGame.score }}</li>
-
-                {% set nb = nb + 1 %} 
-
-            {% endfor %}
+            {% if games %}
+                {% for bestGame in games %}
+                    <li class="game_quiz"><span class="profil-info">{{ nb }} :</span> {{ bestGame.quiz.title }} score: {{ bestGame.score }}</li>
+                    {% set nb = nb + 1 %} 
+                    
+                {% endfor %}
+            {% else %}
+                <p>Vous n'avez enregistré aucun score pour le moment</p>
+            {% endif %}
         </div>
 
         <div class="recent">
@@ -54,9 +57,13 @@
                 <h3 class="recent_acti">Les 5 dernières parties</h3>
 
                 <ul class="list_profil">
-                    {% for game in gamesUser %}
-                        <li class="game_quiz"> {{ game.quiz.title }} <span class="game_score"> {{ game.score }}</span></li>
-                    {% endfor %}
+                    {% if gamesUser %}
+                        {% for game in gamesUser %}
+                            <li class="game_quiz"> {{ game.quiz.title }} <span class="game_score"> {{ game.score }}</span></li>
+                        {% endfor %}
+                    {% else %}  
+                        <p>Vous n'avez enregistré aucun score pour le moment</p>  
+                    {% endif %}
                 </ul>  
 
             </div>
@@ -78,23 +85,21 @@
 
             <h3 class="create_quiz">Vos Quiz créer</h3>
             {# condition si l'utilisateur a créer un quiz ou non  #}
-                {% if not app.user.quizzes|length == 0  %}
+            {% if not app.user.quizzes|length == 0  %}
                 
-                
+                {# boucle pour afficher les quiz de cet utilisateur #}
+                {% for quiz in app.user.quizzes %} 
+                    <section class="section_create">
 
-                    {# boucle pour afficher les quiz de cet utilisateur #}
-                    {% for quiz in app.user.quizzes %} 
-                        <section class="section_create">
+                        <a href="{{path('show_quiz', {'id': quiz.id})}}">
+                            <p class="profil_quiz_info"><strong>{{ quiz.title }}</strong> </p>
+                        </a>
+                        <button class="btn_edit_quiz" >
+                            <a href="{{path('edit_quiz', {'id': quiz.id})}}">Modifier un Quiz</a>
+                        </button>
 
-                            <a  href="{{path('show_quiz', {'id': quiz.id})}}">
-                                <p class="profil_quiz_info">{{ quiz.title }} <span> nombre de question: {{quiz.questions|length}}</span></p>
-                            </a>
-                            <button class="btn_edit_quiz" >
-                                <a  href="{{path('edit_quiz', {'id': quiz.id})}}">Modifier un Quiz</a>
-                            </button>
-
-                        </section> 
-                    {% endfor %}
+                    </section> 
+                {% endfor %}
                
 
             {% else %}

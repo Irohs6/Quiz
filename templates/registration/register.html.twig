@@ -7,29 +7,30 @@
         <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
     {% endfor %}
 <div class="container">
-    <h1>Register</h1>
-
+    
     {{ form_errors(registrationForm) }}
-
+    
     {{ form_start(registrationForm) }}
-    <div class="row">
-        <div class="col-sm">
-            {{ form_row(registrationForm.email) }}
+        <h2><strong>Enregistrez Vous</strong></h2>
+        <div class="row">
+            <div class="col-sm">
+                <strong>{{ form_row(registrationForm.email) }}</strong>
+            </div>
+            <div class="col-sm">
+                <strong>{{ form_row(registrationForm.username) }}</strong>
+            </div>
+            
+            
         </div>
-        <div class="col-sm">
-            {{ form_row(registrationForm.username) }}
-        </div>
-        
-        
-    </div>
-        {{ form_row(registrationForm.plainPassword, {
+        <strong>{{ form_row(registrationForm.plainPassword, {
             label: 'Password'
-        }) }}
+        }) }}</strong>
 
-       
 
-        {{ form_row(registrationForm.agreeTerms) }}
+        <strong>{{ form_row(registrationForm.agreeTerms) }}</strong>
+        <a class = "condition" href="#"><strong>Voir les conditions génnérales</strong></a>
         
-    {{ form_end(registrationForm) }}
+        {{ form_end(registrationForm) }}
+        <p class="connection">Déja Inscrit <a class = "connection" href={{ path("app_login") }}><strong>Connectez vous</strong> </a></p>
 </div>
 {% endblock %}

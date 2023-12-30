@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr">
     <head>
-        {# <script src="https://tarteaucitron.io/load.js?domain=127.0.0.1%2Fhome%2Fquiz&uuid=344ebdfd9d67d296ec607c897c48f5c353b07c71"></script> #}
-
+       
         <meta charset="UTF-8">
         <title>{% block title %}DEV Quiz{% endblock %}</title>
         <script src="https://kit.fontawesome.com/00d08f6e06.js" crossorigin="anonymous"></script>{# lien icon fontaweasome #}
@@ -14,6 +13,7 @@
 
     </head>
     <body>
+      
         <div class="box">
             <header>
                 <div id="nav">
@@ -80,18 +80,14 @@
 
                 <div class="footer">
 
-                    <figure id="logo"> 
-                        <a href="{{path('app_home_quiz')}}"><img class="logo" src="{{ asset('img/logo1.png') }}" alt="Logo de DEV QUIZ"></a>
-                        <figcaption>
-                            <h2 class="h1">DEV QUIZ</h2>
-                        </figcaption>
-                    </figure>
-
                     <section class="contact">
 
                         <h3 class="title_footer">Information</h3>
 
                         <ul class="ul_footer">
+                            <li>
+                                <a href="#">Nos condition génnérales</a>
+                            </li>
                             <li>
                                 <a href="#">Nous contacter</a>
                             </li>
@@ -135,12 +131,7 @@
                             <li>
                                 <a target="_blank" href="https://fr-fr.facebook.com/"><i class="fa-brands fa-facebook fa-2xl"></i></a>
                             </li>
-                            <li>
-                                <a target="_blank" href="https://accounts.snapchat.com/accounts/v2/login"><i class="fa-brands fa-snapchat fa-2xl"></i></a>
-                            </li>
-                            <li>
-                                <a target="_blank" href="https://www.instagram.com/"><i class="fa-brands fa-instagram fa-2xl"></i></a>
-                            </li>
+                          
                         </ul>
 
                     </section>

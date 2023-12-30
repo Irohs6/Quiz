@@ -3,17 +3,16 @@
 {% block title %}Hello QuizController!{% endblock %}
 
 {% block body %}
-{% set idSection = 1 %} {# déclaration d'une variable nb pour le nom des class des level #}
-{% set message = '' %} {# Initialisation de la variable message à l'extérieur de la boucle #}
-{% set playLink = '' %} {# Initialisation de la variable message à l'extérieur de la boucle #}
 
+{% set message = '' %} {# Initialisation de la variable message à l'extérieur de la boucle #}
 
     <section id="hero">
         <article class="hero-text">
             <h2 class="title_home">APPRENEZ EN VOUS AMUSANT</h2>
                 <p>
-                    Bienvenue sur Dev Quiz, le site de <strong>quiz</strong> sur le thème du <strong>développement web.</strong> 
-                    Pour tous niveaux, du débutant au développeur confirmé, venez tester vos <strong>connaissances</strong> ou <strong>réviser</strong> vos bases. 
+                    Bienvenue sur <strong></strong>Dev Quiz,<br>
+                    le site de <strong>quiz</strong> sur le thème du <strong>développement web.</strong><br> 
+                    Pour tous niveaux, du débutant au développeur confirmé, venez tester vos <strong>connaissances</strong> ou <strong>réviser</strong> vos bases. <br>
                     Le tout en vous amusant !
                     
                 </p>
@@ -23,29 +22,42 @@
     <section class="paralax">
         
     </section>
-    
-        {% for theme in allTheme %} {# boucle pour afficher tous les theme disponible#}
 
             <nav id="nav_category" class="nav_category">
-                    {% for category_nav in theme.categories %}  
-                {# boucle pour obtenir tous les category d'un theme #}
+                    {% for category_nav in allCategories %}  
+                    {# boucle pour obtenir tous les category #}
                         {% set hasVerifiedQuiz = false %} {# Initialise une variable pour vérifier si la catégorie a des quiz vérifiés #}
 
                         {% for quiz in category_nav.quizzes %}
+
                             {% if quiz.isVerified %}
+
                                 {% set hasVerifiedQuiz = true %}
-                                
+    
                             {% endif %}
+                            
                         {% endfor %}
+
                     {% if hasVerifiedQuiz %}
+
                         <figure class="fig_category_nav"> {# création d'une seconde nav qui servira de lien vers les slide de chaque catégory#}
                             <a class="link_nav_category" href="#{{category_nav.id}}"><img class="img_category_nav" src="{{ asset('uploads/img/category/' ~ category_nav.picture) }}" alt="{{category_nav.label}}">
                             <figcaption class="fig_caption_category">{{ category_nav.label}}</figcaption></a>
                         </figure>
+
                     {% endif %}
+
                 {% endfor %} {# {% for category_nav in theme.categories %} #}
+
             </nav>
 
+            <article class="table_score">
+                <h2 class="title_score">Amusez-vous, c'est 100% gratuit !</h2>
+                <p>Chaque <strong>Quiz</strong> est une série de 10 question a choix multiple, </p>
+                <p>1 seul bonne réponse possible.</p>
+                <p>Finir un <strong>Quiz</strong> vous raportera des points, </p>
+                <p>et vous indiquera votre % de bonne réponse</p>
+            </article>
             <section class="section-slide"> {# slide faite avec swiper.js#}
                 <div class="content">
                   
@@ -174,7 +186,30 @@
                                                             </div> {# fin <div class="info-play"></div>#}        
                     
                                                         {% else %} {# fin {% if app.user %} si c'est un visiteur  #}
-
+                                                            <div class="info-play">
+                                                                {% set hasGames = false %}
+                                                                {% set gamesForCurrentQuiz = gamesForQuizzes[quiz.id] ?? [] %}
+                                                            <ol>
+                                                                {% for game in gamesForCurrentQuiz %}
+                                                                    {% if game.quiz.id == quiz.id %}
+                                                                        {% if loop.first %}
+                                                                            <h4>Les meilleurs scores pour le quiz </h4>
+                                                                            <p><strong>{{ game.quiz.title }}</strong>:</p>
+                                                                        {% endif %}
+                                                                        <li> {{ game.score }} points</li>
+                                                                        {% set hasGames = true %}
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            </ol>
+                                                                {% if not hasGames %}
+                                                                    <p>Pas de scores enregistrés pour le quiz "<strong>{{ quiz.title }}</strong>". Lancez-vous!!</p>
+                                                                    <p>Devenez <br><strong>  Le champion !!  </strong></p>
+                                                                {% else %}
+                                                                    <p><strong>Relevez le défi</strong> et améliorez ces scores !</p>
+                                                                {% endif %}
+                                                                
+                                                                <a href="{{ path('app_register') }}"><strong>Inscrivez-vous pour participer.</strong></a> 
+                                                            </div>
                                                             <figure class="fig_card_category">
 
                                                                 <img class="img_card_category" src="{{ asset('uploads/img/category/' ~ category.picture) }}" alt="{{category.label}}">
@@ -209,8 +244,19 @@
             </section>{# fin section class slide#}
 
             
-        {% endfor %}{# {% for theme in allTheme %} #}
-            
+      
+        <section class="table_score">
+            <h2 class="title_score">Tester vos connaisance</h2>
+            <p>Utiliser <strong>DEV QUIZ</strong> pour tester vos connaisance en <strong>HTML</strong>,<strong>CSS</strong>,<strong>PHP</strong>, <strong>JavaScripts</strong> et bien d'autre</p>
+            <ol>
+
+                {% for game  in allGames %}
+                    <li class="list_score">{{game.userId.username }} <span class="span_score">{{ game.score }}</span></li>
+                {% endfor %}
+                    
+            </ol>
+        </section>
+
             <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
             <script src="{{ asset('js/swipper.js') }}"></script>
     

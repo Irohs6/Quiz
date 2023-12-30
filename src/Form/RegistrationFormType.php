@@ -48,8 +48,8 @@ class RegistrationFormType extends AbstractType
                 'invalid_message' => 'Les password doivent être identique.',
                 'options' => [
                     'attr' => [
-                        'class' => 'password-field',
-                        'class' => 'form-control'
+                        'class' => 'password-field form-control',
+                        
                     ]
                 ],
                 'required' => true,
@@ -59,15 +59,20 @@ class RegistrationFormType extends AbstractType
 
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
+                'label' => "J'accepte les terme",
                 'constraints' => [
                     new IsTrue([
-                        'message' => 'You should agree to our terms.',
+                        'message' => 'Vous devez accepter nos conditions.',
                     ]),
                 ],
             ])
 
            
-            ->add('Valider', SubmitType::class)
+            ->add('Valider', SubmitType::class,[
+                'attr' => [
+                    'class' => 'btn btn-primary mx-auto d-block', 
+                ],
+            ])
         ;
     }
 

@@ -31,11 +31,14 @@ body{
     cursor: pointer;
 }
 .box{
+    background-image: url(../img/pexels-aleksandar-pasaric-1323712.jpg);
     margin-right: auto;
     margin-left: auto;
+    background-size: cover;
 }
+
 main{
-    background-image: url(../img/download_image_1703319027772.png);
+    
     background-repeat: no-repeat;
     object-fit: cover;
     min-height: 65vh;
@@ -97,8 +100,11 @@ ul{
 }
 /*****************************footer************************************/
 footer{
-    width: 100%;
-    margin-top: 1em;
+    width: 85%;
+    margin: 1em auto;
+    height: 150px;
+    border-top: 2px solid #0B2443;
+    padding: 2em;
 }
 
 .footer{
@@ -139,27 +145,63 @@ h3{
 
 #hero{
     width: 85%;
-    height: 400px;
-    padding: 5em;
-    margin: auto;
+    padding: 3em;
+    margin: 3em auto;
+    border-radius: 25px;
+    box-shadow: 0px 0px 10px 0px #666 inset;
+    background-color: rgba(255,255,255,0.3);
 }
 
 .hero-text{
-    color: rgb(5, 5, 5);
+    text-align: center;
     font-weight: bold;
-    font-size: 30px;
-    background-color: rgba(255, 255, 255, 0.4);
+    
+    border-radius: 15px;
 }
 
+strong{
+    color: #014F86;
+}
 .hero-text h2{
-    padding: 1em;
+    font-size: 3em;
+    padding: 0.5em;
 }
 
+.hero-text p {
+    padding: 0 1em;
+    font-size: 2.5em;
+}
 a{
     text-decoration: none;
 }
-.link_nav_category:hover{
+.table_score{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 85%;
+    font-weight: 500;
+    border-radius: 25px;
+    background-color: rgba(255,255,255,0.3);
+    box-shadow: 0px 0px 10px 0px #666 inset;
+    padding: 2em;
+    margin: 3em auto;
+}
 
+.list_score{
+    font-size: 2em;
+    padding: 0.5em 2em;
+    
+}
+.title_score{
+    
+    text-align: center;
+    font-size: 3em;
+    font-weight: 700;
+    color: #014F86;
+
+}
+.span_score{
+    padding-left: 2em;
 }
 .paralax{
       /* The image used */
@@ -210,7 +252,7 @@ a{
     padding-top: 1.2em;
 }
 .show_info{
-    width: 33%;
+    width: 36%;
     gap: 0.6em;
     text-align: center;
     display: flex;
@@ -230,7 +272,7 @@ a{
     font-size: 1.4rem;
     margin-bottom: 20px;
     line-height: 1.5;
-    text-align: justify;
+    text-align: center;
 }
 
 .quiz-night{
@@ -359,16 +401,16 @@ a{
 #quiz-container-play{
     position: absolute;
     top: 170px;
-    left: 25%;
+    left: 2.5%;
     padding: 15px;
     border-radius: 10px;
     background-color: #0B2443;
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 55%;
+    width: 95%;
     color: white;
-    height: 1000px;
+    height: 700px;
     justify-content: center;
     font-size: 2em;
     z-index: 99;
@@ -378,38 +420,36 @@ a{
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-height: 800px; 
+    min-height: 800px;
 }
+
 #info_question{
-    
     color: white;
     background-color: #0B2443;
     padding: 0.5em;
     border-radius: 10px;
     border: silver 4px solid;
-    font-size: 1.5em;
-    
+    font-size: 1.5em;   
 }
+
 #quiz-container {
     border-radius: 15px;
-    padding: 15px;
-    min-height: 900px;
-    width: 45%;
+    padding: 2em;
+    min-height: 600px;
+    width: 70%;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     align-items: center;
     background-color: #0B2443;
     color: white;
     border: 4px solid silver;
-    margin: 2.5em 0;
+    
 }
 
 .quiz-container{
     border-radius: 15px;
     padding: 15px;
     height: 95%;
-    width: 95%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -423,23 +463,22 @@ a{
 }
 
 #answer{
-    width: 95%;
-    font-size: 2em;
+    width: 100%;
+    font-size: 1.2em;
     display: flex;
     flex-direction: column;
     gap: 0.8em;
 }
 
 .label_answer{
-    width: 90%;
     background: white;
     color: #0c5283;
     border-radius: 10px;
     padding: 0.3em;
     font-weight: 700;
-    cursor: pointer;
-    text-align: justify;
+    cursor: pointer; 
 }
+
 .label_answer:hover{
     filter: opacity(90%);
 }
@@ -464,10 +503,11 @@ input[type="radio"] {
     border: 3px solid silver;
     margin: 1.5em 0;
 }
+
 #valider:hover{ 
     border: 1px solid silver;
-    font-size: 1.45em;
 }
+
 #message{
     width: 50%;
     font-weight: 700;
@@ -486,14 +526,14 @@ input[type="radio"] {
 /********************Recap**************************/
 .container_recap{
     width: 70%;
-    margin: auto; 
+    margin: 2em auto; 
     text-align: center;
+    padding: 1.5em;
 }
 
 .detail_recap{
     font-weight: 700;
-    text-align: justify;
-    width: 50%;
+    text-align: center; 
     margin: auto;
     padding-bottom: 0.8em;
     font-size: 1.2em;
@@ -510,46 +550,41 @@ input[type="radio"] {
     color: red;
 }
 
-.level{
-    display: flex;
-    width: 100%;
-    justify-content: space-around;
-    flex-direction: row;
-    list-style: none;
-}
-.quizList{
-    flex-direction: column;
-    display: flex;
-}
 .link{
     color: #14afd6;
     font-weight: 700;
     font-size: 1.05em;
 }
-.link:hover{
-    font-size: 1em;
+.box_recap{
+    box-shadow: 0px 0px 10px 0px #666 inset;
+    background-color: rgba(255,255,255,0.3);
+    border-radius: 15px;
+    margin: 1em;
+    padding: 2em;
+    font-size: 1.5em;
+    text-align: center;
 }
-
 .recap_question_answer{
-    border-top: 1px dashed blue;
-    padding:  0.6em 0;
+    box-shadow: 0px 0px 10px 0px #666 inset;
+    background-color: rgba(255,255,255,0.3);
+    border-radius: 15px;
+    margin: 1em;
+    padding: 1em;
+    font-size: 1.2em;
 }
 .intitule_question{
     color: #0c5283;
     font-size: 1.2em;
     font-weight: 700; 
 }
-.score_recap{
-    color: #14afd6;
-    font-size: 1.1em;
-}
 
 .p_score{
     text-align: center;
     margin: auto;
     padding-bottom: 0.5em;
-    border-top: 1px dashed blue;
+    font-weight: bold;
     font-size: 1.2em;
+    padding: 1em;
 }
 
 .category{
@@ -565,6 +600,7 @@ input[type="radio"] {
     text-align: center;
     color: #0c5283;
     padding: 0.5em;
+    font-weight: 700;
 }
 /**********************add quiz ********************************/
 #questions-summary{
@@ -626,9 +662,6 @@ input[type="radio"] {
 
 /******************************Détail Quiz*************************************************/
 #quiz-detail-container{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     width: 100%;
 }
 
@@ -636,18 +669,24 @@ input[type="radio"] {
     display: flex;
     align-items: center;
     flex-direction: column;
-    margin-left: auto;
-    margin-right: auto;
-    border: 1px solid black;
     width: 80%;
+    margin: auto;
 }
 
 .quiz-detail{
-    display: flex;
     margin: 2px;
     flex-direction: column;
     width: 50%;
     align-items: center;
+}
+.box_question_reponse{
+    box-shadow: 0px 0px 10px 0px #666 inset;
+    background-color: rgba(255,255,255,0.3);
+    border-radius: 15px;
+    margin: 1em;
+    padding: 2em;
+    font-size: 1.5em;
+    font-weight: 600;
 }
 /***********************************Profil***********************************/
 
@@ -785,7 +824,53 @@ input[type="radio"] {
 }
 
       
-    
+    /*************************form register****************************/
+.form_register{
+    display: flex;
+    margin: 2em auto;
+    padding: 3em;
+    width: 95%;
+    border-radius: 25px;
+    background-color: rgba(255,255,255,0.3);
+    box-shadow: 0px 0px 10px 0px #666 inset;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+#registration_form_Valider{
+    margin-top: 1em;
+}
+.connection{
+    text-align: center;
+}
+.form_register h2{
+    padding-bottom: 1.5em;
+    text-align: center;
+}
+    /*************************form login****************************/
+/* label{
+    padding: 1em 0;
+} */
+.form_login{
+    display: flex;
+    margin: 2em auto;
+    padding: 3em;
+    width: 95%;
+    border-radius: 25px;
+    background-color: rgba(255,255,255,0.3);
+    box-shadow: 0px 0px 10px 0px #666 inset;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+#registration_form_Valider{
+    margin-top: 1em;
+}
+.connection{
+    text-align: center;
+}
+.form_login h2{
+    padding-bottom: 1.5em;
+    text-align: center;
+}
 /****************************************************/
 .quiz_home_card {  
     background-position: center;
@@ -882,17 +967,7 @@ input[type="radio"] {
     margin: auto; 
 }
 
-/* .table-score{
-    width: 60%;
-    height: 60%;
-    position: absolute;
-    top: 10%;
-    left: 25%;
-    background-color: rgba(255, 255, 255);
-    border: 2px solid black;
-    padding: 15px;
-    border-radius: 10px;
-} */
+
 thead th,thead td{
     color: #DF9409;
 }
