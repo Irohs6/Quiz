@@ -1,7 +1,7 @@
 *{
     margin: 0;
     padding: 0;
-    box-sizing: 0;
+    box-sizing: border-box;
 }
 /********************général***********************************/
 body{
@@ -32,8 +32,6 @@ body{
 }
 .box{
     background-image: url(../img/pexels-aleksandar-pasaric-1323712.jpg);
-    margin-right: auto;
-    margin-left: auto;
     background-size: cover;
 }
 
@@ -63,6 +61,9 @@ ul{
     margin: auto;
     border-bottom: 2px solid #1C418C;
     
+}
+#menuBtn{
+    display: none;
 }
 .nav_base{
     display: flex;
@@ -140,7 +141,6 @@ h3{
 .title_home{
     color: #1C418C;
     text-align: center;
-    font-size: xx-large;
 }
 
 #hero{
@@ -174,7 +174,7 @@ strong{
 a{
     text-decoration: none;
 }
-.table_score{
+.article_home{
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -189,16 +189,29 @@ a{
 
 .list_score{
     font-size: 2em;
-    padding: 0.5em 2em;
-    
+    padding: 0.5em 2em; 
 }
-.title_score{
-    
+.link_register{
+    font-size: 1.3em;
+}
+.h2_home{
     text-align: center;
     font-size: 3em;
     font-weight: 700;
     color: #014F86;
 
+}
+.h4_home{
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+.three_score{
+    font-weight: 700;
+    font-size: 1.5em;
+}
+.p_home{
+    font-weight: 700;
+    font-size: 2em;
 }
 .span_score{
     padding-left: 2em;
@@ -230,8 +243,7 @@ a{
 .section-slide{
     position: relative;
     display: flex;
-    justify-content: center;
-    
+    justify-content: center;   
 }
 
 .title-category{
@@ -268,7 +280,7 @@ a{
 }
 .info p{
     color: #0B2443;
-    font-weight: 500;
+    font-weight: 700;
     font-size: 1.4rem;
     margin-bottom: 20px;
     line-height: 1.5;
@@ -1067,5 +1079,4 @@ th, td {
     margin: 10px 0;
 }
   
-
 

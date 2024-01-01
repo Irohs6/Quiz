@@ -1,5 +1,7 @@
 window.addEventListener("load", (event) => {
 
+
+
   const swiperElements = document.querySelectorAll('.swiper');
 
   swiperElements.forEach(element => {

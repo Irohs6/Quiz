@@ -51,12 +51,12 @@
 
             </nav>
 
-            <article class="table_score">
-                <h2 class="title_score">Amusez-vous, c'est 100% gratuit !</h2>
-                <p>Chaque <strong>Quiz</strong> est une série de 10 question a choix multiple, </p>
-                <p>1 seul bonne réponse possible.</p>
-                <p>Finir un <strong>Quiz</strong> vous raportera des points, </p>
-                <p>et vous indiquera votre % de bonne réponse</p>
+            <article class="article_home">
+                <h2 class="h2_home">Amusez-vous, c'est 100% gratuit !</h2>
+                <p class="p_home">Chaque <strong>Quiz</strong> est une série de 10 question a choix multiple, </p>
+                <p class="p_home">1 seul bonne réponse possible.</p>
+                <p class="p_home">Finir un <strong>Quiz</strong> vous raportera des points, </p>
+                <p class="p_home">et vous indiquera votre % de bonne réponse</p>
             </article>
             <section class="section-slide"> {# slide faite avec swiper.js#}
                 <div class="content">
@@ -152,7 +152,7 @@
                                                                 {% if lastGameDate is not null %} {# si la variable a bien été set et donc qu'une partit existe #}
                                                             
                                                                     {% if score >= 80 %} {# condition si score est supérieur a 80% stock se message #}
-                                                                        {% set message = "Vous avez validé le quiz <span class='quiz-night'>" ~ quiz.title ~ "</span> en obtenant " ~ score ~ "%" ~ " de bonne réponse .<br> Vous pourrez quand même le rejouer et tenter de faire mieux si possible." %}
+                                                                        {% set message = "Quiz <span class='quiz-night'>" ~ quiz.title ~ "</span> validé : " ~ score ~ "% de bonnes réponses. Vous pouvez le rejouer pour améliorer votre score." %}
                                                                     {% else %} {# sinon on stock se message #}
                                                                         {% set message = "Vous n'avez pas validé le quiz <span class='quiz-night'>" ~ quiz.title ~ "</span> en obtenant " ~ score ~ "% de bonne réponse." %}
                                                                     {% endif %} {# fin {% if score >= 80 %} #}
@@ -193,22 +193,22 @@
                                                                 {% for game in gamesForCurrentQuiz %}
                                                                     {% if game.quiz.id == quiz.id %}
                                                                         {% if loop.first %}
-                                                                            <h4>Les meilleurs scores pour le quiz </h4>
-                                                                            <p><strong>{{ game.quiz.title }}</strong>:</p>
+                                                                            <h4 class="h4_home">Les meilleurs scores pour le quiz </h4>
+                                                                            <p class="p_home"><strong>{{ game.quiz.title }}</strong>:</p>
                                                                         {% endif %}
-                                                                        <li> {{ game.score }} points</li>
+                                                                        <li class="three_score"> {{ game.score }} %</li>
                                                                         {% set hasGames = true %}
                                                                     {% endif %}
                                                                 {% endfor %}
                                                             </ol>
                                                                 {% if not hasGames %}
-                                                                    <p>Pas de scores enregistrés pour le quiz "<strong>{{ quiz.title }}</strong>". Lancez-vous!!</p>
-                                                                    <p>Devenez <br><strong>  Le champion !!  </strong></p>
+                                                                    <p class="p_home">Pas de scores enregistrés pour le quiz "<strong>{{ quiz.title }}</strong>". Lancez-vous!!</p>
+                                                                    <p class="p_home">Devenez <br><strong>  Le champion !!  </strong></p>
                                                                 {% else %}
-                                                                    <p><strong>Relevez le défi</strong> et améliorez ces scores !</p>
+                                                                    <p class="p_home"><strong>Relevez le défi</strong> et améliorez ces scores !</p>
                                                                 {% endif %}
                                                                 
-                                                                <a href="{{ path('app_register') }}"><strong>Inscrivez-vous pour participer.</strong></a> 
+                                                                <a class="link_register" href="{{ path('app_register') }}"><strong>Inscrivez-vous pour participer.</strong></a> 
                                                             </div>
                                                             <figure class="fig_card_category">
 
@@ -245,9 +245,9 @@
 
             
       
-        <section class="table_score">
-            <h2 class="title_score">Tester vos connaisance</h2>
-            <p>Utiliser <strong>DEV QUIZ</strong> pour tester vos connaisance en <strong>HTML</strong>,<strong>CSS</strong>,<strong>PHP</strong>, <strong>JavaScripts</strong> et bien d'autre</p>
+        <section class="article_home">
+            <h2 class="h2_home">Tester vos connaisance</h2>
+            <p class="p_home">Utiliser <strong>DEV QUIZ</strong> pour tester vos connaisance en <strong>HTML</strong>,<strong>CSS</strong>,<strong>PHP</strong>, <strong>JavaScripts</strong> et bien d'autre</p>
             <ol>
 
                 {% for game  in allGames %}

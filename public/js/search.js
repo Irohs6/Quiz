@@ -1,3 +1,14 @@
+// Sélection du bouton et du menu
+const menuBtn = document.getElementById('menuBtn');
+const navMenu = document.querySelector('.nav_base');
+console.log(menuBtn);
+// Ajout d'un gestionnaire d'événement pour le clic sur le bouton
+menuBtn.addEventListener('click', function() {
+    // Toggle de la classe pour afficher ou masquer le menu
+    navMenu.classList.toggle('show-menu');
+});
+
+
 ////////////////////////////////////// search bar dynamique (AJAX) ///////////////////////////////////////
 
 const textHint = document.getElementById("textHint");
