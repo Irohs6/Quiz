@@ -16,7 +16,8 @@
         <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
         <label for="inputPassword"><strong>Password:</strong></label>
         <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
-
+        {# Intégration de reCAPTCHA #}
+        <div class="g-recaptcha" name="g-recaptcha-response" data-sitekey="{{ GOOGLE_RECAPTCHA_SITE_KEY }}"></div>
         <input type="hidden" name="_csrf_token"
             value="{{ csrf_token('authenticate') }}"
         >
@@ -31,4 +32,6 @@
         <a href="{{ path('app_forgot_password_request')}}"><strong>Mot de passe oublier</strong></a>
     </form>
 </div>
+<!-- Script reCAPTCHA -->
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 {% endblock %}

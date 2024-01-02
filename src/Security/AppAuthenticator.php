@@ -2,12 +2,11 @@
 
 namespace App\Security;
 
-use App\Entity\User;
+use ReCaptcha\ReCaptcha;
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\SecurityRequestAttributes;
@@ -24,27 +23,31 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
 {
     use TargetPathTrait;
 
-    /** @var UserRepository */
     private $userRepository;
+    private $recaptcha;
+    
 
     public const LOGIN_ROUTE = 'app_login';
 
-    public function __construct(private UrlGeneratorInterface $urlGenerator, UserRepository $userRepository)
+
+    public function __construct(private UrlGeneratorInterface $urlGenerator, UserRepository $userRepository, ReCaptcha $recaptcha)
     {
         $this->userRepository = $userRepository;
+        $this->recaptcha = $recaptcha;
     }
 
     public function authenticate(Request $request): Passport
     {
         $email = $request->request->get('email', '');
-
+        $recaptchaResponse = $request->request->get('g-recaptcha-response');
+        dd($recaptchaResponse);
         $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $email);
 
         // On récupère le user grace a son email
         $userEntity = $this->userRepository->findOneBy(['email' => $email]);
 
         if ($userEntity) {
-            # code...
+            
         
             // Et on Vérifiez si l'eamil est vérifié ou si le user est  banni
             if (!$userEntity->isVerified() || $userEntity->isIsBanned()) {
@@ -59,6 +62,12 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
             $errorMessage = "Cet email n'existe pas Veuillez créer un compte";
                 
             throw new CustomUserMessageAuthenticationException($errorMessage);
+        }
+
+        $recaptchaResult = $this->recaptcha->verify($recaptchaResponse, $request->getClientIp());
+
+        if (!$recaptchaResult->isSuccess() || $recaptchaResult->getScore() < 0.5) {
+            throw new CustomUserMessageAuthenticationException('ReCAPTCHA non valide.');
         }
 
         return new Passport(
