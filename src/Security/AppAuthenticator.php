@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Security;
-
+use GuzzleHttp\Client;
 use App\Entity\User;
 use App\Repository\UserRepository;
+use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -37,16 +38,21 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
     public function authenticate(Request $request): Passport
     {
         $email = $request->request->get('email', '');
-
-        $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $email);
-
-        // On récupère le user grace a son email
+        $recaptchaToken = $request->request->get('recaptcha-response');
+        // Valider la réponse reCAPTCHA côté serveur
+        $client = new Client();
+        $response = $client->request('POST', 'https://www.google.com/recaptcha/api/siteverify', [
+            'form_params' => [
+              'secret' => '6Lcml0IpAAAAAAv-02L2Tf_9YZIZRCkwaH3Rf0wb',
+              'response' => $recaptchaToken,
+            ]
+        ]);
+        $body = json_decode($response->getBody()->getContents(), true);
+        if (!$body['success']) {
+            throw new CustomUserMessageAuthenticationException('Invalid reCAPTCHA');
+        }
         $userEntity = $this->userRepository->findOneBy(['email' => $email]);
-
         if ($userEntity) {
-            # code...
-        
-            // Et on Vérifiez si l'eamil est vérifié ou si le user est  banni
             if (!$userEntity->isVerified() || $userEntity->isIsBanned()) {
                 $errorMessage = $userEntity && $userEntity->isIsBanned()
                     ? 'Votre compte est banni.'
@@ -55,12 +61,12 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
                 throw new CustomUserMessageAuthenticationException($errorMessage);
             }
 
-        }else{
+         }else{
             $errorMessage = "Cet email n'existe pas Veuillez créer un compte";
                 
             throw new CustomUserMessageAuthenticationException($errorMessage);
         }
-
+        
         return new Passport(
             new UserBadge($email),
             new PasswordCredentials($request->request->get('password', '')),

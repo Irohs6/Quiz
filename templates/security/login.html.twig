@@ -25,10 +25,19 @@
                 <input type="checkbox" name="_remember_me" >Se souvenir de moi
             </label>
         </div>
+        <input type="hidden" id="recaptchaResponse" name="recaptcha-response">
         <button class="btn btn-primary mx-auto d-block" type="submit">
             Connexion
         </button>
         <a href="{{ path('app_forgot_password_request')}}"><strong>Mot de passe oublier</strong></a>
     </form>
 </div>
+<script src="https://www.google.com/recaptcha/api.js?render=6Lcml0IpAAAAAJkuPOA5ZoQBIN8Fw24UPUwnBKh-"></script>
+<script>
+grecaptcha.ready(function() {
+    grecaptcha.execute('6Lcml0IpAAAAAJkuPOA5ZoQBIN8Fw24UPUwnBKh-', {action: 'login'}).then(function(token) {
+        document.getElementById('recaptchaResponse').value = token
+    });
+});
+</script>
 {% endblock %}

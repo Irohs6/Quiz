@@ -786,7 +786,7 @@ span#tarteaucitronDisclaimerAlert {
  */
 .tarteaucitronIconBottomRight {
     bottom: 0;
-    right: 0;
+    left: 0;
 }
 .tarteaucitronIconBottomLeft {
     bottom: 0;
@@ -869,7 +869,7 @@ span#tarteaucitronDisclaimerAlert {
     display: none;
     padding: 0;
     position: fixed;
-    right: 0;
+    left: 0;
     text-align: center;
     width: auto;
     z-index: 2147483646;
@@ -938,7 +938,7 @@ span#tarteaucitronDisclaimerAlert {
     max-height: 70%;
     max-width: 500px;
     position: fixed;
-    right: 0;
+    left: 10;
     width: 100%;
 }
 

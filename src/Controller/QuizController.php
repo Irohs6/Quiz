@@ -118,7 +118,7 @@ class QuizController extends AbstractController
        
         $now = new DateTime(); // stocke la date du jour
 
-        //si le quiz est vérifier et si le role est modérateur ou admin
+        //si le quiz est vérifier ou si le role est modérateur ou admin
         if ($quiz->isIsVerified()|| $this->isGranted('ROLE_MODERATOR')) {
             // si il n'y a pas de partie jouer ou si la date du jours est égal a la date modifier ou si le role est moderateur ou admin
             if (!$gamePlay || $now == $dateModify || $this->isGranted('ROLE_MODERATOR')){
@@ -144,20 +144,26 @@ class QuizController extends AbstractController
                             }
                         }
                     }
+                    //si l'uttilisateur a 5 partit jouer pour ce quiz
                     if (count($allGameUser) == 5) {
+                        //on récupère la game avec le plus petit score
                         $game = $gameRepository->findOneBy(['userId'=>$this->getUser()->getId(), 'quiz' => $quiz->getId()],['score'=> 'ASC']);
+                        //varaible créer qui stocke la date du jours
                         $now = new DateTime();
+                        //remplace la date de la partie avec le plus petit score par la nouvelle date de la partie
                         $game->setDateGame($now);
-                        
+                        //si le score de la partie est supérieur au plus petit score de la partie jouée sur ce quiz
                         if ($game->getScore() < $score) {
+                            //alors on écrase le score avec le nouveau
                             $game->setScore($score);
                         }
+                        //sinon le score reste inchangé seul la date change.
                       
                         $entityManager->persist($game);
                         // execute PDO(la requete Insert ou Update)
                         $entityManager->flush();
                     }else{
-
+                        //si aucune partit jouer sur se quiz
                         $game = new Game; // nouvelle instance de Game
                         $game->addAnswer($answer);//ajoute les question a la game
                         $quiz->addGame($game);// ajout du quiz dans Game
@@ -180,7 +186,7 @@ class QuizController extends AbstractController
             }else{
             
                 $nbJour = $dateModify->diff($now)->format("%d");
-                $this->addFlash('warning', 'Vous pourez rejouer le quiz dans '.$nbJour.' jours');
+                $this->addFlash('warning', 'Vous pourrez rejouer le quiz dans '.$nbJour.' jours');
                 return $this->redirectToRoute('app_home_quiz');
             }
         }else{
