@@ -26,13 +26,14 @@
                 <a href="{{path('list_quizzes')}}">Liste des Quiz</a>
             </li>
         </ul>
-
-        <ul class="admin_list_user">
-            <h4>User</h4>
-            <li>
-                {# lien vers la liste des utilisateur #}
-                <a href="{{path('app_userManagement')}}">Liste User</a>
-            </li>
-        </ul>
+        {% if is_granted('ROLE_ADMIN') %} 
+            <ul class="admin_list_user">
+                <h4>User</h4>
+                <li>
+                    {# lien vers la liste des utilisateur #}
+                    <a href="{{path('app_userManagement')}}">Liste User</a>
+                </li>
+            </ul>
+        {% endif %}
     </nav>
 

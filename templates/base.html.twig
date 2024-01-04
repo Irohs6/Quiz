@@ -85,7 +85,7 @@
                         {# visible que par admin #}
                         {% if is_granted('ROLE_ADMIN') %} 
                         {# route vers panel admin #}
-                            <a class="lien_nav" href="{{path('app_userManagement')}}">Panel admin</a>
+                            <a class="lien_nav" href="{{path('list_quizzes')}}">Panel admin</a>
                         {% endif %}
                         {# visible pour moderateur et admin  #}
                         {% if is_granted('ROLE_MODERATOR') %} 

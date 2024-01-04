@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Categories!{% endblock %}
+
+{% block body %}
+<div class="box_theme">
+    
+    <table class="admin-theme">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Theme</th>
+                <th>Nombre de Quiz</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+           
+            {% for category in categories %}
+                <tr>
+                    <td>{{ category.id }}</td>
+                    <td>{{ category }}</td>
+                    <td>{{ category.theme }}</td>
+                    <td>{{ category.quizzes|length}}</td>
+                    <td>
+                        <ul class="ul_action">
+                            <li class="li_action">
+                                <a class="btn btn-success" href="{{path('new_quiz', {'idCategory': category.id})}}">Créer un Quiz</a>
+                            </li>
+                            <li class="li_action">
+                                <a class="btn btn-warning" href="{{path('edit_category', {'id': category.id})}}">Modifier un categorie</a>
+                            </li>
+                            
+                        </ul>
+                    </td>
+                    
+                    
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

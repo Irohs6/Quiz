@@ -6,27 +6,30 @@
 
 
     <div id="quiz-detail-container">
-        <h1 class="title">{{ quiz.title }}</h1>
+        <h1 class="title">{{ quiz.category.label }}</h1>
         
         <article id="quiz-detail"> 
             <ol class="quiz-detail">
-                <h2 class="title">{{ quiz.category.label }}</h2>
+                <h2 class="title">{{ quiz.title }}</h2>
+                <a class="btn btn-warning" href="{{path('edit_quiz', {'id': quiz.id})}}">Modifier un Quiz</a>
                 {% for question in quiz.questions %}
                     <article class="box_question_reponse">
-                        <li>{{ question.sentence }}</li>
-                            <ul class="quiz-detail-reponse">
+                        
+                      
+                       <li>{{ question.sentence }}</li>
+
+                            <ol class="quiz-detail-reponse">
                                 {% for reponse in question.answers %}
                             
                                     {% if question.id == reponse.question.id %}
+                                    
                                         <li>{{ reponse.sentence }}</li>
                                     {% endif %}
                                     
                                 {% endfor %}
-                            </ul>
-                        <a href="{{ path('app_unset_quiz',{'id' : question.id ,'idQuiz': quiz.id})}}">Enlever</a>
+                            </ol>
+                        <a href="{{ path('app_unset_quiz',{'id' : question.id ,'idQuiz': quiz.id})}}">Retirer la question</a>
                     
-
-                        <a href="{{path('edit_question', {'id': question.id})}}">Modifier</a>
                     </article>
                 {% endfor %}
                     

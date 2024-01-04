@@ -1,78 +1,65 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AdminController!{% endblock %}
-{% set nb = 1 %}{#  variable déclarer a 1  pour créer différent id sur les button pour les récupérer en js #}
+{% block title %}Liste des Quizs!{% endblock %}
+
 {% block body %}
-
-{# boucle pour afficher toute les catégorie  #}
-{% for category in categories %}
-
-        {% set categoryExist = category %} {# variable pour eviter les doublons#}
-        {# affiche le nombre de quiz existant dans cet catégorie  #}
-        <h2>Pour la categories {{category}} il y a  {{ category.quizzes|length }} quiz</h2>
-        <a href="{{ path('delete_category', {'id': category.id})}}">Supprimer Category</a>
-        <button id="button{{nb}}" class="showButton">Afficher</button>
-
-    <ul class="category" id="{{nb}}">
-        <a class="add" href="{{path('new_quiz', {'idCategory': category.id})}}">Ajouter Quiz</a>
-        {# boucle pour afficher les quiz  #}
-        {% for quiz in quizes %} 
-
-            {# condition qui vérifie que la catégorie n'est pas déja afficher pour qu'elle ne soit afficher qu'un seul fois pour tous les quiz de cet catégorie  #}
-            {% if categoryExist == category  %}
-                
-                {# condition pour afficher les quiz qui appartenant a cet catégorie #}
-                {% if category.id == quiz.category.id  %}
-                
-                
-                    <li class="li_category">
-                        <h4>{{ quiz.title }}</h4>
-                        
-                        <a class="modify" href="{{path('edit_quiz', {'id': quiz.id})}}">Modifier</a>  
-                    </li>
-
-                    <li class="li_category">
-                        <a class="add" href="{{path('new_question', {'idQuiz': quiz.id})}}">Ajouter Question</a>
-                        Nb question:{{ quiz.questions|length}}
-                    </li>
-
-                    <li class="li_category">
-                        Statut: 
-                        {# condition pour afficher les différent statut d'un quiz  #}
+<div class="box_theme">
+    
+    <table class="admin-theme">
+        <thead class="thead-admin">
+            <tr>
+                <th>ID</th>
+                <th>Titre</th>
+                <th>Dificulter</th>
+                <th>Nombre question</th>
+                <th>Créateur</th>
+                <th>Statut</th>
+                <th>Catégorie</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+           
+            {% for quiz in quizzes %}
+                <tr>
+                    <td>{{ quiz.id }}</td>
+                    <td>{{ quiz }}</td>
+                    <td>{{ quiz.level }}</td>
+                    <td>{{ quiz.questions|length }}</td>
+                    {% if quiz.userId %}
+                        <td>{{ quiz.userId.username }}</td>
+                    {% else %}
+                        <td>Utilisateur Suprimé</td>
+                    {% endif %}
+                    <td>
                         {% if quiz.isVerified %}
-                            <span class="success">Vérifier</span>
+                            <i class="fa-solid fa-check fa-2xl" style="color: #0dd10a;"></i>
                         {% else %}
-                            <span class="error">A vérifier</span>
+                            <i class="fa-solid fa-xmark fa-2xl" style="color: #d40c0c;"></i>
                         {% endif %}
-                    </li>
-
-                    <li class="li_category">
-                        {# route pour afficher le détail d'un quiz  #}
-                        <a class="detail" href="{{path('show_quiz', {'id': quiz.id})}}">Détail</a>
-                    </li>
-
-                    <li class="li_category">
-                        {# condition si le quiz a au moin une question on affiche un bouton pour tester le quiz #}
-                        {% if quiz.questions|length > 0 %}   
-
-                                <a class="detail" href="{{path('app_play', {'id': quiz.id})}}">Test Quiz</a>
-
-                        {% endif %}
-                        {# route pour ajouter une nouvelle question et ses réponses  #}
-                        
-                    </li>
+                    </td>
+                    <td>{{ quiz.category }}</td>
+                    <td>
+                        <ul class="ul_action">
+                            <li class="li_action">
+                                <a class="btn btn-warning" href="{{path('edit_quiz', {'id': quiz.id})}}">Modifier un Quiz</a>
+                            </li>
+                            
+                            <li class="li_action">
+                                {% if quiz.isVerified %}
+                                    <a class="btn btn-danger" href="{{path('unVerified_quiz', {'id': quiz.id})}}">Invalider se quiz</a> 
+                                {% else %}
+                                    <a class="btn btn-success" href="{{path('verified_quiz', {'id': quiz.id})}}">Valider se quiz</a> 
+                                {% endif %}
+                                
+                            </li>
+                        </ul>
+                    </td>
                     
-
-                {% endif %}  {# fin {% if category.id == quiz.category.id  %}#} 
-            {% endif %} {# fin {% if categoryExist == category  %} #}
-
-        {% endfor %}{# fin {% for quiz in quizes %}  #}
-    </ul>
-    {% set nb = nb +1 %} {#  on ajoute 1 a chaque tour de boucle #}
-{% endfor %} {# fin {% for category in categories %}#}
-
-
-<script src="{{ asset('js/show_quiz.js') }}"></script>   
-
-   
+                    
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endblock %}

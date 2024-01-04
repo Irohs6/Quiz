@@ -23,7 +23,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class AdminController extends AbstractController
 {
    
-
     //route pour gèrer les  roles et le statut des utilisateurs
     #[Route(path: 'admin/panel/userManagement', name: 'app_userManagement')]
     public function userList(UserRepository $userRepository): Response
@@ -113,7 +112,7 @@ class AdminController extends AbstractController
 
     //Pour créer un nouvelle catégorie dans un thème définie *************************************************************************************************
     #[Route('admin/category/new/{idTheme}', name: 'new_category')]
-    #[Route('admin/category/edit/{id}', name: 'edit_category')]
+    #[Route('moderator/category/edit/{id}', name: 'edit_category')]
     public function newEditCategory(Category $category = null,Request $request, ThemeRepository $themeRepository, EntityManagerInterface $entityManager,FileUploader $fileUploader): Response
     {
         //si la catégorie n'existe pas 

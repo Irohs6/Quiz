@@ -33,12 +33,10 @@ class ModeratorController extends AbstractController
     #[Route(path: 'moderator/list/quiz', name: 'app_list_quiz')]
     public function quizList(QuizRepository $quizRepository,CategoryRepository $categoryRepository): Response
     {
-        $quizes = $quizRepository->findAll();//récupère toute les données quiz enregistré
-        $categories = $categoryRepository->findAll();//récupère toute les données de catégorie enregistré
+        $quizzes = $quizRepository->findAll();
 
         return $this->render('moderator/list_quiz.html.twig', [
-            'quizes' => $quizes,
-            'categories' => $categories,
+            'quizzes' =>$quizzes
         ]);
     }
 
@@ -83,7 +81,15 @@ class ModeratorController extends AbstractController
        
     }
 
+    #[Route('moderator/list/categories', name: 'list_categories')]
+    public function listCategory(CategoryRepository $categoryRepository): Response
+    {
+        $categories = $categoryRepository->findAll();
     
+        return $this->render('moderator/list_categories_moderator.html.twig', [
+            'categories' =>$categories
+        ]);
+    }
 
 
 }

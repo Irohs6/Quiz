@@ -232,7 +232,7 @@ class QuizController extends AbstractController
         ]);
     }
 
-    //Pour créer ou modifier un quiz
+    //Pour créer ou 
     #[Route('user/quiz/{idCategory}/new/', name: 'new_quiz')]
     public function newQuiz(Quiz $quiz = null, Request $request, EntityManagerInterface $entityManager,CategoryRepository $categoryRepository): Response
     {
@@ -264,7 +264,7 @@ class QuizController extends AbstractController
                 $entityManager->flush();
         
                 $this->addFlash('success', "Votre Quiz a bien été créer vous recevrez une confirmation par email une fois qu'il sera validé.");
-                return $this->redirectToRoute('app_list_quiz'); // redirige vers le détail d'un quiz
+                return $this->redirectToRoute('show_quiz',['id'=> $quiz->getId()]); // redirige vers le détail d'un quiz
             }
         } else {
             
