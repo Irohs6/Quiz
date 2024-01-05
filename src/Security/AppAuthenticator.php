@@ -39,7 +39,7 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
     {
         $email = $request->request->get('email', '');
         $recaptchaToken = $request->request->get('recaptcha-response');
-        // Valider la réponse reCAPTCHA côté serveur
+        
         $client = new Client();
         $response = $client->request('POST', 'https://www.google.com/recaptcha/api/siteverify', [
             'form_params' => [

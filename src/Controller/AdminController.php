@@ -60,10 +60,12 @@ class AdminController extends AbstractController
     #[Route(path: 'admin/panel/isBanned/{id}', name: 'app_userIsBanned')]
     public function bannedUser(User $user, EntityManagerInterface $entityManager): Response
     {
-        $user->setIsBanned(true);
+        $user->setIsBanned(true);// met le boolean a vrais l'uttilisateur est alors banni et ne peux plus se connecter
 
         $entityManager->flush();
+
         $this->addFlash('success', "Cet utilisateur a bien été banni.");
+        //redirige vers la liste des utilisateur de l'admin pannel
         return $this->redirectToRoute('app_userManagement');
     }
 
@@ -71,46 +73,54 @@ class AdminController extends AbstractController
     #[Route(path: 'admin/panel/unBanned/{id}', name: 'app_userUnBanned')]
     public function unbannedUser(User $user, EntityManagerInterface $entityManager): Response
     {
-        $user->setIsBanned(false);
+        $user->setIsBanned(false); // met le bollean a faux l'uttilisateur n'est plus bannie il peux a nouveau se connecter
+
         $entityManager->flush();
+
         $this->addFlash('success', "Cet Utilisateur a bien été débannie.");
+        //redirige vers la liste des utilisateur de l'admin pannel
         return $this->redirectToRoute('app_userManagement');
     }
 
+    //liste de quiz pour le pannel admin
     #[Route('admin/list/quizzes', name: 'list_quizzes')]
     public function listQuizes(QuizRepository $quizRepository): Response
     {
-        $quizzes = $quizRepository->findAll();
+        $quizzes = $quizRepository->findAll();// récupère tous les quiz enregistrer
     
+        //envoit les données vers la vue
         return $this->render('admin/list_quizzes_admin.html.twig', [
             'quizzes' =>$quizzes
         ]);
     }
      
+    //route pour supprimer un quiz
     #[Route('admin/quiz/{id}/delete', name: 'delete_quiz')]
     public function deleteQuiz(Quiz $quiz, EntityManagerInterface $entityManager): Response
     {
-        foreach ($quiz->getQuestions() as $question) {
-            $quiz->removeQuestion($question);
+        foreach ($quiz->getQuestions() as $question) {//boucle pour récupérer les question d'un quiz
+            $quiz->removeQuestion($question);// enlève l'association entre quiz et question et set a nul le quiz_id de question
         }
 
-        $entityManager->remove($quiz);//suprime un quiz
+        $entityManager->remove($quiz);//suprime le quiz
         $entityManager->flush();
         $this->addFlash('success', "Quiz supprimé avec succès.");
+        //redirige a la liste de quiz du pannel admin
         return $this->redirectToRoute('app_list_quiz');
     }
 
+    //route pour la liste des catégorie du pannel admin
     #[Route('admin/list/categories', name: 'list_categories')]
     public function listCategory(CategoryRepository $categoryRepository): Response
     {
-        $categories = $categoryRepository->findAll();
-    
+        $categories = $categoryRepository->findAll();// récupère toute les catégorie enregistré
+        // retourne les données vers la vue 
         return $this->render('admin/list_categories_admin.html.twig', [
             'categories' =>$categories
         ]);
     }
 
-    //Pour créer un nouvelle catégorie dans un thème définie *************************************************************************************************
+    //Pour créer/modifier une  catégorie dans un thème définie *************************************************************************************************
     #[Route('admin/category/new/{idTheme}', name: 'new_category')]
     #[Route('moderator/category/edit/{id}', name: 'edit_category')]
     public function newEditCategory(Category $category = null,Request $request, ThemeRepository $themeRepository, EntityManagerInterface $entityManager,FileUploader $fileUploader): Response
@@ -127,7 +137,7 @@ class AdminController extends AbstractController
             $theme = $category->getTheme(); //on récupère le theme contenu dans la catégorie
             // Récupérez le nom du fichier depuis l'entité
             $picture = $category->getPicture();//on récupère l'image de la catégorie
-            $message = "Cet Categorie a bien été modifier";
+            $message = "Cet Categorie a bien été modifier";// message stocké 
         }
           
         $category->setTheme($theme);//on ajoute le thème a la catégorie
@@ -138,27 +148,37 @@ class AdminController extends AbstractController
         //si le formulaire de Quiz est remplie et valide
         if ($formNewCategory->isSubmitted() && $formNewCategory->isValid()) {
             /** @var UploadedFile $pictureFile */
-        // on récupère l'image
-        $pictureFile = $formNewCategory->get('picture')->getData();
-        //si l'image existe
-        if ($pictureFile) {
-            //on utilise la fonction upload du service File upload qi va modifier le name avec un id unique
-            $pictureFileName = $fileUploader->upload($pictureFile);
-            // on set l'image modifier dans la catégorie
-            $category->setPicture($pictureFileName);
-        }else{
-            //si l'image n'a pas changer on remet la meme
-            $category->setPicture($picture);
-        }
-        
+            // on récupère l'image contenu dans le formulaire
+            $pictureFile = $formNewCategory->get('picture')->getData();
+            //si l'image existe  et qu'elle n'a pas changé on garde la meme image
+            if ($pictureFile && $picture != null && $pictureFile == $picture) {
+                $category->setPicture($picture);
+                // sinon si l'image existe mais qu'elle a changer on supprime l'ancienne du dossier upload et on stock la nouvelle
+            }else if ($pictureFile && $picture != null && $pictureFile != $picture){
+                $projectDir = $this->getParameter('kernel.project_dir');
+            
+                unlink($projectDir.'/public/uploads/img/category/'.$picture); // suprime l'image du dossier upload
+                 //on utilise la fonction upload du service File upload qi va modifier le name avec un id unique
+                $pictureFileName = $fileUploader->upload($pictureFile);
+                // on set l'image modifier dans la catégorie
+                $category->setPicture($pictureFileName);
+                // sinon c'est une création donc on enregistre juste l'image
+            }else{
+
+                //on utilise la fonction upload du service File upload qi va modifier le name avec un id unique
+                $pictureFileName = $fileUploader->upload($pictureFile);
+                // on set l'image modifier dans la catégorie
+                $category->setPicture($pictureFileName);
+            }
+               
             //récupère les donné du formulaire  
             $formNewCategory->getData();
             // prepare PDO(prepare la requete Insert ou Update)
             $entityManager->persist($category);
             // execute PDO(la requete Insert ou Update)
             $entityManager->flush();
-            //redirige ajout de question et réponse
             $this->addFlash('success', $message);
+            //redirige vers la liste des catégorie du pannel admin
             return $this->redirectToRoute('list_categories');
         }
 
@@ -170,6 +190,7 @@ class AdminController extends AbstractController
         ]);
     }
       
+    // route pour la suppression d'une catégorie et des question et des quiz qu'elle contient
     #[Route('admin/category/{id}/delete', name: 'delete_category')]
     public function deleteCategory(Category $category, EntityManagerInterface $entityManager): Response
     {
@@ -180,7 +201,7 @@ class AdminController extends AbstractController
           
             $projectDir = $this->getParameter('kernel.project_dir');
             
-            unlink($projectDir.'/public/uploads/img/category/'.$image); 
+            unlink($projectDir.'/public/uploads/img/category/'.$image); // suprime l'image du dossier upload
         } else {
             $image = null;
         }
@@ -190,7 +211,7 @@ class AdminController extends AbstractController
         return $this->redirectToRoute('list_categories');
     }
 
-
+        // route pour crer modifier un thème
     #[Route('admin/create/theme', name: 'new_theme')]
     #[Route('admin/theme/edit/{id}', name: 'edit_theme')]
     public function createEditTheme(Theme $theme = null, EntityManagerInterface $entityManager, Request $request): Response
@@ -232,13 +253,14 @@ class AdminController extends AbstractController
     #[Route('moderator/list/theme', name: 'list_theme')]
     public function listTheme(ThemeRepository $themeRepository): Response
     {
-        $themes = $themeRepository->findAll();
-    
+        $themes = $themeRepository->findAll();// récupère tous les thèmes enregistrer en base
+        // les retourne a la vue
         return $this->render('theme/list_theme.html.twig', [
             'themes' =>$themes
         ]);
     }
 
+    // pour supprimer un thème, suprime les catégorie quiz question et réponse en cascade
     #[Route('admin/theme/{id}/delete', name: 'delete_theme')]
     public function deleteTheme(Theme $theme, EntityManagerInterface $entityManager): Response
     {

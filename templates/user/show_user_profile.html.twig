@@ -26,6 +26,7 @@
                 </div>
                 {# lien vers le formulaire de modification de profil(username, email, image) #}
                 <a class="btn_edit_profil" href="{{path('edit_profile', {'id': app.user.id})}}">Modifier profil</a>
+                <a class="btn_edit_profil" href="{{path('edit_pasword', {'id': app.user.id})}}">Modifier Votre mot de passe</a>
                 <a class="btn_edit_profil" href="{{path('delete_profile', {'id': app.user.id})}}">Suprimer profil</a>
             </section>
         <div class="points">

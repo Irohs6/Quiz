@@ -81,7 +81,7 @@ class ModeratorController extends AbstractController
        
     }
 
-    #[Route('moderator/list/categories', name: 'list_categories')]
+    #[Route('moderator/list/categories', name: 'app_list_categories')]
     public function listCategory(CategoryRepository $categoryRepository): Response
     {
         $categories = $categoryRepository->findAll();
