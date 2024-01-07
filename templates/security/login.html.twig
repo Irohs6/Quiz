@@ -11,10 +11,10 @@
 
         
 
-        <h2><strong>Conecté vous s'il vous plait</strong></h2>
-        <label for="inputEmail"><strong>Email:</strong></label>
+        <h2> <span class="quiz-night">Conecté vous s'il vous plait</span></h2>
+        <label for="inputEmail"> <span class="quiz-night">Email:</span></label>
         <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
-        <label for="inputPassword"><strong>Password:</strong></label>
+        <label for="inputPassword"> <span class="quiz-night">Password:</span></label>
         <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
 
         <input type="hidden" name="_csrf_token"
@@ -25,11 +25,13 @@
                 <input type="checkbox" name="_remember_me" >Se souvenir de moi
             </label>
         </div>
+
         <input type="hidden" id="recaptchaResponse" name="recaptcha-response">
         <button class="btn btn-primary mx-auto d-block" type="submit">
             Connexion
         </button>
-        <a href="{{ path('app_forgot_password_request')}}"><strong>Mot de passe oublier</strong></a>
+        
+        <a href="{{ path('app_forgot_password_request')}}"><span class="quiz-night">Mot de passe oublier</span></a>
     </form>
 </div>
 <script src="https://www.google.com/recaptcha/api.js?render=6Lcml0IpAAAAAJkuPOA5ZoQBIN8Fw24UPUwnBKh-"></script>

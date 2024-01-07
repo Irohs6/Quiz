@@ -11,26 +11,26 @@
     {{ form_errors(registrationForm) }}
     
     {{ form_start(registrationForm) }}
-        <h2><strong>Enregistrez Vous</strong></h2>
+        <h2><span class="quiz-night">Enregistrez Vous</span></h2>
         <div class="row">
             <div class="col-sm">
-                <strong>{{ form_row(registrationForm.email) }}</strong>
+                <span class="quiz-night">{{ form_row(registrationForm.email) }}</span>
             </div>
             <div class="col-sm">
-                <strong>{{ form_row(registrationForm.username) }}</strong>
+                <span class="quiz-night">{{ form_row(registrationForm.username) }}</span>
             </div>
             
             
         </div>
-        <strong>{{ form_row(registrationForm.plainPassword, {
+        <span class="quiz-night">{{ form_row(registrationForm.plainPassword, {
             label: 'Password'
-        }) }}</strong>
+        }) }}</span>
 
 
-        <strong>{{ form_row(registrationForm.agreeTerms) }}</strong>
-        <a class = "condition" href="#"><strong>Voir les conditions génnérales</strong></a>
+        <span class="quiz-night">{{ form_row(registrationForm.agreeTerms) }}</span>
+        <a class = "condition" href="#"><span class="quiz-night">Voir les conditions génnérales</span></a>
         
         {{ form_end(registrationForm) }}
-        <p class="connection">Déja Inscrit <a class = "connection" href={{ path("app_login") }}><strong>Connectez vous</strong> </a></p>
+        <p class="connection">Déja Inscrit <a class = "connection" href={{ path("app_login") }}><span class="quiz-night">Connectez vous</span> </a></p>
 </div>
 {% endblock %}

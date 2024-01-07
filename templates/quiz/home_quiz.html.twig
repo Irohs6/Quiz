@@ -193,7 +193,7 @@
                                                                     {% if game.quiz.id == quiz.id %}
                                                                         {% if loop.first %}
                                                                             <h4 class="h4_home">Les meilleurs scores pour le quiz </h4>
-                                                                            <p class="p_home"><strong>{{ game.quiz.title }}</strong>:</p>
+                                                                            <p class="p_home"><span class="quiz-night">{{ game.quiz.title }}</span>:</p>
                                                                         {% endif %}
                                                                         <li class="three_score"> {{ game.score }} %</li>
                                                                         {% set hasGames = true %}
@@ -250,7 +250,7 @@
             <ol>
 
                 {% for game  in allGames %}
-                    <li class="list_score">{{game.userId.username }} <span class="span_score">{{ game.score }}</span></li>
+                    <li class="list_score">{{game.userId.username }} <span class="span_score">{{ game.score }}% </span></li>
                 {% endfor %}
                     
             </ol>

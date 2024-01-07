@@ -210,12 +210,11 @@
         width: 98%;
         padding: 1em;
     }
+    
     .h2_home{
         font-size: 2em;
     }
-    .section-slide{
-        display: block;
-    }
+   
     .swiper{
         width: 250px;
     }
@@ -233,6 +232,10 @@
         width: 100%;
         flex-direction: column-reverse;
     }
+    .show_info ol {
+        list-style: none;
+        padding-left: 0;
+    }
     .info p{   
         font-size: 2em;
     }
@@ -242,14 +245,152 @@
     .list_score{
         padding: 0.5em 0em;
     }
-    .ul_footer{
-        display: flex;
-        gap: 1em;
-        list-style: none;
+    .span_score {
+        padding-left: 1.5em;
     }
-    .footer {
-        
+    /*************footer**************/
+    footer{
+        width: 95%;
+        height: auto;
+        padding: 0;
+    }
+    
+    .contact, .partenaire, .reseau-sociaux {
+        padding: 1em;
+        display: flex;
         flex-direction: column;
-        
+        width: 100%;
+    }
+    .reseau-sociaux li {
+        padding: 1em;
+        margin: auto;
+        font-size: 1.5em;
+    }
+    .contact li{
+        margin: auto;
+    }
+    .title_footer {   
+        font-size: 1.8em;   
+    }
+
+    .ul_footer{
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        font-size: 1.2em;
+    }
+    .footer {  
+        flex-direction: column;  
+    }
+    /**************login****************/
+    .form_login{
+        margin: 4em auto;
+        padding: 1em;
+    }
+    label {
+        font-size: 1.3em;
+    }
+    .d-block {
+        margin: 1em;
+        padding: 1em;
+        width: 50%;
+    }
+    /***********register*************************/
+    .form_register {
+        margin: 4em auto;
+        padding: 1em;
+        width: 95%;
+    }
+    #registration_form_Valider {
+      
+        padding: 1em;
+        width: 50%;
+    }
+
+    /*************profil*********************/
+    .container-profil {
+        width: 95%;
+        flex-direction: column;
+        flex-wrap: wrap;
+    }
+    .edit_profil {
+        width: 95%;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    .deal,.recent,.favorite,.bought {
+        width: 95%;
+    }
+    .score {
+        color: #0B2443;
+        font-size: 4em;
+        font-weight: 800;
+    }
+    .points {
+        width: 100%;
+        text-align: center;
+    }
+    .btn_edit_profil {
+        margin: 1em auto;
+    }
+
+    /****************détail quiz****************/
+    .title{
+        margin-top: 2em;
+    }
+    #quiz-detail{
+        width: 95%;
+    }
+    #quiz-detail ol{
+        padding: 1em 0;
+    }
+    #quiz-detail ol li{
+        padding: 0.5em 0;
+    }
+    .quiz-detail{
+        text-align: center;
+        width: 100%;
+    }
+    .box_question_reponse{
+        margin: 1em auto;
+        font-size: 1.3em;
+    }
+
+    #title_question_not_use{
+        margin: 1em auto;
+        width: 95%;
+        text-align: center;
+        padding: 1.3em;
+        font-size: 1.2em;
+        box-shadow: 0px 0px 10px 0px #666 inset;
+        background-color: rgba(255,255,255,0.3);
+        border-radius: 15px;
+    }
+    .title_question_not_use{
+        color: #014F86;
+        font-weight: bold;
+    }
+    .add_not_use{
+        margin: 1em;
+        cursor: pointer;
+        border: 2px solid #0B2443;
+        border-radius: 5px;
+        color: black;
+        padding: 3px;
+        width: 200px;
+        text-align: center;
+    }
+    #title_question_not_use li{
+        padding: 1em;
+    }
+
+    /*************play quiz*****************/
+
+    .title_play_quiz{
+        text-transform: uppercase;
+        text-align: center;
+        color: #0c5283;
+        padding: 3em 0 0.5em 0;
+        font-weight: 700;
     }
 }

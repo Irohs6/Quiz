@@ -6,12 +6,12 @@
 {# fichier json en hidden récupérer par le fichier scrip.js et traité pour afficher les question et les réponse du quiz de façon dynamique  #}
 <input hidden id="quiz" type="text" data-attribut="{{ quizJson }} ">
 
-<h2 class="title">{{ quiz.title }}</h2>
+<h2 class="title_play_quiz">{{ quiz.title }}</h2>
 
     <article id="quiz-container-play"> 
         {# container qui affiche le nombre de question la difficulter la catégorie d'un quiz et le bouton pour jouer#}
 
-        <h2 class="title"> {{ quiz.title }}</h2>
+        <h2 class="title_info_quiz"> {{ quiz.title }}</h2>
 
         <p class="difficulter">Difficulté : {{ quiz.level }} </p>
 

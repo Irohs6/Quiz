@@ -6,11 +6,11 @@
 
 
     <div id="quiz-detail-container">
-        <h1 class="title">{{ quiz.category.label }}</h1>
+        <h2 class="title">{{ quiz.category.label }}</h2>
         
         <article id="quiz-detail"> 
             <ol class="quiz-detail">
-                <h2 class="title">{{ quiz.title }}</h2>
+                <h3 class="title">{{ quiz.title }}</h3>
                 <a class="btn btn-warning" href="{{path('edit_quiz', {'id': quiz.id})}}">Modifier un Quiz</a>
                 {% for question in quiz.questions %}
                     <article class="box_question_reponse">
@@ -34,16 +34,17 @@
                 {% endfor %}
                     
             </ol>
+            
+            <ul id="title_question_not_use">
+                <h3 class="title_question_not_use">Liste des questions non utilisées</h3>     
+                {% for question in questionNotInQuiz %}
+                    {% if question.category == quiz.category %}
+                        <li>{{ question }}</li><a class="add_not_use" href="{{ path('app_add_quiz',{'id' : question.id ,'idQuiz': quiz.id})}}"> Ajouter</a>
+                    {% endif %}
+                {% endfor %}
+               
+            </ul>
         </article>
-        <h3>Liste des questions non utilisées</h3>     
-        <ul>
-            {% for question in questionNotInQuiz %}
-                {% if question.category == quiz.category %}
-                    <li>{{ question }}<a class="add" href="{{ path('app_add_quiz',{'id' : question.id ,'idQuiz': quiz.id})}}"> Ajouter</a></li>
-                {% endif %}
-            {% endfor %}
-           
-        </ul>
     </div>
 
 {% endblock %}

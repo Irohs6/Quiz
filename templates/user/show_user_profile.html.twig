@@ -36,8 +36,8 @@
                     {% set scoretotal = scoretotal + game.score %}  
             {% endfor %}
                 {# affichage du score total  #}
+            <p class="info_score">Score Total:</p>
             <h4 class="score">{{ scoretotal }}</h4>
-            <p class="info_score">Score Total</p>
         </div>
 
         <div class="deal">
@@ -96,7 +96,7 @@
                             <p class="profil_quiz_info"><strong>{{ quiz.title }}</strong> </p>
                         </a>
                         <button class="btn_edit_quiz" >
-                            <a href="{{path('edit_quiz', {'id': quiz.id})}}">Modifier un Quiz</a>
+                            <a href="{{path('edit_quiz', {'id': quiz.id})}}">Modifier</a>
                         </button>
 
                     </section> 
