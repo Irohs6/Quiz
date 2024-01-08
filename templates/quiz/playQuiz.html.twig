@@ -3,7 +3,8 @@
 {% block title %}Hello QuizController!{% endblock %}
 
 {% block body %}
-{# fichier json en hidden récupérer par le fichier scrip.js et traité pour afficher les question et les réponse du quiz de façon dynamique  #}
+{# fichier json en hidden récupérer par le fichier quiz_play.js et traité 
+    pour afficher les question et les réponse du quiz de façon dynamique  #}
 <input hidden id="quiz" type="text" data-attribut="{{ quizJson }} ">
 
 <h2 class="title_play_quiz">{{ quiz.title }}</h2>
@@ -49,7 +50,7 @@
             </section>
         {{ form_end(formQuiz) }}
        
-        <script src="{{ asset('js/script.js') }}"></script>   
+        <script src="{{ asset('js/quiz_play.js') }}"></script>   
     
     
 {% endblock %}

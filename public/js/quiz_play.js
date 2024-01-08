@@ -2,6 +2,10 @@ window.addEventListener("load", (event) => {
 
     // Récupération des données du quiz depuis l'attribut 'data-attribut'
     let quizData = JSON.parse(document.getElementById('quiz').getAttribute('data-attribut'));
+    // La méthode JSON.parse() est utilisée pour analyser la chaîne JSON contenue
+    // dans l'attribut 'data-attribut' de l'élément avec l'ID 'quiz'.
+    // Cela convertit la chaîne JSON en un objet JavaScript pour une utilisation ultérieure dans le script.
+
     console.log(quizData);
     let quizQuestion = document.getElementById('questions'); // récupère lae h2 qui servira a l'affichage de la question
     let selectedAnswers = {}; // déclaration d'un tableau vide pour récupérer plus tard les réponse sélectionné a chaque question
@@ -25,7 +29,7 @@ window.addEventListener("load", (event) => {
    // Gestion du clic sur le bouton "Play"
     play.addEventListener('click', function () {
 
-    document.getElementById('quiz-container-play').style.display = 'none';// cache le container afficher au début pour afficher les question et réponse après avoir clické sur le bouton jouer
+        document.getElementById('quiz-container-play').style.display = 'none';// cache le container afficher au début pour afficher les question et réponse après avoir clické sur le bouton jouer
 
     });
 
@@ -46,7 +50,6 @@ window.addEventListener("load", (event) => {
 
     // Fonction pour afficher une question
     function displayQuestion() {
-        
         let newIndex = getRandomUniqueIndex(0, quizData.questions.length);// stock le nouvel index de question unique
         currentQuestionIndex = newIndex; // et rempalce celui de currentQuestion pour la question suivante
         askedQuestions.push(newIndex); // Stock les index de question qui ont déja été afficher pour garantir qu'une question ne sera posé qu'une seul fois
@@ -102,17 +105,14 @@ window.addEventListener("load", (event) => {
     valider.addEventListener('click', function() {
         validateAnswers();
         let checkedAnswers = [];//instancie un tableau pour stocker les réponses séléctioné
-        // document.getElementById('next_question').style.display = 'block'; // affiche le bouton question suivante
-        let currentQuestion = quizData.questions[currentQuestionIndex]; //la question affiché
-        
+        let currentQuestion = quizData.questions[currentQuestionIndex]; //recupère la question la question affiché
         let radios = quizAnswer.querySelectorAll('input[type="radio"]'); // récupère tous les bouton radio
-
         radios.forEach(function(radio) {
            // récupère le bouton radio qui est chek donc la réponse sélectionné
             if (radio.checked) {
                 let answerId = radio.id; // récupère l'id de la réponses sélectioné
                 let answerIntitulle = radio.nextSibling.textContent; // Récupérez l'intitulé de la réponse sélectionné
-                let answerIsRight = currentQuestion.reponses.find((reponse) => reponse.id == answerId ).isRihgt //cherche la propriété isRight de la réponse sélectioné dans le tableau d'après son id 
+                let answerIsRight = currentQuestion.reponses.find((reponse) => reponse.id == answerId ).isRight //cherche la propriété isRight de la réponse sélectioné dans le tableau d'après son id 
                 checkedAnswers.push({ 
                     questionId: currentQuestion.id, //id de la question
                     questionIntitulle: currentQuestion.question, // intitulé de la question
@@ -122,15 +122,7 @@ window.addEventListener("load", (event) => {
                     answerIsright: answerIsRight // réponse juste ou fausse
                 });//ajoute dans le tableau l'id de la question son intitule , l'id de la réponse selectioné et son intitulé et si c'est une bonne réponse ou non
             }
-        
-        
         });
-         // Si 10 questions ont été posées
-       
-            if (count === 10 ) {
-                valider.style.display = 'none' //cache le bouton valider après la validation de la dernière question
-                document.getElementById('quiz-container').style.display = 'none';//cache le contenu du quiz-container contenant les question et les réponse
-            }
        
         // Stocke les réponses sélectionnées dans le tableau selectedAnswers
         selectedAnswers[currentQuestion.id] = selectedAnswers[currentQuestion.id] || [];
@@ -143,7 +135,9 @@ window.addEventListener("load", (event) => {
             displayQuestion();
         } else {
             // Ajoute le recap dans le html pour le récupérer dans le controlleur le stocké en session a l'afficher sur une autre pages
-            displayRecap()
+            arrayRecap()
+            valider.style.display = 'none' //cache le bouton valider après la validation de la dernière question
+            document.getElementById('quiz-container').style.display = 'none';//cache le contenu du quiz-container contenant les question et les réponse
             sectionInfoQuestion.style.display = 'none'
             message.innerHTML = 'Bravo vous avez Terminer ce quiz appuyer sur le bouton pour découvrir votre résultat'; //Affiche un message une fois le quiz terminer
         }
@@ -153,7 +147,7 @@ window.addEventListener("load", (event) => {
     });
 
     //function qui créer un tableau de recap d'un quiz
-    function displayRecap() {
+    function arrayRecap() {
 
         let scoreTotal = 0
        
@@ -167,20 +161,14 @@ window.addEventListener("load", (event) => {
 
         askedQuestionsOrder.forEach((questionIndex, index) => {
             const questionData = selectedAnswers[quizData.questions[questionIndex].id];
-        
-            
             if (questionData) {
-    
                 questionData.forEach(answerData => {
-                
                 //si la question sélection est vrais on incrémente la variable scoreTotal de 10
                     if (answerData.answerIsright) {
                         const score = 10 ;
                         scoreTotal = scoreTotal + score
                     }
-                 
-                });
-               
+                });               
                 tableScore = []
                 tableScore.push({
                         'score': scoreTotal //score total
@@ -191,8 +179,7 @@ window.addEventListener("load", (event) => {
                     ...selectedAnswers,
                     ...tableScore
                 };
-                
-               
+                           
                 const recapDataJSON = JSON.stringify(selectedAnswersScore);// JSON.stringify converti une variable Javascript/ un objet ou un tableau en un string JSON prend en premier paramamètre la value, peux accepter un second paramètre une fonction de remplacement et un 3ème paramètre pour l'indentation
                 const recapDataField = document.createElement('input');//créer un élément input
                 recapDataField.type = 'hidden';// met le input en type hidden(non visible)

@@ -84,7 +84,7 @@ class ModeratorController extends AbstractController
     #[Route('moderator/list/categories', name: 'app_list_categories')]
     public function listCategory(CategoryRepository $categoryRepository): Response
     {
-        $categories = $categoryRepository->findAll();
+        $categories = $categoryRepository->findAll();//récupère tous les donnée de catégorie enregsitré
     
         return $this->render('moderator/list_categories_moderator.html.twig', [
             'categories' =>$categories

@@ -22,7 +22,7 @@
             {% else %}
                 <strong  ><p class="error">{{ recap.answerIntitulle }}</p></strong> 
             {% endif %}
-            <strong><p>Lien doc:</strong> <span class="link"><a target="blank" href="{{ recap.link }}">{{recap.link ? recap.link :  "Aucun lien " }} </a></span></p>
+            <strong><p>Lien doc:</strong> <span class="link"><a target="blank" href="{{ recap.link }}">{{recap.link ? 'Ici' :  "Aucun lien " }} </a></span></p>
         </section>
 
         {% set index = index + 1 %}

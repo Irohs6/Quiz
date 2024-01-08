@@ -91,7 +91,7 @@ class QuizController extends AbstractController
                 $questionData['reponses'][] = [
                     'id' => $reponse->getId(),//ajoute l'id de la réponse
                     'intitulle' => $reponse->getSentence(),//ajoute l'intitulé de la réponse
-                    'isRihgt' => $reponse->isIsRight(),//ajoute le bolean isRight pour savoir si la réponse est juste au mauvaise
+                    'isRight' => $reponse->isIsRight(),//ajoute le bolean isRight pour savoir si la réponse est juste au mauvaise
                 ];
             }
         
@@ -100,6 +100,7 @@ class QuizController extends AbstractController
         }
         
         $quizJson = json_encode($quizData); //transforme le tableau en Json ((JavaScript Object Notation))
+
         $category = $quiz->getCategory(); // on récupère la catégorie pour en récupérer l'image
        
         
@@ -138,11 +139,7 @@ class QuizController extends AbstractController
                         if (isset($data['score'])) {
                             $score = $data['score'];
                             
-                        } else {
-                            foreach ($data as $response) {
-                                $answer = $entityManager->getRepository(Answer::class)->findOneBy(['id' => $response['answerId']]);//récupère la question grace a son id contenu dans le tableau
-                            }
-                        }
+                        } 
                     }
                     //si l'uttilisateur a 5 partit jouer pour ce quiz
                     if (count($allGameUser) == 5) {
@@ -165,7 +162,6 @@ class QuizController extends AbstractController
                     }else{
                         //si aucune partit jouer sur se quiz
                         $game = new Game; // nouvelle instance de Game
-                        $game->addAnswer($answer);//ajoute les question a la game
                         $quiz->addGame($game);// ajout du quiz dans Game
                         $user = $this->getUser(); // on récupère l'user en session
                         $game->setUserId($user); // on rajoute l'user en session a la Game
@@ -195,10 +191,10 @@ class QuizController extends AbstractController
         }
         
         return $this->render('quiz/playQuiz.html.twig', [
-            'category' => $category,
             'quiz' => $quiz,
             'quizJson' => $quizJson,
-            'formQuiz' => $formQuiz,
+            'formQuiz' => $formQuiz, 
+            'category' => $category,
         ]);
     }
 

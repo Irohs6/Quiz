@@ -16,10 +16,10 @@ security:
         main:
            
 
-            # configure the maximum login attempts
+           # Configure le nombre maximum d'ereur de tentatives de connexion
             login_throttling:
-                max_attempts: 3          # per minute ...
-                interval: '10 minutes' # ... or in a custom perio
+                max_attempts: 3          # nombre d'ereur autorisé par minute
+                interval: '10 minutes' # délais avant de pouvoir réessayer
             lazy: true
             provider: app_user_provider
             custom_authenticator: App\Security\AppAuthenticator

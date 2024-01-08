@@ -52,25 +52,23 @@ class QuestionRepository extends ServiceEntityRepository
     }
     public function questionsNotInQuiz(int $quizId)
     {
-        $em = $this->getEntityManager();
-
-        // Créer la sous-requête pour obtenir les question appartenant au quiz spécifique
-        $subquery = $em->createQueryBuilder();
+        /* Créer la sous-requête pour obtenir les question 
+        appartenant au quiz spécifique*/
+        $subquery = $this->createQueryBuilder('q');
         $subquery->select('q.id')
-        ->from('App\Entity\Question', 'q')
         ->leftJoin('q.quiz', 'qu')
         ->where('qu.id = :id');
 
-        // Créer la requête principale pour obtenir les questions non utilisé
-        $qb = $em->createQueryBuilder();
-        $qb->select('que')
-        ->from('App\Entity\Question', 'que')
-        ->where($qb->expr()->notIn('que.id', $subquery->getDQL()))
+        /* Créer la requête principale pour obtenir toute les question sauf 
+        se déjà contenu dans le quiz de la sous requètes*/
+        $query = $this->createQueryBuilder('que');
+        $query->select('que')
+        ->where($query->expr()->notIn('que.id', $subquery->getDQL()))
         ->setParameter('id', $quizId)
         ->orderBy('que.sentence');
 
-    $query = $qb->getQuery();
+        $result = $query->getQuery();
 
-    return $query->getResult();
+    return $result->getResult();
     }
 }

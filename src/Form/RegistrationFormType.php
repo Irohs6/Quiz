@@ -41,7 +41,8 @@ class RegistrationFormType extends AbstractType
                 'constraints' => [
                 new Regex([
                     'pattern' => '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,64}$/',
-                    'message' => 'Votre mot de passe doit contenir au minimum 12 caractère dont 1 lettre majuscule, 1 lettre minuscule, 1 chiffre et 1 caractère spécial.'])
+                    'message' => 'Votre mot de passe doit contenir au minimum 12 caractère dont 1 lettre majuscule, 
+                    1 lettre minuscule, 1 chiffre et 1 caractère spécial.'])
                 ],
                 'mapped' => false,
                 'type' => PasswordType::class,

@@ -155,6 +155,7 @@ class AdminController extends AbstractController
                 $category->setPicture($picture);
                 // sinon si l'image existe mais qu'elle a changer on supprime l'ancienne du dossier upload et on stock la nouvelle
             }else if ($pictureFile && $picture != null && $pictureFile != $picture){
+                // Récupère le chemin absolu vers le répertoire racine du projet Symfony
                 $projectDir = $this->getParameter('kernel.project_dir');
             
                 unlink($projectDir.'/public/uploads/img/category/'.$picture); // suprime l'image du dossier upload
