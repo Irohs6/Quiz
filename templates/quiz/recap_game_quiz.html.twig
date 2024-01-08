@@ -6,25 +6,24 @@
 {% set index = 1 %}
 <section class="container_recap">
     <article class="box_recap">
-        <h2 class="title">Recapitulatif de votre partie</h2>
+        <h2 class="title_recap">Recapitulatif de votre partie</h2>
         <p class="detail_recap">Découvrez votre score, les réponses <span class="success">justes</span> et <span class="error">fausses</span>, accompagnés d'un lien vers la documentation officielle pour booster votre compréhension et progresser dès maintenant ! </p>
         <p class="p_score">Score Obtenue: <strong >{{ score }}%</strong> de bonnes réponses</p>
     </article>
 
     {% for recap in quizsRecap %}
         
-      
-    <section class="recap_question_answer">
-        <strong class="info_recap">Question {{ index  }}:</strong> <span class="intitule_question">{{ recap.questionIntitulle }}</span>   
-        
-        <strong class="info_recap"><p>Réponses sélectionnées:</p></strong>
-        {% if recap.answerIsright %}
-            <strong  ><p class="success">{{ recap.answerIntitulle }}</p></strong> 
-        {% else %}
-            <strong  ><p class="error">{{ recap.answerIntitulle }}</p></strong> 
-        {% endif %}
-        <strong><p>Lien doc:</strong> <span class="link"><a target="blank" href="{{ recap.link }}">{{recap.link ? recap.link :  "Aucun lien " }} </a></span></p>
-    </section>
+        <section class="recap_question_answer">
+            <strong class="info_recap">Question {{ index  }}:</strong> <span class="intitule_question">{{ recap.questionIntitulle }}</span>   
+            
+            <strong class="info_recap"><p>Réponses sélectionnées:</p></strong>
+            {% if recap.answerIsright %}
+                <strong  ><p class="success">{{ recap.answerIntitulle }}</p></strong> 
+            {% else %}
+                <strong  ><p class="error">{{ recap.answerIntitulle }}</p></strong> 
+            {% endif %}
+            <strong><p>Lien doc:</strong> <span class="link"><a target="blank" href="{{ recap.link }}">{{recap.link ? recap.link :  "Aucun lien " }} </a></span></p>
+        </section>
 
         {% set index = index + 1 %}
     {% endfor %}    

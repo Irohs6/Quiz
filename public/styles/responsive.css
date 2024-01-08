@@ -393,4 +393,34 @@
         padding: 3em 0 0.5em 0;
         font-weight: 700;
     }
+    .nb_question{
+        text-align: center;
+    }
+    #quiz-container{
+        width: 95%;
+    }
+    #questions {
+        text-align: center;
+    }
+    #message {
+        width: 95%;
+    }
+
+    /************recap***************/
+
+    .container_recap {
+        width: 95%;
+        margin: 2em auto;
+        text-align: center;
+        padding: 1.5em;
+    }
+
+    .title_recap{
+        text-align: center;
+    }
+    .box_recap {
+        
+        margin: 0;
+        
+    }
 }
