@@ -119,14 +119,13 @@
                     
                                                             <div class="info-play">
 
-                                                                {% for game in quiz.games %} {# boucle sur toute les partie jouer d'un quiz#}
-
-                                                                    {% if game.userId.id == app.user.id %} {# condition qui verifie si le user connecter a une partie enregistré dans se quiz#}
+                                                                {% for game in allGamesUser %} {# boucle sur toute les partie jouer d'un quiz#}
+                                                                    {% if game.userId.id == app.user.id and game.quiz.id == quiz.id %} {# condition qui verifie si le user connecter a une partie enregistré dans se quiz#}
+                                                                
+                                                                        {% if game.score %} {# si c'est la premiére itération #}
                                                                         
-                                                                        {% if loop.first %} {# si c'est la premiére itération #}
-
                                                                             {% set score = game.score %} {# on set dans la varible score #} 
-
+                                                                        
                                                                         {% elseif game.score > score %} 
                                                                         {# si ce n'est pas la première itération on compare le scoree enregistré dans la variable avec les autre score si il y en a et si le score suivant est supérieur alors on écrase le score dans la variable avec le nouveaux#}
 
@@ -152,7 +151,7 @@
                                                                 {% if lastGameDate is not null %} {# si la variable a bien été set et donc qu'une partit existe #}
                                                             
                                                                     {% if score >= 80 %} {# condition si score est supérieur a 80% stock se message #}
-                                                                        {% set message = "Quiz <span class='quiz-night'>" ~ quiz.title ~ "</span> validé : " ~ score ~ "% de bonnes réponses. Vous pouvez le rejouer pour améliorer votre score." %}
+                                                                        {% set message = "Quiz <span class='quiz-night'>" ~ quiz.title ~ "</span> est validé : " ~ score ~ "% de bonnes réponses. Vous pouvez le rejouer pour améliorer votre score." %}
                                                                     {% else %} {# sinon on stock se message #}
                                                                         {% set message = "Vous n'avez pas validé le quiz <span class='quiz-night'>" ~ quiz.title ~ "</span> en obtenant " ~ score ~ "% de bonne réponse." %}
                                                                     {% endif %} {# fin {% if score >= 80 %} #}
@@ -185,7 +184,7 @@
                     
                                                             </div> {# fin <div class="info-play"></div>#}        
                     
-                                                        {% else %} {# fin {% if app.user %} si c'est un visiteur  #}
+                                                        {% else %} {# sinon si c'est un visiteur  #}
                                                             <div class="info-play">
                                                                 {% set hasGames = false %}
                                                                 {% set gamesForCurrentQuiz = gamesForQuizzes[quiz.id] ?? [] %}
@@ -219,7 +218,7 @@
                                                         
                                                             <h2>{{ quiz.title }}</h2>
 
-                                                        {% endif %}
+                                                        {% endif %} {# fin {% if app.user %} #}
 
                                                     </div>{#fin <div class="swiper-slide"></div>#}
 

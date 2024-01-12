@@ -78,7 +78,7 @@ async function showHint(srch) {
         
                     results.forEach((info) => {
                         const resultLink = document.createElement("a");
-                        resultLink.href = `/quiz/play/${info.id}`; // Lien vers le quiz
+                        resultLink.href = `/user/quiz/play/${info.id}`; // Lien vers le quiz
                         resultLink.textContent = info.title; // Titre du quiz
         
                         const resultItem = document.createElement("li");

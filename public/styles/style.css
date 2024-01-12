@@ -463,13 +463,13 @@ a{
     color: white;
 }
 
-#questions{
+#questions-sentence{
     text-align: justify;
     font-weight: 700;
     padding-bottom: 0.5em;
 }
 
-#answer{
+#answer-sentence{
     width: 100%;
     font-size: 1.2em;
     display: flex;
@@ -504,7 +504,13 @@ input[type="radio"] {
     display: none;
 }
 
-#valider{
+#valider.disabled {
+    opacity: 0.5; 
+    pointer-events: none; 
+   
+}
+
+ #valider{
     border-radius: 10px;
     padding: 0.6em;
     background: white;
@@ -515,11 +521,11 @@ input[type="radio"] {
     cursor: pointer;
     border: 3px solid silver;
     margin: 1.5em 0;
-}
+} 
 
 #valider:hover{ 
-    border: 1px solid silver;
-}
+    opacity: 80%;
+} 
 
 #message{
     width: 50%;

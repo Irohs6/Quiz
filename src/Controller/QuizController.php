@@ -31,8 +31,14 @@ class QuizController extends AbstractController
     {
         $allTheme = $themeRepository->findAll();//recupère toute les donné de la table theme
         $allCategories = $categoryRepository->findAll();//recupère toute les donné de la table category
-        $allLevel = $levelRepository->findAll();//recupère toute les donné de la table level
-        $allGames = $gameRepository->findAllBestGame();//recupère toute les donné de la table game
+        $allGames = $gameRepository->findAllBestGame();//recupère toute les donné de la game 
+        if ($this->getUser()) {
+            $allGamesUser = $gameRepository->findBy(['userId'=>$this->getUser()->getId()],['score' => 'ASC']);//recupère toute les donné de la table game
+            
+        } else {
+           $allGamesUser = null;
+        }
+        
          // Récupérer tous les quizzes
         $allQuizzes = $quizRepository->findAll();
 
@@ -55,10 +61,10 @@ class QuizController extends AbstractController
         return $this->render('quiz/home_quiz.html.twig', [
             'allTheme' => $allTheme,
             'allCategories' => $allCategories,
-            'allLevel'=> $allLevel,
             'gamesPlay' => $gamesPlay,
             'gamesForQuizzes' => $gamesForQuizzes,
-            'allGames' => $allGames
+            'allGames' => $allGames,
+            'allGamesUser' => $allGamesUser
         ]);
     }
    

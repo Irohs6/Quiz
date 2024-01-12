@@ -25,28 +25,27 @@
     </article>
   
         {{ form_start(formQuiz) }}
-        {# affiche l'image liée a la catégorie du quiz  #}
+        {# conteneur pour le quiz#}
         <div id="quiz-container">
+            {# indiquera le numéro de la question#}
             <section id="info_question">Question n°<strong id="number_question"></strong>/10</section>
 
             <section class="quiz-container">
 
-                <h2 id="questions"></h2>
+                <h2 id="questions-sentence"></h2>{# pour afficher l'intituler de la question#}
                 
 
-                <div  id="answer"></div>
+                <div  id="answer-sentence"></div>{#v     contenir les bouton radio des réponses#}
 
                 <input  id="valider" type="button" value="Valider"/>
                 
 
             </div>   
-                <article id="message"></article> 
+                <article id="message"></article> {#contiendra le message a la fin du quiz#}
                 {# div ou sera afficher le recapitulatif du quiz une fois terminer  #}
-                <div id="recap-container"></div>
-                {# bouton qui permettra d'afficher le tableaux récapitulatif a la fin du quiz  #}
-                <input type="button" id="show-recap" value="Afficher recap">
+                <div id="recap-container"></div>{# contiendra le json du récapitulatif du quiz qui sera récupérer dans le controlleur pour traitement#}
                 {# pour soumettre le résultat #}
-                <input id="submit" type="submit">
+                <input id="submit" type="submit">{#  #}
             </section>
         {{ form_end(formQuiz) }}
        

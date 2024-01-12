@@ -31,9 +31,8 @@
             </section>
         <div class="points">
             {% for game in app.user.games %}
-            {% set scoretotal = scoretotal + game.score %}   
-                    {# calcul pour le score total  #}
-                    {% set scoretotal = scoretotal + game.score %}  
+                {% set scoretotal = scoretotal + game.score %}   
+                {# calcul pour le score total  #}   
             {% endfor %}
                 {# affichage du score total  #}
             <p class="info_score">Score Total:</p>
@@ -44,7 +43,7 @@
             <h3 class="best_score">Mes 3 meilleurs scores :</h3>
             {% if games %}
                 {% for bestGame in games %}
-                    <li class="game_quiz"><span class="profil-info">{{ nb }} :</span> {{ bestGame.quiz.title }} score: {{ bestGame.score }}</li>
+                    <li class="game_quiz"><span class="profil-info">{{ nb }} :</span> {{ bestGame.quiz.title }} score: {{ bestGame.score }}%</li>
                     {% set nb = nb + 1 %} 
                     
                 {% endfor %}
@@ -60,7 +59,7 @@
                 <ul class="list_profil">
                     {% if gamesUser %}
                         {% for game in gamesUser %}
-                            <li class="game_quiz"> {{ game.quiz.title }} <span class="game_score"> {{ game.score }}</span></li>
+                            <li class="game_quiz"> {{ game.quiz.title }} <span class="game_score"> {{ game.score }}%</span></li>
                         {% endfor %}
                     {% else %}  
                         <p>Vous n'avez enregistré aucun score pour le moment</p>  
@@ -75,7 +74,7 @@
             <ul>
                 {% if app.user.favoritesQuizzes %}
                     {% for favoriteQuiz in app.user.favoritesQuizzes %}
-                        <li class="game_quiz">{{favoriteQuiz}}</li>
+                        <li class="game_quiz"><a href="{{ path('app_play', {'id': favoriteQuiz.id}) }}">{{favoriteQuiz}}</a></li>
                     {% endfor %}
                 {% else %}
                     <p>Vous n'avez pas de quiz favoris pour le moment</p>
