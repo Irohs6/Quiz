@@ -25,48 +25,48 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class QuizController extends AbstractController
 {
 
-    //futur home de quiz en cour de création
-    #[Route('home/quiz', name: 'app_home_quiz')]
-    public function home_quiz(ThemeRepository $themeRepository, CategoryRepository $categoryRepository, LevelRepository $levelRepository, GameRepository $gameRepository,QuizRepository $quizRepository): Response
-    {
-        $allTheme = $themeRepository->findAll();//recupère toute les donné de la table theme
-        $allCategories = $categoryRepository->findAll();//recupère toute les donné de la table category
-        $allGames = $gameRepository->findAllBestGame();//recupère toute les donné de la game 
-        if ($this->getUser()) {
-            $allGamesUser = $gameRepository->findBy(['userId'=>$this->getUser()->getId()],['score' => 'ASC']);//recupère toute les donné de la table game
+    // //futur home de quiz en cour de création
+    // #[Route('home/quiz', name: 'app_home_quiz')]
+    // public function home_quiz(ThemeRepository $themeRepository, CategoryRepository $categoryRepository, LevelRepository $levelRepository, GameRepository $gameRepository,QuizRepository $quizRepository): Response
+    // {
+    //     $allTheme = $themeRepository->findAll();//recupère toute les donné de la table theme
+    //     $allCategories = $categoryRepository->findAll();//recupère toute les donné de la table category
+    //     $allGames = $gameRepository->findAllBestGame();//recupère toute les donné de la game 
+    //     if ($this->getUser()) {
+    //         $allGamesUser = $gameRepository->findBy(['userId'=>$this->getUser()->getId()],['score' => 'ASC']);//recupère toute les donné de la table game
             
-        } else {
-           $allGamesUser = null;
-        }
+    //     } else {
+    //        $allGamesUser = null;
+    //     }
         
-         // Récupérer tous les quizzes
-        $allQuizzes = $quizRepository->findAll();
+    //      // Récupérer tous les quizzes
+    //     $allQuizzes = $quizRepository->findAll();
 
-        $gamesForQuizzes = [];
+    //     $gamesForQuizzes = [];
 
-        // Pour chaque quiz, récupérer les trois meilleurs jeux
-        foreach ($allQuizzes as $quiz) {
-            $gamesForQuizzes[$quiz->getId()] = $gameRepository->findBestGameByQuiz($quiz);
-        }
+    //     // Pour chaque quiz, récupérer les trois meilleurs jeux
+    //     foreach ($allQuizzes as $quiz) {
+    //         $gamesForQuizzes[$quiz->getId()] = $gameRepository->findBestGameByQuiz($quiz);
+    //     }
 
-        if (!$this->getUser()) {
-            $gamesPlay = [];
+    //     if (!$this->getUser()) {
+    //         $gamesPlay = [];
             
             
-        }else{
+    //     }else{
             
-            $gamesPlay = $gamesPlay = $gameRepository->findLatestGamesByQuiz($this->getUser()->getId());
+    //         $gamesPlay = $gamesPlay = $gameRepository->findLatestGamesByQuiz($this->getUser()->getId());
            
-        }
-        return $this->render('quiz/home_quiz.html.twig', [
-            'allTheme' => $allTheme,
-            'allCategories' => $allCategories,
-            'gamesPlay' => $gamesPlay,
-            'gamesForQuizzes' => $gamesForQuizzes,
-            'allGames' => $allGames,
-            'allGamesUser' => $allGamesUser
-        ]);
-    }
+    //     }
+    //     return $this->render('quiz/home_quiz.html.twig', [
+    //         'allTheme' => $allTheme,
+    //         'allCategories' => $allCategories,
+    //         'gamesPlay' => $gamesPlay,
+    //         'gamesForQuizzes' => $gamesForQuizzes,
+    //         'allGames' => $allGames,
+    //         'allGamesUser' => $allGamesUser
+    //     ]);
+    // }
    
     //pages pour jouer un quiz
     #[Route('user/quiz/play/{id}', name: 'app_play')]
